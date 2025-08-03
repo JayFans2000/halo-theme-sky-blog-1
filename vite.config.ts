@@ -5,11 +5,37 @@ import { join, dirname } from "path";
 
 /**
  * 复制静态资源到构建目录
- * 注意：字体等静态资源已移至 templates/static 目录，不再需要复制
  */
 function copyStaticAssets() {
-  // 静态资源已移至 templates/static 目录，不再需要复制
-  console.log('📁 静态资源已移至 templates/static 目录，跳过复制');
+  const srcStaticDir = 'src/static';
+  const destAssetsDir = 'templates/assets';
+  
+  if (!existsSync(srcStaticDir)) {
+    return;
+  }
+  
+  function copyRecursive(src: string, dest: string) {
+    if (!existsSync(dest)) {
+      mkdirSync(dest, { recursive: true });
+    }
+    
+    const items = readdirSync(src);
+    items.forEach(item => {
+      const srcPath = join(src, item);
+      const destPath = join(dest, item);
+      
+      if (statSync(srcPath).isDirectory()) {
+        copyRecursive(srcPath, destPath);
+      } else {
+        // 跳过 README.md 文件
+        if (item !== 'README.md') {
+          copyFileSync(srcPath, destPath);
+        }
+      }
+    });
+  }
+  
+  copyRecursive(srcStaticDir, destAssetsDir);
 }
 
 /**
@@ -61,12 +87,11 @@ export default defineConfig({
     assetsInlineLimit: 0,
   },
   plugins: [
-    // 静态资源已移至 templates/static 目录，不再需要复制插件
-    // {
-    //   name: 'copy-static-assets',
-    //   closeBundle() {
-    //     copyStaticAssets();
-    //   }
-    // }
+    {
+      name: 'copy-static-assets',
+      closeBundle() {
+        copyStaticAssets();
+      }
+    }
   ]
 });

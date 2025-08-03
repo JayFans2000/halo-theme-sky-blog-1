@@ -1,10 +1,16 @@
 /**
- * 组件样式
- * 定义网站中各种UI组件的样式
+ * 首页样式表
+ * 按功能区域分类整理的样式定义
  */
 
+/* ===================================================
+ * 1. 通用组件样式
+ * ==================================================*/
 
-/* 全局霓虹按钮效果 */
+/**
+ * 1.1 全局霓虹按钮效果
+ * 带有霓虹灯光效果的交互按钮
+ */
 .sky-btn {
   position: relative;
   background: transparent;
@@ -24,7 +30,10 @@
 }
 
 
-/* 说说卡片悬浮效果 */
+/**
+ * 1.2 说说卡片悬浮效果
+ * 用于说说模块的卡片样式，包含悬停动画和毛玻璃效果
+ */
 .floating-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
@@ -42,7 +51,10 @@
 
 
 
-/* 渐变文字 */
+/**
+ * 1.3 渐变文字效果
+ * 应用于需要渐变色彩的文本元素
+ */
 .gradient-text {
   background: linear-gradient(45deg, var(--sky-primary), var(--sky-secondary));
   -webkit-background-clip: text;
@@ -50,13 +62,734 @@
   background-clip: text;
 }
 
+/* ===================================================
+ * 2. 头部背景系统
+ * ==================================================*/
+
 /**
- * 组合特效样式 - 支持多种特效自由组合
- * 装饰特效：只添加装饰元素，不影响文字样式
- * 样式特效：只改变文字样式，不添加装饰元素
+ * 2.1 智能主题适配动态背景系统
+ * 根据明暗主题自动调整的背景效果
  */
 
-/* ===== 基础样式 ===== */
+/* 主题适配基底 - 根据主题自动调整 */
+.theme-adaptive-base {
+  /* 深色主题：深邃渐变 */
+  background: linear-gradient(135deg,
+      #0f172a 0%,
+      /* slate-950 */
+      #111827 25%,
+      /* gray-900 */
+      #1e293b 50%,
+      /* slate-800 */
+      #000000 100%
+      /* black */
+    );
+}
+
+/* 浅色主题适配 */
+[data-theme="light"] .theme-adaptive-base {
+  /* 浅色主题：优雅深色渐变，确保白色文字可读 */
+  background: linear-gradient(135deg,
+      #1f2937 0%,
+      /* gray-800 */
+      #374151 25%,
+      /* gray-700 */
+      #4b5563 50%,
+      /* gray-600 */
+      #1f2937 100%
+      /* gray-800 */
+    );
+}
+
+/* 动态色彩流动背景 */
+.dynamic-gradient-bg {
+  background: linear-gradient(45deg,
+      #1e293b, #0f172a, #1e1b4b, #312e81,
+      #1e293b, #0f172a, #1e1b4b, #312e81);
+  background-size: 800% 800%;
+  animation: gradient-flow 20s ease-in-out infinite;
+}
+
+/* 主题适配透明度 */
+.theme-adaptive-opacity {
+  opacity: 0.6;
+}
+
+[data-theme="light"] .theme-adaptive-opacity {
+  opacity: 0.4;
+}
+
+/* 浅色主题下的动态色彩调整 */
+[data-theme="light"] .dynamic-gradient-bg {
+  background: linear-gradient(45deg,
+      #374151, #1f2937, #4338ca, #5b21b6,
+      #374151, #1f2937, #4338ca, #5b21b6);
+  background-size: 800% 800%;
+  animation: gradient-flow 20s ease-in-out infinite;
+}
+
+@keyframes gradient-flow {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 100% 50%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+/**
+ * 2.2 光效系统
+ * 为背景添加光源和光束效果
+ */
+.light-effects {
+  position: relative;
+}
+
+.light-source {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.3;
+}
+
+.light-primary {
+  top: 30%;
+  left: 20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #3b82f6, transparent);
+  animation: light-pulse-primary 8s ease-in-out infinite;
+}
+
+.light-secondary {
+  bottom: 40%;
+  right: 25%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, #8b5cf6, transparent);
+  animation: light-pulse-secondary 10s ease-in-out infinite;
+}
+
+.light-accent {
+  top: 60%;
+  left: 60%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #06b6d4, transparent);
+  animation: light-pulse-accent 6s ease-in-out infinite;
+}
+
+/* 光束效果 */
+.light-beam {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  opacity: 0.2;
+  filter: blur(1px);
+}
+
+.light-beam-1 {
+  top: 25%;
+  left: 0;
+  width: 100%;
+  animation: light-beam-sweep-1 12s linear infinite;
+}
+
+.light-beam-2 {
+  top: 55%;
+  left: 0;
+  width: 100%;
+  animation: light-beam-sweep-2 15s linear infinite;
+}
+
+.light-beam-3 {
+  top: 75%;
+  left: 0;
+  width: 100%;
+  animation: light-beam-sweep-3 18s linear infinite;
+}
+
+/* 光效动画 */
+@keyframes light-pulse-primary {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes light-pulse-secondary {
+
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes light-pulse-accent {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes light-beam-sweep-1 {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes light-beam-sweep-2 {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes light-beam-sweep-3 {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/**
+ * 2.3 粒子引力系统
+ * 为背景添加动态粒子效果
+ */
+.particle-system {
+  position: relative;
+}
+
+.particle-cluster {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+}
+
+.particle-cluster-1 {
+  top: 20%;
+  left: 15%;
+  animation: cluster-orbit-1 25s linear infinite;
+}
+
+.particle-cluster-2 {
+  top: 60%;
+  right: 20%;
+  animation: cluster-orbit-2 30s linear infinite reverse;
+}
+
+.particle-cluster-3 {
+  bottom: 25%;
+  left: 50%;
+  animation: cluster-orbit-3 35s linear infinite;
+}
+
+/* 粒子轨道动画 */
+@keyframes cluster-orbit-1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(100px, -50px) rotate(90deg);
+  }
+
+  50% {
+    transform: translate(50px, 100px) rotate(180deg);
+  }
+
+  75% {
+    transform: translate(-50px, 50px) rotate(270deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes cluster-orbit-2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  33% {
+    transform: translate(-80px, 60px) rotate(120deg) scale(1.1);
+  }
+
+  66% {
+    transform: translate(40px, -80px) rotate(240deg) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(360deg) scale(1);
+  }
+}
+
+@keyframes cluster-orbit-3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(60px, -40px) rotate(72deg);
+  }
+
+  40% {
+    transform: translate(20px, 80px) rotate(144deg);
+  }
+
+  60% {
+    transform: translate(-60px, 30px) rotate(216deg);
+  }
+
+  80% {
+    transform: translate(-20px, -70px) rotate(288deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+/* 粒子样式 */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(0.5px);
+}
+
+.particle-large {
+  width: 12px;
+  height: 12px;
+  animation: particle-pulse-large 4s ease-in-out infinite;
+}
+
+.particle-medium {
+  width: 8px;
+  height: 8px;
+  animation: particle-pulse-medium 3s ease-in-out infinite;
+}
+
+.particle-small {
+  width: 5px;
+  height: 5px;
+  animation: particle-pulse-small 2.5s ease-in-out infinite;
+}
+
+.particle-tiny {
+  width: 2px;
+  height: 2px;
+  animation: particle-twinkle 2s ease-in-out infinite;
+}
+
+/* 粒子颜色 */
+.particle-blue {
+  background: radial-gradient(circle, #3b82f6, #1d4ed8);
+  box-shadow: 0 0 20px #3b82f6, 0 0 40px #1d4ed8;
+}
+
+.particle-purple {
+  background: radial-gradient(circle, #8b5cf6, #7c3aed);
+  box-shadow: 0 0 20px #8b5cf6, 0 0 40px #7c3aed;
+}
+
+.particle-cyan {
+  background: radial-gradient(circle, #06b6d4, #0891b2);
+  box-shadow: 0 0 20px #06b6d4, 0 0 40px #0891b2;
+}
+
+.particle-white {
+  background: radial-gradient(circle, #ffffff, #e5e7eb);
+  box-shadow: 0 0 15px #ffffff, 0 0 30px #e5e7eb;
+}
+
+/* 粒子脉冲动画 */
+@keyframes particle-pulse-large {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0.5px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.3) rotate(180deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes particle-pulse-medium {
+
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.4) rotate(180deg);
+  }
+}
+
+@keyframes particle-pulse-small {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes particle-twinkle {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/**
+ * 2.4 多层视差几何系统
+ * 为背景添加多层次的几何图形，创造视差效果
+ */
+.parallax-geometry {
+  position: relative;
+}
+
+.parallax-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.parallax-far {
+  animation: parallax-drift-far 40s linear infinite;
+}
+
+.parallax-mid {
+  animation: parallax-drift-mid 30s linear infinite reverse;
+}
+
+.parallax-near {
+  animation: parallax-drift-near 20s linear infinite;
+}
+
+/* 视差漂移动画 */
+@keyframes parallax-drift-far {
+  0% {
+    transform: translateX(-100px) translateY(-50px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(100px) translateY(50px) rotate(360deg);
+  }
+}
+
+@keyframes parallax-drift-mid {
+  0% {
+    transform: translateX(-50px) translateY(-25px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(50px) translateY(25px) rotate(-360deg);
+  }
+}
+
+@keyframes parallax-drift-near {
+  0% {
+    transform: translateX(-25px) translateY(-10px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(25px) translateY(10px) rotate(180deg);
+  }
+}
+
+/* 几何形状基础样式 */
+.geometric-shape {
+  position: absolute;
+  opacity: 0.1;
+  border: 1px solid;
+  animation-duration: 15s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* 远景几何形状 */
+.geo-far-1 {
+  top: 20%;
+  left: 10%;
+  width: 60px;
+  height: 60px;
+  border-color: #3b82f6;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  animation-name: geo-rotate-slow;
+}
+
+.geo-far-2 {
+  top: 70%;
+  right: 15%;
+  width: 80px;
+  height: 80px;
+  border-color: #8b5cf6;
+  border-radius: 50%;
+  animation-name: geo-pulse-slow;
+}
+
+.geo-far-3 {
+  bottom: 30%;
+  left: 60%;
+  width: 50px;
+  height: 50px;
+  border-color: #06b6d4;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  animation-name: geo-float-slow;
+}
+
+/* 中景几何形状 */
+.geo-mid-1 {
+  top: 40%;
+  left: 70%;
+  width: 40px;
+  height: 40px;
+  border-color: #f59e0b;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation-name: geo-rotate-medium;
+  opacity: 0.15;
+}
+
+.geo-mid-2 {
+  top: 15%;
+  right: 40%;
+  width: 35px;
+  height: 35px;
+  border-color: #ef4444;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  animation-name: geo-pulse-medium;
+  opacity: 0.15;
+}
+
+.geo-mid-3 {
+  bottom: 40%;
+  right: 60%;
+  width: 45px;
+  height: 45px;
+  border-color: #10b981;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation-name: geo-float-medium;
+  opacity: 0.15;
+}
+
+/* 近景几何形状 */
+.geo-near-1 {
+  top: 60%;
+  left: 30%;
+  width: 25px;
+  height: 25px;
+  border-color: #ffffff;
+  animation-name: geo-rotate-fast;
+  opacity: 0.2;
+}
+
+.geo-near-2 {
+  top: 25%;
+  left: 80%;
+  width: 30px;
+  height: 30px;
+  border-color: #e5e7eb;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation-name: geo-pulse-fast;
+  opacity: 0.2;
+}
+
+/* 几何动画 */
+@keyframes geo-rotate-slow {
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+}
+
+@keyframes geo-rotate-medium {
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+}
+
+@keyframes geo-rotate-fast {
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.3);
+  }
+}
+
+@keyframes geo-pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.2;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes geo-pulse-medium {
+
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.25;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes geo-pulse-fast {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes geo-float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+@keyframes geo-float-medium {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+  }
+}
+
+/* ===================================================
+ * 3. 首页标题样式
+ * ==================================================*/
+
+/**
+ * 3.1 标题文字特效基础
+ * 所有标题特效的基础样式
+ */
 .effect-base {
   position: relative;
   display: inline-block;
@@ -64,7 +797,10 @@
   transition: all 0.3s ease;
 }
 
-/* ===== 装饰特效层 - 不影响文字样式 ===== */
+/**
+ * 3.2 装饰特效层 - 不影响文字样式
+ * 为标题添加装饰性效果，如粒子、星光等
+ */
 
 /* 粒子环绕特效 - 纯装饰 */
 .effect-particles::before,
@@ -412,7 +1148,10 @@
   }
 }
 
-/* ===== 样式特效层 - 只改变文字样式 ===== */
+/**
+ * 3.3 样式特效层 - 只改变文字样式
+ * 定义不同的标题文字样式效果
+ */
 
 /* 默认样式 - 楷体 (当选择"无"样式时使用) */
 .effect-none {
@@ -448,7 +1187,7 @@
 .effect-lxgw-wenkai-bright {
   font-family: 'LXGW WenKai Bright', '霞鹜文楷', '楷体', 'KaiTi', serif;
   color: var(--title-color);
-  text-shadow: 
+  text-shadow:
     1px 1px 0px rgba(0, 0, 0, 0.5),
     2px 2px 4px rgba(0, 0, 0, 0.3),
     0 0 8px var(--sky-primary);
@@ -461,9 +1200,9 @@
 .effect-siyuan-songti {
   font-family: '思源屏显臻宋', '思源宋体', '宋体', 'SimSun', serif;
   color: transparent;
-  background: linear-gradient(45deg, 
-    var(--sky-primary), var(--sky-secondary), var(--sky-accent), 
-    var(--sky-primary), var(--sky-secondary), var(--sky-accent));
+  background: linear-gradient(45deg,
+      var(--sky-primary), var(--sky-secondary), var(--sky-accent),
+      var(--sky-primary), var(--sky-secondary), var(--sky-accent));
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -474,15 +1213,21 @@
 }
 
 @keyframes rainbow-flow {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
 }
 
-/* 副标题打字机效果 */
+/**
+ * 3.4 副标题打字机效果
+ * 为首页副标题添加打字机动画效果
+ */
 .typewriter {
   font-family: 'Comic Neue', cursive, Arial, sans-serif;
   filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
@@ -526,35 +1271,59 @@
 }
 
 
-/* ===== 智能主题适配动态背景系统 ===== */
+/* ===================================================
+ * 4. 说说模块样式
+ * ==================================================*/
+
+/**
+ * 4.1 说说卡片基础样式
+ * 已在通用组件部分定义 (.floating-card)
+ */
+
+/* ===================================================
+ * 5. 性能优化
+ * ==================================================*/
+
+/**
+ * 5.1 响应式优化
+ * 针对不同设备尺寸的样式调整
+ */
 
 /* 主题适配基底 - 根据主题自动调整 */
 .theme-adaptive-base {
   /* 深色主题：深邃渐变 */
-  background: linear-gradient(135deg, 
-    #0f172a 0%,     /* slate-950 */
-    #111827 25%,    /* gray-900 */
-    #1e293b 50%,    /* slate-800 */
-    #000000 100%    /* black */
-  );
+  background: linear-gradient(135deg,
+      #0f172a 0%,
+      /* slate-950 */
+      #111827 25%,
+      /* gray-900 */
+      #1e293b 50%,
+      /* slate-800 */
+      #000000 100%
+      /* black */
+    );
 }
 
 /* 浅色主题适配 */
 [data-theme="light"] .theme-adaptive-base {
   /* 浅色主题：优雅深色渐变，确保白色文字可读 */
-  background: linear-gradient(135deg, 
-    #1f2937 0%,     /* gray-800 */
-    #374151 25%,    /* gray-700 */
-    #4b5563 50%,    /* gray-600 */
-    #1f2937 100%    /* gray-800 */
-  );
+  background: linear-gradient(135deg,
+      #1f2937 0%,
+      /* gray-800 */
+      #374151 25%,
+      /* gray-700 */
+      #4b5563 50%,
+      /* gray-600 */
+      #1f2937 100%
+      /* gray-800 */
+    );
 }
 
 /* 动态色彩流动背景 */
 .dynamic-gradient-bg {
-  background: linear-gradient(45deg, 
-    #1e293b, #0f172a, #1e1b4b, #312e81, 
-    #1e293b, #0f172a, #1e1b4b, #312e81);
+  background: linear-gradient(45deg,
+      #1e293b, #0f172a, #1e1b4b, #312e81,
+      #1e293b, #0f172a, #1e1b4b, #312e81);
   background-size: 800% 800%;
   animation: gradient-flow 20s ease-in-out infinite;
 }
@@ -570,21 +1339,37 @@
 
 /* 浅色主题下的动态色彩调整 */
 [data-theme="light"] .dynamic-gradient-bg {
-  background: linear-gradient(45deg, 
-    #374151, #1f2937, #4338ca, #5b21b6, 
-    #374151, #1f2937, #4338ca, #5b21b6);
+  background: linear-gradient(45deg,
+      #374151, #1f2937, #4338ca, #5b21b6,
+      #374151, #1f2937, #4338ca, #5b21b6);
   background-size: 800% 800%;
   animation: gradient-flow 20s ease-in-out infinite;
 }
 
 @keyframes gradient-flow {
-  0%, 100% { background-position: 0% 50%; }
-  25% { background-position: 100% 50%; }
-  50% { background-position: 100% 100%; }
-  75% { background-position: 0% 100%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 100% 50%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  75% {
+    background-position: 0% 100%;
+  }
 }
 
-/* ===== 粒子引力系统 ===== */
+/**
+ * 5.2 性能优化
+ * 针对低性能设备的优化措施
+ */
 .particle-system {
   position: relative;
 }
@@ -615,27 +1400,69 @@
 
 /* 粒子轨道动画 */
 @keyframes cluster-orbit-1 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(100px, -50px) rotate(90deg); }
-  50% { transform: translate(50px, 100px) rotate(180deg); }
-  75% { transform: translate(-50px, 50px) rotate(270deg); }
-  100% { transform: translate(0, 0) rotate(360deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(100px, -50px) rotate(90deg);
+  }
+
+  50% {
+    transform: translate(50px, 100px) rotate(180deg);
+  }
+
+  75% {
+    transform: translate(-50px, 50px) rotate(270deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
 }
 
 @keyframes cluster-orbit-2 {
-  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  33% { transform: translate(-80px, 60px) rotate(120deg) scale(1.1); }
-  66% { transform: translate(40px, -80px) rotate(240deg) scale(0.9); }
-  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  33% {
+    transform: translate(-80px, 60px) rotate(120deg) scale(1.1);
+  }
+
+  66% {
+    transform: translate(40px, -80px) rotate(240deg) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(360deg) scale(1);
+  }
 }
 
 @keyframes cluster-orbit-3 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(60px, -40px) rotate(72deg); }
-  40% { transform: translate(20px, 80px) rotate(144deg); }
-  60% { transform: translate(-60px, 30px) rotate(216deg); }
-  80% { transform: translate(-20px, -70px) rotate(288deg); }
-  100% { transform: translate(0, 0) rotate(360deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(60px, -40px) rotate(72deg);
+  }
+
+  40% {
+    transform: translate(20px, 80px) rotate(144deg);
+  }
+
+  60% {
+    transform: translate(-60px, 30px) rotate(216deg);
+  }
+
+  80% {
+    transform: translate(-20px, -70px) rotate(288deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
 }
 
 /* 粒子样式 */
@@ -692,52 +1519,67 @@
 
 /* 粒子脉冲动画 */
 @keyframes particle-pulse-large {
-  0%, 100% { 
-    opacity: 0.8; 
-    transform: scale(1) rotate(0deg); 
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1) rotate(0deg);
     filter: blur(0.5px);
   }
-  50% { 
-    opacity: 1; 
-    transform: scale(1.3) rotate(180deg); 
+
+  50% {
+    opacity: 1;
+    transform: scale(1.3) rotate(180deg);
     filter: blur(0px);
   }
 }
 
 @keyframes particle-pulse-medium {
-  0%, 100% { 
-    opacity: 0.7; 
-    transform: scale(1) rotate(0deg); 
+
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
   }
-  50% { 
-    opacity: 1; 
-    transform: scale(1.4) rotate(180deg); 
+
+  50% {
+    opacity: 1;
+    transform: scale(1.4) rotate(180deg);
   }
 }
 
 @keyframes particle-pulse-small {
-  0%, 100% { 
-    opacity: 0.6; 
-    transform: scale(1); 
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
   }
-  50% { 
-    opacity: 1; 
-    transform: scale(1.5); 
+
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
   }
 }
 
 @keyframes particle-twinkle {
-  0%, 100% { 
-    opacity: 0.3; 
-    transform: scale(0.8); 
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
   }
-  50% { 
-    opacity: 1; 
-    transform: scale(1.2); 
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
   }
 }
 
-/* ===== 多层视差几何系统 ===== */
+/**
+ * 5.3 GPU加速优化
+ * 使用硬件加速提升动画性能
+ */
 .parallax-geometry {
   position: relative;
 }
@@ -762,18 +1604,33 @@
 
 /* 视差漂移动画 */
 @keyframes parallax-drift-far {
-  0% { transform: translateX(-100px) translateY(-50px) rotate(0deg); }
-  100% { transform: translateX(100px) translateY(50px) rotate(360deg); }
+  0% {
+    transform: translateX(-100px) translateY(-50px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(100px) translateY(50px) rotate(360deg);
+  }
 }
 
 @keyframes parallax-drift-mid {
-  0% { transform: translateX(-50px) translateY(-25px) rotate(0deg); }
-  100% { transform: translateX(50px) translateY(25px) rotate(-360deg); }
+  0% {
+    transform: translateX(-50px) translateY(-25px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(50px) translateY(25px) rotate(-360deg);
+  }
 }
 
 @keyframes parallax-drift-near {
-  0% { transform: translateX(-25px) translateY(-10px) rotate(0deg); }
-  100% { transform: translateX(25px) translateY(10px) rotate(180deg); }
+  0% {
+    transform: translateX(-25px) translateY(-10px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(25px) translateY(10px) rotate(180deg);
+  }
 }
 
 /* 几何形状基础样式 */
@@ -875,47 +1732,111 @@
 
 /* 几何动画 */
 @keyframes geo-rotate-slow {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.1); }
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
 }
 
 @keyframes geo-rotate-medium {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.2); }
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
 }
 
 @keyframes geo-rotate-fast {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.3); }
+
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.3);
+  }
 }
 
 @keyframes geo-pulse-slow {
-  0%, 100% { opacity: 0.1; transform: scale(1); }
-  50% { opacity: 0.2; transform: scale(1.1); }
+
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.2;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes geo-pulse-medium {
-  0%, 100% { opacity: 0.15; transform: scale(1); }
-  50% { opacity: 0.25; transform: scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.25;
+    transform: scale(1.2);
+  }
 }
 
 @keyframes geo-pulse-fast {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(1.3); }
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(1.3);
+  }
 }
 
 @keyframes geo-float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(120deg); }
-  66% { transform: translateY(5px) rotate(240deg); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
 }
 
 @keyframes geo-float-medium {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(180deg); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+  }
 }
 
-/* ===== 光效系统 ===== */
 .light-effects {
   position: relative;
 }
@@ -986,61 +1907,117 @@
 
 /* 光效动画 */
 @keyframes light-pulse-primary {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
 }
 
 @keyframes light-pulse-secondary {
-  0%, 100% { opacity: 0.25; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(1.1); }
+
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes light-pulse-accent {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.3); }
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
 }
 
 @keyframes light-beam-sweep-1 {
-  0% { transform: translateX(-100%); opacity: 0; }
-  50% { opacity: 0.2; }
-  100% { transform: translateX(100%); opacity: 0; }
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 @keyframes light-beam-sweep-2 {
-  0% { transform: translateX(100%); opacity: 0; }
-  50% { opacity: 0.15; }
-  100% { transform: translateX(-100%); opacity: 0; }
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 }
 
 @keyframes light-beam-sweep-3 {
-  0% { transform: translateX(-100%); opacity: 0; }
-  50% { opacity: 0.1; }
-  100% { transform: translateX(100%); opacity: 0; }
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
-/* ===== 响应式优化 ===== */
 @media (max-width: 768px) {
   .particle-cluster {
     width: 150px;
     height: 150px;
   }
-  
+
   .geometric-shape {
     opacity: 0.05;
   }
-  
+
   .light-source {
     filter: blur(15px);
     opacity: 0.2;
   }
-  
+
   .light-beam {
     opacity: 0.1;
   }
 }
 
-/* ===== 性能优化 ===== */
 @media (prefers-reduced-motion: reduce) {
+
   .dynamic-gradient-bg,
   .particle-cluster,
   .parallax-layer,
@@ -1051,7 +2028,6 @@
   }
 }
 
-/* GPU加速优化 */
 .particle-system,
 .parallax-geometry,
 .light-effects {
