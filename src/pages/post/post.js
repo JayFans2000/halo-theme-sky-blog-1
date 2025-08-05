@@ -27,7 +27,6 @@ function createPostController() {
       this.initCodeBlocks();
       this.initImageZoom();
       
-      console.log('文章页面控制器已初始化');
     },
     
     /**
@@ -271,7 +270,6 @@ window.PostShare = {
     const success = await window.SkyUtils.copyToClipboard(window.location.href);
     if (success) {
       // 这里可以显示提示消息
-      console.log('链接已复制到剪贴板');
     }
   }
 };
@@ -281,4 +279,3 @@ document.addEventListener('alpine:init', () => {
   Alpine.data('postController', createPostController);
 });
 
-console.log('Sky Theme - 文章页面脚本已加载');

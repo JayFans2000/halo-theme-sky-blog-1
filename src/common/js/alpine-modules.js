@@ -69,7 +69,6 @@ function createHeaderController() {
         this.progressStroke = `${strokeDasharray} ${circumference}`;
       });
       
-      console.log('首页头部控制器已初始化');
     }
   };
 }
@@ -151,7 +150,6 @@ function initializeAll() {
   Alpine.data('navbarController', createNavbarController);
   Alpine.data('createThemeToggle', createThemeToggle);
   
-  console.log('Sky Theme - 模板组件已注册完成');
 }
 
 

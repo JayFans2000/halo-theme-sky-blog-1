@@ -99,6 +99,10 @@
     class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] items-center justify-center hidden"
     onclick="if(event.target === this) { document.getElementById('talk-modal').classList.add('hidden'); document.getElementById('talk-modal').style.display = 'none'; }"
     style="display: none;">
+    <link rel="stylesheet" th:href="@{/assets/emoji/emoji-selector.css?v={version}(version=${theme.spec.version})}">
+
+    <script th:src="@{/assets/emoji/emoji-selector.js?v={version}(version=${theme.spec.version})}"></script>
+
     <div class="w-full max-w-lg mx-4 bg-base-200 rounded-2xl border border-base-300 shadow-2xl overflow-hidden backdrop-blur-md"
         onclick="event.stopPropagation();">
         <!-- 模态框标题 -->
@@ -128,7 +132,7 @@
                         <div class="flex space-x-2">
                             <!-- 表情选择器按钮 -->
                             <button type="button" id="emoji-trigger-btn"
-                                onclick="showEmojiSelector(document.getElementById('talk-content'))"
+                                onclick="showEmojiSelector(document.getElementById('talk-content'), this)"
                                 class="p-2 hover:scale-110 transition-all duration-200 group" title="添加表情">
                                 <span
                                     class="icon-[material-symbols--sentiment-satisfied] w-4 h-4 text-base-content/60 group-hover:text-yellow-400 transition-colors"></span>

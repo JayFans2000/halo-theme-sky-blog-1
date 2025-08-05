@@ -129,7 +129,6 @@ window.SkyEvents = {
    * 页面加载完成事件
    */
   onPageLoad() {
-    console.log('Sky Theme - 页面加载完成');
     
     // 初始化懒加载图片
     this.initLazyImages();
@@ -185,4 +184,3 @@ document.addEventListener('DOMContentLoaded', () => {
   window.SkyEvents.onPageLoad();
 });
 
-console.log('Sky Theme - 基础脚本已加载');

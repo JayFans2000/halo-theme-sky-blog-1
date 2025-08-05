@@ -6,7 +6,7 @@
 // 导入首页特定样式
 import './index.css';
 
-console.log('Sky Theme - 首页脚本已加载');
+
 
 /**
  * 瞬间卡片鼠标跟随发光效果
@@ -169,12 +169,7 @@ window.hideMomentCardGlow = function(card) {
             this.styleEffect = this.titleElement.dataset.styleEffect || 'none';
             this.originalText = this.titleElement.dataset.originalText || this.titleElement.textContent.trim();
 
-            console.log('标题特效配置:', {
-                decoration: this.decorationEffect,
-                style: this.styleEffect,
-                text: this.originalText
-            });
-
+         
             // 应用特效
             this.applyEffects();
         },
