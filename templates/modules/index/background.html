@@ -1,0 +1,122 @@
+<!-- 背景层模块 -->
+<!-- 背景层：图片Banner背景 -->
+<div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.show_background}">
+    <!-- 第一层：原始图片背景 -->
+    <img class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 filter blur-[0.5px]"
+        th:src="${theme.config.index.background_settings.background_image}" alt="背景图片">
+
+    <!-- 第二层：组合蒙版容器 -->
+    <div class="absolute inset-0">
+        <!-- 默认基础蒙版 + 渐变蒙版组合 -->
+        <div class="absolute inset-0 bg-black/30 bg-gradient-to-b from-black/10 via-black/50 to-black/80"></div>
+
+        <!-- 滚动深邃效果蒙版 -->
+        <div class="absolute inset-0 bg-black transition-opacity duration-500"
+            :style="`opacity: ${scrolled ? 0.4 : 0.1}`">
+        </div>
+    </div>
+</div>
+
+<!-- 视觉震撼动态背景层：当隐藏图片背景时显示 -->
+<div class="absolute inset-0 z-0 overflow-hidden" th:unless="${theme.config.index.background_settings.show_background}">
+    <!-- 第一层：智能主题适配渐变基底 -->
+    <div class="absolute inset-0 theme-adaptive-base"></div>
+
+    <!-- 第二层：动态色彩流动背景 -->
+    <div class="absolute inset-0 dynamic-gradient-bg theme-adaptive-opacity"></div>
+
+    <!-- 第三层：粒子引力系统 -->
+    <div class="absolute inset-0 particle-system">
+        <!-- 主要粒子群 -->
+        <div class="particle-cluster particle-cluster-1">
+            <div class="particle particle-large particle-blue"></div>
+            <div class="particle particle-medium particle-purple"></div>
+            <div class="particle particle-small particle-cyan"></div>
+            <div class="particle particle-tiny particle-white"></div>
+        </div>
+
+        <div class="particle-cluster particle-cluster-2">
+            <div class="particle particle-large particle-purple"></div>
+            <div class="particle particle-medium particle-cyan"></div>
+            <div class="particle particle-small particle-blue"></div>
+            <div class="particle particle-tiny particle-white"></div>
+        </div>
+
+        <div class="particle-cluster particle-cluster-3">
+            <div class="particle particle-large particle-cyan"></div>
+            <div class="particle particle-medium particle-blue"></div>
+            <div class="particle particle-small particle-purple"></div>
+            <div class="particle particle-tiny particle-white"></div>
+        </div>
+
+        <!-- 连接线系统 -->
+        <svg class="absolute inset-0 w-full h-full particle-connections" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="connection-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.4" />
+                    <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.6" />
+                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.4" />
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                    <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- 动态连接线 -->
+            <path class="connection-line connection-line-1" stroke="url(#connection-gradient)" stroke-width="1"
+                fill="none" filter="url(#glow)"></path>
+            <path class="connection-line connection-line-2" stroke="url(#connection-gradient)" stroke-width="0.8"
+                fill="none" filter="url(#glow)"></path>
+            <path class="connection-line connection-line-3" stroke="url(#connection-gradient)" stroke-width="0.6"
+                fill="none" filter="url(#glow)"></path>
+        </svg>
+    </div>
+
+    <!-- 第四层：多层视差几何 -->
+    <div class="absolute inset-0 parallax-geometry">
+        <!-- 远景层 -->
+        <div class="parallax-layer parallax-far">
+            <div class="geometric-shape geo-hexagon geo-far-1"></div>
+            <div class="geometric-shape geo-triangle geo-far-2"></div>
+            <div class="geometric-shape geo-circle geo-far-3"></div>
+        </div>
+
+        <!-- 中景层 -->
+        <div class="parallax-layer parallax-mid">
+            <div class="geometric-shape geo-diamond geo-mid-1"></div>
+            <div class="geometric-shape geo-pentagon geo-mid-2"></div>
+            <div class="geometric-shape geo-star geo-mid-3"></div>
+        </div>
+
+        <!-- 近景层 -->
+        <div class="parallax-layer parallax-near">
+            <div class="geometric-shape geo-square geo-near-1"></div>
+            <div class="geometric-shape geo-octagon geo-near-2"></div>
+        </div>
+    </div>
+
+    <!-- 第五层：光效系统 -->
+    <div class="absolute inset-0 light-effects">
+        <!-- 主光源 -->
+        <div class="light-source light-primary"></div>
+        <div class="light-source light-secondary"></div>
+        <div class="light-source light-accent"></div>
+
+        <!-- 光束效果 -->
+        <div class="light-beam light-beam-1"></div>
+        <div class="light-beam light-beam-2"></div>
+        <div class="light-beam light-beam-3"></div>
+    </div>
+
+    <!-- 第六层：深度蒙版 -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/40"></div>
+
+    <!-- 第七层：滚动交互蒙版 -->
+    <div class="absolute inset-0 bg-black transition-opacity duration-700 ease-out"
+        :style="`opacity: ${scrolled ? 0.25 : 0.02}`">
+    </div>
+</div>

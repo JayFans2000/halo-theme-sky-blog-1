@@ -8,37 +8,26 @@
  * ==================================================*/
 
 /**
- * 1.1 全局霓虹按钮效果
- * 带有霓虹灯光效果的交互按钮
+ * 1.1 简约按钮效果
+ * 简约优雅的交互按钮，减少过度发光效果
  */
 .sky-btn {
   position: relative;
-  background: transparent;
-  border: 2px solid var(--sky-primary);
-  color: var(--title-color);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .sky-btn:hover {
-  background: var(--sky-primary);
-  color: var(--title-color);
-  box-shadow:
-    0 0 10px var(--sky-primary),
-    0 0 20px var(--sky-primary),
-    0 0 30px var(--sky-primary);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/**
- * 1.2 渐变文字效果
- * 应用于需要渐变色彩的文本元素
- */
-.gradient-text {
-  background: linear-gradient(45deg, var(--sky-primary), var(--sky-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
 
 /* ===================================================
  * 2. 首页背景样式
@@ -594,19 +583,23 @@
 }
 
 /**
- * 3.2 装饰特效层 - 不影响文字样式
- * 为标题添加装饰性效果，如粒子、星光等
+ * 3.3 粒子特效 - 完整版
+ * 为标题添加动态粒子轨道效果
  */
 
-/* 粒子环绕特效 - 纯装饰 */
+/* 粒子特效基础样式 */
+.effect-particles {
+  position: relative;
+  display: inline-block;
+}
+
+/* 粒子伪元素基础样式 */
 .effect-particles::before,
 .effect-particles::after,
 .effect-particles span::before,
 .effect-particles span::after,
 .effect-particles span span::before,
-.effect-particles span span::after,
-.effect-particles span span span::before,
-.effect-particles span span span::after {
+.effect-particles span span::after {
   content: '';
   position: absolute;
   border-radius: 50%;
@@ -614,70 +607,75 @@
   pointer-events: none;
 }
 
-/* 粒子1 - 左上大粒子 */
+/* 粒子1 - 主要大粒子，右上方 */
 .effect-particles::before {
-  width: 5px;
-  height: 5px;
-  background: var(--sky-primary, #3b82f6);
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #fff, var(--sky-primary, #3b82f6));
   box-shadow:
-    0 0 8px var(--sky-primary, #3b82f6),
-    0 0 16px var(--sky-accent, #8b5cf6);
-  top: -12px;
-  left: 5%;
-  animation: orbit-1 5s linear infinite;
+    0 0 10px #fff,
+    0 0 20px var(--sky-primary, #3b82f6),
+    0 0 30px var(--sky-primary, #3b82f6);
+  top: -15px;
+  right: 10%;
+  animation: orbit-1 6s linear infinite;
   opacity: 0.9;
 }
 
-/* 粒子2 - 右下大粒子 */
+/* 粒子2 - 次要大粒子，左下方 */
 .effect-particles::after {
-  width: 4px;
-  height: 4px;
-  background: var(--sky-secondary, #06b6d4);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff, var(--sky-secondary, #06b6d4));
   box-shadow:
-    0 0 10px var(--sky-secondary, #06b6d4),
-    0 0 20px var(--sky-accent, #8b5cf6);
-  bottom: -10px;
-  right: 5%;
-  animation: orbit-2 4s linear infinite reverse;
+    0 0 8px #fff,
+    0 0 16px var(--sky-secondary, #06b6d4),
+    0 0 24px var(--sky-secondary, #06b6d4);
+  bottom: -12px;
+  left: 15%;
+  animation: orbit-2 5s linear infinite reverse;
   opacity: 0.8;
 }
 
-/* 粒子3 - 上方中央粒子 */
+/* 粒子3 - 中等粒子，上方中央 */
 .effect-particles span::before {
-  width: 3px;
-  height: 3px;
-  background: var(--sky-accent, #8b5cf6);
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle, #fff, var(--sky-accent, #8b5cf6));
   box-shadow:
-    0 0 8px var(--sky-accent, #8b5cf6),
-    0 0 16px var(--sky-primary, #3b82f6);
-  top: -15px;
+    0 0 6px #fff,
+    0 0 12px var(--sky-accent, #8b5cf6),
+    0 0 18px var(--sky-accent, #8b5cf6);
+  top: -20px;
   left: 50%;
-  animation: orbit-3 6s linear infinite;
+  animation: orbit-3 4s linear infinite;
   opacity: 0.7;
 }
 
-/* 粒子4 - 下方中央粒子 */
+/* 粒子4 - 中等粒子，下方中央 */
 .effect-particles span::after {
-  width: 3px;
-  height: 3px;
-  background: var(--sky-primary, #3b82f6);
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #fff, var(--sky-primary, #3b82f6));
   box-shadow:
-    0 0 8px var(--sky-primary, #3b82f6),
-    0 0 16px var(--sky-secondary, #06b6d4);
+    0 0 5px #fff,
+    0 0 10px var(--sky-primary, #3b82f6),
+    0 0 15px var(--sky-primary, #3b82f6);
   bottom: -8px;
-  left: 30%;
-  animation: orbit-4 7s linear infinite reverse;
+  left: 60%;
+  animation: orbit-4 4.5s linear infinite reverse;
   opacity: 0.7;
 }
 
 /* 粒子5 - 右上小粒子 */
 .effect-particles span span::before {
-  width: 2px;
-  height: 2px;
-  background: #fff;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, #fff, var(--sky-secondary, #06b6d4));
   box-shadow:
-    0 0 6px #fff,
-    0 0 12px var(--sky-primary, #3b82f6);
+    0 0 4px #fff,
+    0 0 8px var(--sky-secondary, #06b6d4),
+    0 0 12px var(--sky-secondary, #06b6d4);
   top: -6px;
   right: 20%;
   animation: orbit-5 3s linear infinite;
@@ -688,10 +686,11 @@
 .effect-particles span span::after {
   width: 2px;
   height: 2px;
-  background: #fff;
+  background: radial-gradient(circle, #fff, var(--sky-accent, #8b5cf6));
   box-shadow:
-    0 0 6px #fff,
-    0 0 12px var(--sky-secondary, #06b6d4);
+    0 0 3px #fff,
+    0 0 6px var(--sky-accent, #8b5cf6),
+    0 0 9px var(--sky-accent, #8b5cf6);
   bottom: -5px;
   left: 15%;
   animation: orbit-6 4s linear infinite reverse;
@@ -1072,18 +1071,112 @@
  * 4.1 说说卡片基础样式
  * 用于说说模块的卡片样式，包含悬停动画和毛玻璃效果
  */
-.floating-card {
+ .moment-card {
+   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   backdrop-filter: blur(10px);
+   background: rgba(255, 255, 255, 0.05);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+ }
+ 
+.moment-floating-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.floating-card:hover {
+
+.moment-floating-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow:
-    0 20px 40px rgba(0, 163, 255, 0.3),
-    0 0 20px rgba(123, 66, 246, 0.2);
+    0 20px 40px color-mix(in srgb, var(--color-primary) 30%, transparent),
+    /* 外层阴影：30% 主色浓度 */
+    0 0 20px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  /* 内层发光：20% 主色浓度 */
+}
+
+/**
+ * 4.2 瞬间卡片鼠标跟随发光效果
+ * 实现基于鼠标位置的动态光晕效果，增强用户交互体验
+ */
+
+/* 带发光效果的卡片基础样式 */
+.moment-card-with-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 发光效果容器 - 绝对定位且不响应鼠标事件 */
+.moment-glow-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 动态光效元素 - 跟随鼠标位置移动 */
+.moment-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  background: radial-gradient(circle,
+      color-mix(in oklch, var(--color-primary) 50%, transparent),
+      color-mix(in oklch, var(--color-primary) 30%, transparent),
+      color-mix(in oklch, var(--color-primary) 10%, transparent),
+      transparent 70%);
+  filter: blur(20px);
+  transform: translate(-50%, -50%);
+  will-change: left, top, opacity;
+}
+
+/* 确保卡片内容在光效之上 */
+.moment-card-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* 增强卡片悬停效果，与发光效果协调 */
+.moment-card-with-glow:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklch, var(--color-primary) 20%, transparent);
+  box-shadow:
+    0 8px 32px color-mix(in oklch, var(--color-primary) 50%, transparent),
+    0 0 20px color-mix(in oklch, var(--color-primary) 20%, transparent),;
+}
+
+/* 为瞬间浮动卡片添加发光效果支持 */
+.moment-floating-card-with-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.moment-floating-card-with-glow .moment-glow-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.moment-floating-card-with-glow .moment-glow {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  background: radial-gradient(circle,
+    color-mix(in oklch, var(--color-primary) 50%, transparent),
+    color-mix(in oklch, var(--color-primary) 30%, transparent),
+    color-mix(in oklch, var(--color-primary) 10%, transparent),
+    transparent 70%);
+  filter: blur(15px);
+  transform: translate(-50%, -50%);
+  will-change: left, top, opacity;
 }
 
 /* ===================================================
@@ -1224,4 +1317,54 @@
   .wave-dot {
     animation: none;
   }
+}
+
+/**
+ * 4.3 瞬间点赞按钮样式
+ * 为瞬间卡片的点赞功能提供交互样式
+ */
+
+/* 点赞按钮基础样式 */
+.moment-like-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 点赞按钮悬停效果 */
+.moment-like-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* 已点赞状态样式 */
+.moment-like-btn.liked {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.moment-like-btn.liked:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* 点赞动画效果 */
+.moment-like-btn:active {
+  transform: scale(0.95);
+}
+
+/* 点赞图标样式 */
+.moment-like-btn .icon-[material-symbols--favorite] {
+  transition: all 0.2s ease;
+}
+
+/* 点赞数量样式 */
+.moment-like-count {
+  transition: color 0.2s ease;
+  font-weight: 500;
+}
+
+/* 点赞按钮容器样式 */
+.moment-like-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

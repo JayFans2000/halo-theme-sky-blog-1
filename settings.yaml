@@ -675,3 +675,27 @@ spec:
               if: $get(show_wave_transition).value
               label: 波浪颜色
               help: 波浪的颜色，可以使用颜色名称、HEX、RGB、变量
+        - $formkit: group
+          name: moment_settings
+          label: 瞬间说说设置
+          value:
+            show_moment: true
+            moment_title: "瞬间"
+          children:
+            - $formkit: radio
+              id: show_moment
+              name: show_moment
+              label: 显示瞬间说说
+              help: 是否在首页显示瞬间说说模块
+              options:
+                - label: 显示
+                  value: true
+                - label: 隐藏
+                  value: false
+            - $formkit: text
+              name: moment_title
+              key: moment_title_field
+              if: $get(show_moment).value
+              label: 瞬间标题
+              help: 瞬间说说模块的标题文字
+              value: "瞬间"

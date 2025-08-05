@@ -1,0 +1,71 @@
+<!-- 标题内容模块 -->
+<!-- 字体按需加载脚本 -->
+<script th:inline="javascript">
+    (function () {
+        // 获取当前使用的字体设置
+        const titleFont = /*[[${theme.config.index.title_settings.title_font}]]*/ 'font-default';
+        const subtitleFont = /*[[${theme.config.index.subtitle_settings.subtitle_font}]]*/ 'font-default';
+
+        // 已加载的字体跟踪
+        const loadedFonts = {};
+
+        // 加载字体的函数
+        function loadFont(fontName, fontPath) {
+            if (loadedFonts[fontName]) return; // 避免重复加载
+
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = fontPath;
+            document.head.appendChild(link);
+            loadedFonts[fontName] = true;
+            console.log(`已加载${fontName}字体`);
+        }
+
+        // 根据主标题字体加载
+        if (titleFont === 'font-lxgw-wenkai-bright') {
+            loadFont('霞鹜文楷亮', '/themes/theme-sky-blog-1/assets/fonts/LXGWBright-SemiLight/result.css');
+        }
+        else if (titleFont === 'font-siyuan-songti') {
+            loadFont('思源屏显臻宋', '/themes/theme-sky-blog-1/assets/fonts/思源屏显臻宋/result.css');
+        }
+
+        // 根据副标题字体加载
+        if (subtitleFont === 'font-lxgw-wenkai-bright') {
+            loadFont('霞鹜文楷亮', '/themes/theme-sky-blog-1/assets/fonts/LXGWBright-SemiLight/result.css');
+        }
+        else if (subtitleFont === 'font-siyuan-songti') {
+            loadFont('思源屏显臻宋', '/themes/theme-sky-blog-1/assets/fonts/思源屏显臻宋/result.css');
+        }
+
+        // 英文字体和默认字体已在基础CSS中加载，无需动态处理
+    })();
+</script>
+
+<!-- 中层：标题内容 -->
+<div class="relative z-20 flex flex-col items-center justify-center min-h-screen px-4 text-center"
+    :style="`transform: translateY(${scrollOffset * 0.3}px); opacity: ${1 - scrollOffset * 0.001}`">
+
+    <!-- 主标题 - 增强特效 -->
+    <h1 id="main-title" th:if="${theme.config.index.title_settings.show_title}"
+        th:class="${'text-6xl md:text-8xl font-bold mb-6 text-white animate-in fade-in zoom-in duration-700 effect-base ' + theme.config.index.title_settings.style_effect + ' ' + theme.config.index.title_settings.title_font}"
+        style="animation-delay: 0.2s;"
+        th:data-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
+        th:data-original-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
+        th:data-decoration-effect="${theme.config.index.title_settings.decoration_effect}">
+        <span
+            th:text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}">Sky
+            Blog</span>
+    </h1>
+
+    <!-- 副标题 - 增强特效 -->
+    <div th:if="${theme.config.index.subtitle_settings.show_subtitle}"
+        class="text-xl md:text-2xl mb-8 max-w-2xl animate-in text-white fade-in slide-in-from-bottom-4 duration-700"
+        style="animation-delay: 0.4s;">
+        <p id="subtitle"
+            th:class="${'subtitle-base ' + theme.config.index.subtitle_settings.subtitle_font + ' ' + (theme.config.index.subtitle_settings.subtitle_effect == 'typewriter' ? 'typewriter' : (theme.config.index.subtitle_settings.subtitle_effect == 'gradient-flow' ? 'gradient-flow' : ''))}"
+            th:text="${theme.config.index.subtitle_settings.subtitle_text}">
+            记录生活，分享思考，探索无限可能
+        </p>
+    </div>
+
+</div>
