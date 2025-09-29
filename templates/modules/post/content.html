@@ -1,0 +1,85 @@
+
+<!-- 主要内容区域 -->
+  <main class="relative z-10 bg-base-100" th:fragment="post-content">
+    <!-- 两栏布局容器 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+        <!-- 左侧主内容区域 -->
+        <article class="lg:col-span-3 bg-base-100">
+          <!-- 文章头部 -->
+          <header class="mb-8 pb-6 border-b border-base-200/50">
+            <!-- 文章标题 -->
+            <h1 class="text-3xl lg:text-4xl font-bold text-base-content mb-6 leading-tight" th:text="${post.spec.title}">
+              文章标题占位符
+            </h1>
+
+            <!-- 文章元数据 -->
+            <div class="flex flex-wrap items-center gap-4 text-sm text-base-content/60">
+              <!-- 发布时间 -->
+              <div class="flex items-center gap-1">
+                <span class="text-base">📅</span>
+                <span th:text="${#temporals.format(post.spec.publishTime, 'yyyy.MM.dd')}">发布时间占位符</span>
+              </div>
+
+              <!-- 浏览数 -->
+              <div class="flex items-center gap-1">
+                <iconify-icon icon="material-symbols:visibility" class="w-4 h-4 text-base-content/70"></iconify-icon>
+                <span th:text="${post.stats.visit ?: 0}">浏览数占位符</span>
+              </div>
+
+              <!-- 点赞数 -->
+              <div class="flex items-center gap-1">
+                <iconify-icon icon="material-symbols:favorite" class="w-4 h-4 text-base-content/70"></iconify-icon>
+                <span th:text="${post.stats.upvote ?: 0}">点赞数占位符</span>
+              </div>
+
+              <!-- 字数统计 -->
+              <div class="flex items-center gap-1">
+                <iconify-icon icon="material-symbols:bar-chart" class="w-4 h-4 text-base-content/70"></iconify-icon>
+                <span>字数统计占位符</span>
+              </div>
+
+              <!-- 阅读时间 -->
+              <div class="flex items-center gap-1">
+                <iconify-icon icon="material-symbols:schedule" class="w-4 h-4 text-base-content/70"></iconify-icon>
+                <span>阅读时间占位符</span>
+              </div>
+            </div>
+          </header>
+
+          <!-- 文章内容 -->
+          <div class="prose prose-lg max-w-none" id="post-content">
+            <!-- 文章摘要 -->
+            <div class="bg-base-200/30 rounded-lg p-6 mb-8" th:if="${post.spec.excerpt}">
+              <h3 class="text-lg font-semibold mb-3 text-base-content/80">文章摘要</h3>
+              <p class="text-base-content/70" th:text="${post.spec.excerpt}">文章摘要占位符</p>
+            </div>
+            
+            <!-- 文章正文内容 -->
+            <!-- 文章正文内容 -->
+            <div th:utext="${post.content.content}" class="prose prose-lg max-w-none">
+              <!-- 文章内容占位符 - 这里将显示实际的文章内容 -->
+              <p class="text-base-content/60">文章正文内容将在这里显示...</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 右侧目录区域 -->
+        <aside class="hidden lg:block lg:col-span-1">
+          <div class="sticky top-24 z-30">
+            <!-- 目录标题 -->
+            <h3 class="text-lg font-semibold text-base-content mb-4 pb-2 border-b border-base-200/50">
+              📋 目录
+            </h3>
+
+            <!-- 目录导航容器 - 由 enhanced-toc.js 自动生成 -->
+            <nav id="desktop-toc" class="toc-nav space-y-2" role="navigation" aria-label="文章目录">
+              <!-- 目录内容将由 JavaScript 自动生成 -->
+              <div class="text-base-content/60">目录将根据文章标题自动生成</div>
+            </nav>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>

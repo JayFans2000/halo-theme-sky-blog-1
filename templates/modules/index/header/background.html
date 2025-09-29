@@ -2,7 +2,7 @@
 <!-- 背景层：图片Banner背景 -->
 <div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.show_background}">
     <!-- 第一层：原始图片背景 -->
-    <img class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 filter blur-[0.5px]"
+    <img class="absolute inset-0 w-full h-full object-cover object-center sm:object-center md:object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
         th:src="${theme.config.index.background_settings.background_image}" alt="背景图片">
 
     <!-- 第二层：组合蒙版容器 -->

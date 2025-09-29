@@ -40,13 +40,14 @@
     })();
 </script>
 
-<!-- 中层：标题内容 -->
-<div class="relative z-20 flex flex-col items-center justify-center min-h-screen px-4 text-center"
+<!-- 中层：标题内容 - 统一布局方案 -->
+<div class="absolute inset-0 z-20 flex flex-col items-center justify-center px-4 text-center
+            transition-all duration-700 ease-out"
     :style="`transform: translateY(${scrollOffset * 0.3}px); opacity: ${1 - scrollOffset * 0.001}`">
 
     <!-- 主标题 - 增强特效 -->
     <h1 id="main-title" th:if="${theme.config.index.title_settings.show_title}"
-        th:class="${'text-6xl md:text-8xl font-bold mb-6 text-white animate-in fade-in zoom-in duration-700 effect-base ' + theme.config.index.title_settings.style_effect + ' ' + theme.config.index.title_settings.title_font}"
+        th:class="${'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 sm:mb-4 md:mb-6 text-white animate-in fade-in zoom-in duration-700 effect-base transition-all ' + theme.config.index.title_settings.style_effect + ' ' + theme.config.index.title_settings.title_font}"
         style="animation-delay: 0.2s;"
         th:data-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
         th:data-original-text="${#strings.isEmpty(theme.config.index.title_settings.custom_title) ? site.title : theme.config.index.title_settings.custom_title}"
@@ -58,10 +59,10 @@
 
     <!-- 副标题 - 增强特效 -->
     <div th:if="${theme.config.index.subtitle_settings.show_subtitle}"
-        class="text-xl md:text-2xl mb-8 max-w-2xl animate-in text-white fade-in slide-in-from-bottom-4 duration-700"
+        class="text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-8 max-w-xs sm:max-w-md md:max-w-2xl animate-in text-white fade-in slide-in-from-bottom-4 duration-700 transition-all"
         style="animation-delay: 0.4s;">
         <p id="subtitle"
-            th:class="${'subtitle-base ' + theme.config.index.subtitle_settings.subtitle_font + ' ' + (theme.config.index.subtitle_settings.subtitle_effect == 'typewriter' ? 'typewriter' : (theme.config.index.subtitle_settings.subtitle_effect == 'gradient-flow' ? 'gradient-flow' : ''))}"
+            th:class="${'subtitle-base transition-all duration-300 ' + theme.config.index.subtitle_settings.subtitle_font + ' ' + (theme.config.index.subtitle_settings.subtitle_effect == 'typewriter' ? 'typewriter' : (theme.config.index.subtitle_settings.subtitle_effect == 'gradient-flow' ? 'gradient-flow' : ''))}"
             th:text="${theme.config.index.subtitle_settings.subtitle_text}">
             记录生活，分享思考，探索无限可能
         </p>

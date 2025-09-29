@@ -49,6 +49,127 @@ body {
     scrollbar-gutter: stable;
 }
 
+/* 平板端优化和流畅动画系统 */
+/* 自定义缓动函数 */
+:root {
+    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-natural: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* 全局过渡动画 */
+* {
+    transition-timing-function: var(--ease-gentle);
+}
+
+/* 平板端专用动画类 */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .tablet-optimized {
+        transform: scale(0.98);
+        transition: transform 0.4s var(--ease-smooth);
+    }
+    
+    .tablet-optimized:hover {
+        transform: scale(1);
+    }
+    
+    /* 平板端减少动画强度 */
+    .animate-smooth-fade-in {
+        animation-duration: 0.4s;
+    }
+    
+    .animate-gentle-scale {
+        animation-duration: 0.3s;
+    }
+    
+    .animate-natural-slide-up {
+        animation-duration: 0.5s;
+    }
+}
+
+/* 流畅的淡入动画 */
+@keyframes smooth-fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 柔和的缩放动画 */
+@keyframes gentle-scale {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.02);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 自然的滑入动画 */
+@keyframes natural-slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    60% {
+        opacity: 0.8;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 动画工具类 */
+.animate-smooth-fade-in {
+    animation: smooth-fade-in 0.6s var(--ease-natural) forwards;
+}
+
+.animate-gentle-scale {
+    animation: gentle-scale 0.5s var(--ease-smooth) forwards;
+}
+
+.animate-natural-slide-up {
+    animation: natural-slide-up 0.7s var(--ease-gentle) forwards;
+}
+
+/* 悬停效果增强 */
+.hover-lift {
+    transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 平板端触摸优化 */
+@media (hover: none) and (pointer: coarse) {
+    .hover-lift:active {
+        transform: translateY(-1px);
+        transition-duration: 0.1s;
+    }
+}
+
+/* 响应式动画延迟 */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
 body[style*="overflow: hidden"] {
     overflow: auto !important;
 }

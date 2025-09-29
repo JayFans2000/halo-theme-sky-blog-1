@@ -51,24 +51,48 @@ function createBackToTop() {
  */
 function createHeaderController() {
   return {
-    scrolled: false,
     scrollOffset: 0,
-    progressStroke: '0 113',
+    scrolled: false,
+    showMoments: true,
+    showPublishModal: false,
+    isTablet: false,
     
     init() {
-      // 滚动监听
-      window.addEventListener('scroll', () => {
-        this.scrollOffset = window.scrollY;
-        this.scrolled = this.scrollOffset > 20;
-        
-        // 计算进度条
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = Math.min(this.scrollOffset / maxScroll, 1);
-        const circumference = 2 * Math.PI * 18; // r=18
-        const strokeDasharray = circumference * progress;
-        this.progressStroke = `${strokeDasharray} ${circumference}`;
+      // 检测设备类型
+      this.detectDevice();
+      
+      // 监听窗口大小变化
+      window.addEventListener('resize', () => {
+        this.detectDevice();
       });
       
+      // 监听滚动事件，使用节流优化性能
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.updateScrollOffset();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    },
+    
+    detectDevice() {
+      this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    },
+    
+    updateScrollOffset() {
+      this.scrollOffset = window.scrollY;
+      
+      // 更新scrolled状态，用于背景蒙版透明度控制
+      this.scrolled = this.scrollOffset > 50;
+      
+      // 平板端优化：减少视差效果强度
+      if (this.isTablet) {
+        this.scrollOffset *= 0.7;
+      }
     }
   };
 }

@@ -1,6 +1,11 @@
 <!--  Header - 模块化版本 -->
-<div class="relative min-h-screen overflow-hidden mt-[-50px] z-10" x-data="headerController()">
-
+<div class="relative 
+            min-h-[60vh] max-h-[70vh] 
+            md:min-h-[80vh] md:max-h-[85vh]
+            lg:min-h-screen lg:max-h-screen  
+            overflow-hidden mt-[-50px] z-10 
+            transition-all duration-500 ease-out" 
+     x-data="headerController()">
     <!-- 背景模块 -->
     <th:block th:replace="~{modules/index/header/background}"></th:block>
 

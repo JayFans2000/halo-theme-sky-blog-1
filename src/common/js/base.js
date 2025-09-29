@@ -90,7 +90,7 @@ window.SkyUtils = {
     try {
       await navigator.clipboard.writeText(text);
       return true;
-    } catch (err) {
+    } catch {
       // 降级方案
       const textArea = document.createElement('textarea');
       textArea.value = text;
@@ -144,7 +144,7 @@ window.SkyEvents = {
     const images = document.querySelectorAll('img[data-src]');
     
     if ('IntersectionObserver' in window) {
-      const imageObserver = new IntersectionObserver((entries, observer) => {
+      const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;

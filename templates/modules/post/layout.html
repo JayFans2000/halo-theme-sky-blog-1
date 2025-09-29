@@ -18,18 +18,17 @@
   <link rel="stylesheet" th:href="@{/assets/fonts/open-fonts.css?v={version}(version=${theme.spec.version})}" />
   <!-- 主题样式 -->
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
-  <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
+  <link rel="stylesheet" th:href="@{/assets/css/post.css?v={version}(version=${theme.spec.version})}" />
 
 </head>
 
 <body class="min-h-screen bg-base-100 text-base-content">
   <!-- 导航栏 -->
   <th:block th:replace="~{modules/nav :: navbar}" />
-  <th:block th:replace="~{modules/index/header}" />
 
   <!-- 主要内容区域 -->
-  <main class="flex-1 -mt-16">
-    <th:block th:replace="${content}" />
+  <main class="flex-1 mt-16">
+    <th:block th:replace="~{modules/post/content}" />
   </main>
 
   <!-- 页脚 -->
@@ -37,7 +36,7 @@
 
   <!-- JavaScript 文件 -->
   <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
-  <script th:src="@{/assets/js/index.js?v={version}(version=${theme.spec.version})}" defer></script>
+  <script th:src="@{/assets/js/post.js?v={version}(version=${theme.spec.version})}" defer></script>
 </body>
 
 </html>
