@@ -4,6 +4,72 @@
  */
 
 /**
+ * 页面加载屏幕（可配置）
+ * 从 html 标签的 data 属性读取配置
+ */
+(function() {
+  // 读取配置
+  const config = {
+    enabled: document.documentElement.dataset.loadingEnabled === 'true',
+    type: document.documentElement.dataset.loadingType || 'spinner',
+    imageUrl: document.documentElement.dataset.loadingImageUrl || '',
+    text: document.documentElement.dataset.loadingText || '加载中...'
+  };
+  
+  // 如果禁用，跳过
+  if (!config.enabled) return;
+  
+  // 生成加载图标 HTML
+  let loadingIcon = '';
+  if (config.type === 'image' && config.imageUrl) {
+    loadingIcon = `<img src="${config.imageUrl}" style="width: 64px; height: 64px; object-fit: contain;" alt="Loading">`;
+  } else {
+    loadingIcon = `<span class="loading loading-${config.type} loading-lg text-primary"></span>`;
+  }
+  
+  // 创建加载屏幕
+  const loadingScreen = document.createElement('div');
+  loadingScreen.id = 'app-loading';
+  loadingScreen.style.cssText = `
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--color-base-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  `;
+  
+  loadingScreen.innerHTML = `
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      ${loadingIcon}
+      <p style="margin-top: 1rem; color: var(--color-base-content); opacity: 0.6; font-size: 0.875rem;">${config.text}</p>
+    </div>
+  `;
+  
+  // 尽早插入到页面
+  if (document.body) {
+    document.body.insertBefore(loadingScreen, document.body.firstChild);
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.insertBefore(loadingScreen, document.body.firstChild);
+    });
+  }
+  
+  // 页面完全加载后移除
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => {
+        loadingScreen.remove();
+      }, 500);
+    }, 150);
+  });
+})();
+
+/**
  * 工具函数集合
  */
 window.SkyUtils = {

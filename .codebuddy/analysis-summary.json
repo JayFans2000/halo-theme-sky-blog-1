@@ -1,7 +1,0 @@
-{
-  "title": "Header模板模块化拆分",
-  "features": ["背景模块拆分", "标题模块拆分", "瞬间模块拆分", "过渡动画模块拆分", "主header文件重构"],
-  "tech": { "Web": { "arch": "thymeleaf", "component": null } },
-  "design": "将单一复杂的header.html文件按功能模块拆分为4个独立的子模板文件，每个文件负责特定功能，通过th:replace引入到主文件中",
-  "plan": { "step1": "done", "step2": "done", "step3": "done", "step4": "done", "step5": "done" }
-}

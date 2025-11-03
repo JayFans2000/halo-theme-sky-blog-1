@@ -42,6 +42,25 @@
     --glow-intensity-strong: 0.8;
 
     --sky-container: var(--color-base-300);
+    
+    /* Halo 评论组件变量适配到 DaisyUI 5 */
+    --halo-cw-primary-1-color: var(--color-primary);
+    --halo-cw-primary-2-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
+    --halo-cw-primary-3-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    
+    --halo-cw-text-1-color: var(--color-base-content);
+    --halo-cw-text-2-color: color-mix(in srgb, var(--color-base-content) 85%, transparent);
+    --halo-cw-text-3-color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+    
+    --halo-cw-muted-1-color: var(--color-base-300);
+    --halo-cw-muted-2-color: var(--color-base-200);
+    --halo-cw-muted-3-color: var(--color-base-100);
+    
+    --halo-cw-base-rounded: 0.5rem;
+    --halo-cw-avatar-rounded: 9999px;
+    --halo-cw-avatar-size: 2rem;
+    --halo-cw-base-font-size: 14px;
+    --halo-cw-base-font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* 滚动条修复 - 防止页面跳动 */
@@ -183,4 +202,61 @@ body[style*="overflow: hidden"] {
         padding-right: var(--scrollbar-width);
         overflow: hidden;
     }
+}
+
+/* 深色模式组件微光效果 - 统一使用淡灰色光圈 */
+[data-theme="dark"] .card,
+[data-theme="night"] .card,
+[data-theme="black"] .card,
+[data-theme="dracula"] .card,
+[data-theme="forest"] .card,
+[data-theme="business"] .card,
+[data-theme="coffee"] .card,
+[data-theme="dim"] .card,
+[data-theme="synthwave"] .card,
+[data-theme="halloween"] .card,
+[data-theme="luxury"] .card {
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
+[data-theme="dark"] .card:hover,
+[data-theme="night"] .card:hover,
+[data-theme="black"] .card:hover,
+[data-theme="dracula"] .card:hover,
+[data-theme="forest"] .card:hover,
+[data-theme="business"] .card:hover,
+[data-theme="coffee"] .card:hover,
+[data-theme="dim"] .card:hover,
+[data-theme="synthwave"] .card:hover,
+[data-theme="halloween"] .card:hover,
+[data-theme="luxury"] .card:hover {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+}
+
+[data-theme="dark"] .modal-box,
+[data-theme="night"] .modal-box,
+[data-theme="black"] .modal-box,
+[data-theme="dracula"] .modal-box,
+[data-theme="forest"] .modal-box,
+[data-theme="business"] .modal-box,
+[data-theme="coffee"] .modal-box,
+[data-theme="dim"] .modal-box,
+[data-theme="synthwave"] .modal-box,
+[data-theme="halloween"] .modal-box,
+[data-theme="luxury"] .modal-box {
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+}
+
+[data-theme="dark"] .drawer-side > div,
+[data-theme="night"] .drawer-side > div,
+[data-theme="black"] .drawer-side > div,
+[data-theme="dracula"] .drawer-side > div,
+[data-theme="forest"] .drawer-side > div,
+[data-theme="business"] .drawer-side > div,
+[data-theme="coffee"] .drawer-side > div,
+[data-theme="dim"] .drawer-side > div,
+[data-theme="synthwave"] .drawer-side > div,
+[data-theme="halloween"] .drawer-side > div,
+[data-theme="luxury"] .drawer-side > div {
+    box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }

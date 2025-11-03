@@ -7,6 +7,7 @@
 import './css/tailwind.css';
 import './css/nav-enhancements.css';
 import './css/base.css';
+import './css/floating-dock.css';
 
 // 导入基础脚本
 import './js/base.js';

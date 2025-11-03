@@ -1,0 +1,298 @@
+/* ========================================== */
+/*            悬浮 Dock 控制栏样式             */
+/* ========================================== */
+
+/* Dock 容器样式 */
+.floating-dock-wrapper {
+  /* 确保在最顶层 */
+  position: relative;
+  z-index: 9999;
+}
+
+.dock-container {
+  /* 毛玻璃效果增强 */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  
+  /* 阴影层次 */
+  box-shadow: 
+    0 10px 40px -10px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  
+  /* 悬停效果 */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dock-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 20px 60px -15px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Dock 按钮项 */
+.dock-item {
+  position: relative;
+  overflow: visible;
+  will-change: transform;
+}
+
+/* Dock 自定义按钮样式 */
+.dock-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-base-content);
+}
+
+.dock-btn:hover [class*="icon-"],
+.dock-btn:hover .dock-icon-svg,
+.dock-btn:hover .dock-icon-svg svg {
+  color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.dock-btn:active {
+  transform: scale(0.9);
+}
+
+/* SVG 图标样式控制 */
+.dock-icon-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: currentColor;
+}
+
+.dock-icon-svg svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* 强制 SVG 使用 currentColor，覆盖任何固定颜色 */
+.dock-icon-svg svg,
+.dock-icon-svg svg * {
+  fill: currentColor !important;
+  color: currentColor !important;
+}
+
+/* 强制移除 SVG 的固定尺寸属性 */
+.dock-icon-svg svg[width],
+.dock-icon-svg svg[height] {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 分享平台按钮样式 - 简约卡片风格 */
+.share-platform-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: 1px solid var(--color-base-300);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: var(--color-base-content);
+}
+
+.share-platform-btn:hover {
+  background: var(--color-base-200);
+  border-color: var(--color-primary);
+}
+
+.share-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.share-icon-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.share-icon-wrapper svg,
+.share-icon-wrapper svg * {
+  fill: currentColor !important;
+  color: currentColor !important;
+}
+
+.share-platform-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-base-content);
+}
+
+/* Tooltip 增强 */
+.dock-tooltip {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+}
+
+.dock-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--color-base-content);
+}
+
+/* 响应式适配 */
+
+/* 桌面端 (≥1024px) */
+@media (min-width: 1024px) {
+  .dock-container {
+    padding: 0.375rem 0.5rem;
+  }
+  
+  .dock-item {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* 平板端 (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dock-container {
+    padding: 0.375rem 0.5rem;
+  }
+  
+  .dock-item {
+    width: 1.875rem;
+    height: 1.875rem;
+  }
+  
+  .dock-item [class*="icon-"] {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+/* 移动端 (< 768px) */
+@media (max-width: 767px) {
+  .dock-container {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .dock-item {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .dock-item [class*="icon-"] {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  
+  .floating-dock-wrapper {
+    bottom: 1rem;
+  }
+  
+  /* 移动端隐藏 tooltip，避免遮挡 */
+  .dock-tooltip {
+    display: none;
+  }
+  
+  /* 修复：防止 Dock 占用额外高度 */
+  body {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* 小屏幕 (< 640px) */
+@media (max-width: 639px) {
+  .dock-container {
+    padding: 0.25rem 0.375rem;
+  }
+  
+  .dock-item {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+/* 性能优化 */
+.dock-item,
+.dock-container {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 分享模态框样式增强 */
+.modal-box {
+  max-width: 28rem;
+}
+
+/* 评论抽屉样式 */
+.drawer-side {
+  z-index: 9998;
+}
+
+/* 深色模式微光圈效果 - 统一风格 */
+[data-theme="dark"] .dock-container,
+[data-theme="night"] .dock-container,
+[data-theme="black"] .dock-container,
+[data-theme="dracula"] .dock-container,
+[data-theme="forest"] .dock-container,
+[data-theme="business"] .dock-container,
+[data-theme="coffee"] .dock-container,
+[data-theme="dim"] .dock-container,
+[data-theme="synthwave"] .dock-container,
+[data-theme="halloween"] .dock-container,
+[data-theme="luxury"] .dock-container {
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
+[data-theme="dark"] .dock-container:hover,
+[data-theme="night"] .dock-container:hover,
+[data-theme="black"] .dock-container:hover,
+[data-theme="dracula"] .dock-container:hover,
+[data-theme="forest"] .dock-container:hover,
+[data-theme="business"] .dock-container:hover,
+[data-theme="coffee"] .dock-container:hover,
+[data-theme="dim"] .dock-container:hover,
+[data-theme="synthwave"] .dock-container:hover,
+[data-theme="halloween"] .dock-container:hover,
+[data-theme="luxury"] .dock-container:hover {
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+}
+
+/* 动画关键帧 - 简约入场 */
+@keyframes dock-fade-in {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 移除默认入场动画，由 Alpine.js 的 x-show 控制显示 */
+

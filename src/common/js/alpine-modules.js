@@ -3,37 +3,42 @@
  * 只包含模板中实际使用的功能
  */
 
+/* global Alpine */
+
 /**
- * 回到顶部控制器
- * 模板使用：templates/modules/footer.html
+ * 悬浮 Dock 控制器
+ * 模板使用：templates/modules/floating-dock.html, templates/modules/post/floating-dock.html
  */
-function createBackToTop() {
+function createFloatingDock() {
   return {
-    isVisible: false,
-    progress: 0,
-    progressStroke: '0 113',
+    isVisible: true,
+    isCommentDrawerOpen: false,
+    scrollTimeout: null,
+    scrollPercent: 0,
     
     init() {
-      // 初始化时计算一次进度
-      this.updateProgress();
+      this.updateVisibility();
       
-      // 监听滚动事件
+      let ticking = false;
+      
       window.addEventListener('scroll', () => {
-        this.updateProgress();
-      });
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.updateVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
     },
     
-    updateProgress() {
+    updateVisibility() {
       const scrollTop = window.scrollY;
-      // 按钮在滚动超过100px时显示
-      this.isVisible = scrollTop > 100;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       
-      // 进度环始终根据滚动位置更新
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
-      const circumference = 2 * Math.PI * 18; // r=18
-      const strokeDasharray = circumference * progress;
-      this.progressStroke = `${strokeDasharray} ${circumference}`;
+      // 只在页面最顶部（< 50px）时隐藏
+      this.isVisible = scrollTop >= 50;
+      this.scrollPercent = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
     },
     
     scrollToTop() {
@@ -41,6 +46,132 @@ function createBackToTop() {
         top: 0,
         behavior: 'smooth'
       });
+    },
+    
+    // 文章页专用方法
+    openShareModal() {
+      const modal = document.getElementById('share_modal');
+      if (modal) {
+        modal.showModal();
+      }
+    },
+    
+    toggleCommentDrawer() {
+      this.isCommentDrawerOpen = !this.isCommentDrawerOpen;
+      const checkbox = document.getElementById('comment-drawer');
+      if (checkbox) {
+        checkbox.checked = this.isCommentDrawerOpen;
+      }
+    }
+  };
+}
+
+/**
+ * 分享模态框控制器
+ * 模板使用：templates/modules/post/floating-dock.html
+ */
+function createShareModal() {
+  return {
+    shareUrl: '',
+    shareTitle: '',
+    shareTitleTemplate: '',
+    copied: false,
+    showQRCode: false,
+    
+    init() {
+      this.shareUrl = window.location.href;
+      const originalTitle = document.title;
+      const siteName = document.querySelector('meta[property="og:site_name"]')?.content || '';
+      const author = document.querySelector('meta[name="author"]')?.content || '';
+      
+      // 从模板的 data 属性读取分享标题模板
+      this.shareTitleTemplate = this.$el.dataset.shareTitleTemplate || '';
+      
+      // 如果有模板，替换变量
+      if (this.shareTitleTemplate) {
+        this.shareTitle = this.shareTitleTemplate
+          .replace(/{title}/g, originalTitle)
+          .replace(/{site}/g, siteName)
+          .replace(/{author}/g, author);
+      } else {
+        this.shareTitle = originalTitle;
+      }
+    },
+    
+    async copyUrl() {
+      try {
+        await navigator.clipboard.writeText(this.shareUrl);
+        this.copied = true;
+        setTimeout(() => {
+          this.copied = false;
+        }, 2000);
+      } catch (err) {
+        console.error('复制失败:', err);
+      }
+    },
+    
+    shareToPlatform(element) {
+      const urlTemplate = element.dataset.shareUrl;
+      
+      // 替换 URL 中的变量
+      const shareUrl = urlTemplate
+        .replace(/{url}/g, encodeURIComponent(this.shareUrl))
+        .replace(/{title}/g, encodeURIComponent(this.shareTitle));
+      
+      // 打开分享链接
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    },
+    
+    shareToWeChat() {
+      this.showQRCode = !this.showQRCode;
+      
+      if (this.showQRCode) {
+        // 使用简单的方式生成二维码（可以后续集成 QRCode 库）
+        this.$nextTick(() => {
+          const container = document.getElementById('qrcode-container');
+          if (container) {
+            container.innerHTML = `
+              <div class="text-center p-8 bg-base-200 rounded">
+                <p class="text-sm">二维码功能需要集成 QRCode 库</p>
+                <p class="text-xs text-base-content/60 mt-2">URL: ${this.shareUrl}</p>
+              </div>
+            `;
+          }
+        });
+      }
+    }
+  };
+}
+
+/**
+ * 评论抽屉控制器
+ * 模板使用：templates/modules/post/floating-dock.html
+ */
+function createCommentDrawer() {
+  return {
+    isOpen: false,
+    
+    init() {
+      // 监听抽屉状态
+      const checkbox = document.getElementById('comment-drawer');
+      if (checkbox) {
+        checkbox.addEventListener('change', (e) => {
+          this.isOpen = e.target.checked;
+        });
+      }
+      
+      // 监听关闭抽屉事件
+      window.addEventListener('close-comment-drawer', () => {
+        this.closeDrawer();
+      });
+    },
+    
+    closeDrawer() {
+      this.isOpen = false;
+      const checkbox = document.getElementById('comment-drawer');
+      if (checkbox) {
+        checkbox.checked = false;
+      }
     }
   };
 }
@@ -169,7 +300,9 @@ function createThemeToggle() {
  */
 function initializeAll() {
   // 注册模板中使用的组件
-  Alpine.data('backToTop', createBackToTop);
+  Alpine.data('floatingDock', createFloatingDock);
+  Alpine.data('shareModal', createShareModal);
+  Alpine.data('commentDrawer', createCommentDrawer);
   Alpine.data('headerController', createHeaderController);
   Alpine.data('navbarController', createNavbarController);
   Alpine.data('createThemeToggle', createThemeToggle);
@@ -179,7 +312,9 @@ function initializeAll() {
 
 export {
   initializeAll,
-  createBackToTop,
+  createFloatingDock,
+  createShareModal,
+  createCommentDrawer,
   createHeaderController,
   createNavbarController,
   createThemeToggle

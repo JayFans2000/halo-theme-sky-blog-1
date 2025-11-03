@@ -5,7 +5,7 @@ metadata:
 spec:
   forms:
     - group: nav
-      label: 导航设置
+      label: Nav设置
       formSchema:
         - $formkit: group
           name: logo_settings
@@ -699,3 +699,173 @@ spec:
               label: 瞬间标题
               help: 瞬间说说模块的标题文字
               value: "瞬间"
+    - group: floating_dock
+      label: 悬浮控制栏
+      formSchema:
+        - $formkit: group
+          name: general_settings
+          label: 通用设置
+          value:
+            enable_dock: true
+            dock_menu: primary
+          children:
+            - $formkit: radio
+              name: enable_dock
+              label: 启用悬浮 Dock
+              help: 是否显示底部悬浮控制栏
+              options:
+                - label: 启用
+                  value: true
+                - label: 禁用
+                  value: false
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              help: 选择要在悬浮 Dock 中显示的菜单。菜单项的图标通过【元数据】中的 icon 字段设置（填入 SVG 代码）
+        - $formkit: group
+          name: post_settings
+          label: 文章页设置
+          value:
+            post_dock_menu: primary
+            enable_share: true
+            enable_comment_drawer: true
+          children:
+            - $formkit: menuRadio
+              name: post_dock_menu
+              label: 文章页 Dock 菜单
+              value: primary
+              help: 选择要在文章页 Dock 中显示的菜单（可以和通用 Dock 菜单一样，也可以选择不同的菜单）
+            - $formkit: radio
+              id: enable_share
+              name: enable_share
+              label: 启用分享功能
+              help: 文章页 Dock 中的分享按钮
+              options:
+                - label: 启用
+                  value: true
+                - label: 禁用
+                  value: false
+            - $formkit: radio
+              name: enable_comment_drawer
+              label: 启用评论抽屉
+              help: 从右侧展开的评论面板
+              options:
+                - label: 启用
+                  value: true
+                - label: 禁用
+                  value: false
+        - $formkit: group
+          name: share_settings
+          label: 分享设置
+          if: $get(enable_share).value
+          value:
+            share_title_template: ""
+            share_platforms:
+              - name: "微信"
+                url: "wechat"
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M8.5 11.5c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5S7 9.2 7 10s.7 1.5 1.5 1.5zm7 0c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5-1.5.7-1.5 1.5.7 1.5 1.5 1.5zm3.5 2.5c-2.2 0-4.2.9-5.6 2.3-.2-.1-.5-.3-.9-.3-3 0-5.5 2-6.4 4.7C2.8 19.5 0 16.1 0 12 0 7 4 3 9 3s9 4 9 9c-.1 0-.2 0-.2 0h-.8zM24 16c0-3.9-3.6-7-8-7s-8 3.1-8 7 3.6 7 8 7c.7 0 1.4-.1 2-.2 1.6 1.1 3.5 1.7 5.5 1.7.3 0 .5-.2.5-.5v-.1c0-.2-.1-.3-.2-.4-.8-.5-1.3-1.5-1.3-2.5.1-1.3.8-2.5 1.5-3.5zm-11.5-.5c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm5 0c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/></svg>'
+              - name: "微博"
+                url: "https://service.weibo.com/share/share.php?url={url}&title={title}"
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M9.63 18.31c-3.55.36-6.62-1.26-6.85-3.63-.23-2.37 2.48-4.53 6.03-4.89 3.55-.36 6.62 1.26 6.85 3.63.23 2.37-2.48 4.53-6.03 4.89zm7.89-7.65c-.3-.09-.51-.15-.35-.54.34-.85.38-1.58.01-2.1-.69-.97-2.59-.92-4.76-.02 0 0-.68.29-.51-.24.34-1.05.29-1.93-.23-2.44-1.18-1.14-4.31.04-7 2.63-2.01 1.94-3.18 3.98-3.18 5.93 0 3.49 4.48 5.61 8.86 5.61 5.75 0 9.58-3.34 9.58-5.99 0-1.6-1.35-2.51-2.42-2.84zM19 6.03c.62.61.87 1.47.72 2.35-.06.36.21.41.47.33.91-.26 1.66-.91 2.03-1.75.79-1.76.25-3.85-1.33-5.08C19.3.66 17.2.01 15.18.58c-.38.11-.47.39-.2.61 0 0 .82.68 1.22 1.55.4.87.4 1.86.03 2.72-.13.31.06.49.38.37.88-.32 1.62-1.01 2-1.89.02-.05.05-.09.08-.13.37-.52.52-1.14.43-1.76-.09-.62-.41-1.18-.88-1.57-.09.01-.18.03-.27.06C17.21 0 16.5.53 16.04 1.27c-.46.74-.62 1.62-.45 2.47.17.85.68 1.57 1.39 2.02.36.23.79.29 1.19.18.07-.02.13-.05.19-.08.59-.29 1.03-.81 1.23-1.43.2-.62.14-1.29-.18-1.86-.32-.57-.83-1.01-1.41-1.24z"/></svg>'
+              - name: "X"
+                url: "https://twitter.com/intent/tweet?url={url}&text={title}"
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+              - name: "QQ"
+                url: "https://connect.qq.com/widget/shareqq/index.html?url={url}&title={title}"
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M21.395 15.035a39.548 39.548 0 00-.803-2.264l-1.079-2.695c.001-.032.014-.562.014-.836C19.526 4.632 17.351 0 12 0S4.474 4.632 4.474 9.241c0 .274.013.804.014.836l-1.08 2.695a38.97 38.97 0 00-.802 2.264c-1.021 3.283-.69 4.643-.438 4.673.54.065 1.202-2.216 1.202-2.216.886 1.893 2.568 3.256 4.606 3.598-.135.144-.216.287-.234.43-.053.419.29.638.656.638.185 0 .375-.057.536-.152.536-.317 1.084-1.014 1.084-1.014s.548.697 1.084 1.014c.16.095.351.152.536.152.366 0 .709-.219.656-.638-.018-.143-.099-.286-.234-.43 2.038-.342 3.72-1.705 4.606-3.598 0 0 .662 2.281 1.202 2.216.251-.03.583-1.39-.438-4.673z"/></svg>'
+          children:
+            - $formkit: text
+              name: share_title_template
+              label: 分享标题模板
+              help: 留空使用文章标题，可使用变量 {title} {site} {author}
+              placeholder: "推荐阅读：{title} - {site}"
+            - $formkit: repeater
+              name: share_platforms
+              label: 分享平台
+              help: 配置社交分享平台，{url} 和 {title} 会自动替换为文章链接和标题
+              children:
+                - $formkit: text
+                  name: name
+                  label: 平台名称
+                - $formkit: text
+                  name: url
+                  label: 分享链接模板
+                  help: 使用 wechat 表示微信二维码，其他填写完整分享链接，支持 {url} {title} 变量
+                - $formkit: code
+                  name: icon
+                  label: 图标 SVG 代码
+                  language: html
+                  height: 100
+    - group: general
+      label: 通用设置
+      formSchema:
+        - $formkit: group
+          name: loading_screen
+          label: 加载屏幕
+          value:
+            enable: true
+            type: spinner
+            image_url: ""
+            text: "加载中..."
+          children:
+            - $formkit: radio
+              name: enable
+              label: 启用加载屏幕
+              help: 页面加载时显示加载动画
+              options:
+                - label: 启用
+                  value: true
+                - label: 禁用
+                  value: false
+            - $formkit: select
+              name: type
+              label: 加载图标类型
+              value: spinner
+              help: 选择加载动画样式
+              if: $get(enable).value
+              options:
+                - value: spinner
+                  label: 旋转圆圈（Spinner）
+                - value: dots
+                  label: 跳动圆点（Dots）
+                - value: ring
+                  label: 圆环（Ring）
+                - value: ball
+                  label: 小球（Ball）
+                - value: bars
+                  label: 条形（Bars）
+                - value: image
+                  label: 自定义图片
+            - $formkit: text
+              name: image_url
+              label: 自定义图片 URL
+              help: 填写图片地址，建议使用 GIF 动画
+              if: $get(enable).value && $get(type).value === 'image'
+            - $formkit: text
+              name: text
+              label: 加载文字
+              value: "加载中..."
+              help: 加载屏幕显示的文字
+              if: $get(enable).value
+    - group: article
+      label: 文章设置
+      formSchema:
+        - $formkit: group
+          name: content_style
+          label: 内容样式
+          value:
+            style_theme: default
+          children:
+            - $formkit: select
+              name: style_theme
+              label: 文章样式主题
+              value: default
+              help: 选择文章内容的显示风格
+              options:
+                - value: default
+                  label: 默认风格（推荐）
+                - value: github
+                  label: GitHub 风格（经典优雅）
+                - value: tailwind
+                  label: Tailwind 风格（现代简约）

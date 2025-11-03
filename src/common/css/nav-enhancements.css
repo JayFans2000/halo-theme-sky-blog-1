@@ -6,7 +6,30 @@
  * 特性：响应式设计、主题适配、性能优化
  */
 
+/* 导航菜单图标样式 */
+.nav-icon-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon-svg svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.nav-icon-svg svg,
+.nav-icon-svg svg * {
+  fill: currentColor !important;
+  color: currentColor !important;
+}
+
 /* 基础导航栏样式 - 透明背景与过渡效果 */
+.nav-wrapper {
+  z-index: 50 !important;
+}
+
 .navbar {
   position: relative;
   background-color: transparent;
@@ -76,18 +99,19 @@
 }
 
 /* 按钮交互效果 - 简约优雅风格 */
-.btn-ghost {
+/* 导航栏按钮特殊样式 */
+.navbar .btn-ghost {
   transition: all 0.2s ease;
   position: relative;
 }
 
-.btn-ghost:hover {
+.navbar .btn-ghost:hover {
   background-color: color-mix(in srgb, var(--color-base-content) 5%, transparent);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 8%, transparent);
 }
 
-.btn-ghost:active {
+.navbar .btn-ghost:active {
   transform: translateY(0);
   transition: all 0.1s ease;
 }

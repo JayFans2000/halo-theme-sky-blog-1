@@ -6,7 +6,7 @@
 <!-- ========================================== -->
 
 <!-- 主导航栏容器 -->
-<div th:fragment="navbar" class="drawer sticky top-0 z-50 transition-all duration-500 ease-out"
+<div th:fragment="navbar" class="drawer sticky top-0 z-50 transition-all duration-500 ease-out nav-wrapper"
   x-data="navbarController">
 
   <!-- 移动端抽屉开关 -->
@@ -64,9 +64,16 @@
 
                 <!-- 普通菜单项（无子菜单） -->
                 <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                  <a th:href="@{${menuItem.status.href}}" th:text="${menuItem.status.displayName}"
+                  <a th:href="@{${menuItem.status.href}}"
                     th:target="${menuItem.spec.target?.value}"
-                    class="nav-menu-item flex items-center px-4 py-2 text-sm font-medium text-base-content hover:text-base-content/90 rounded-lg hover:bg-base-200/50">
+                    class="nav-menu-item flex items-center gap-2 px-4 py-2 text-sm font-medium text-base-content hover:text-base-content/90 rounded-lg hover:bg-base-200/50">
+                    <!-- 菜单图标（如果有） -->
+                    <span th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
+                          th:utext="${menuItem.metadata.annotations['icon']}"
+                          class="w-4 h-4 nav-icon-svg flex-shrink-0">
+                    </span>
+                    <!-- 菜单文字 -->
+                    <span th:text="${menuItem.status.displayName}"></span>
                   </a>
                 </th:block>
 
