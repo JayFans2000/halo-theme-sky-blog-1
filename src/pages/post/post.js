@@ -156,18 +156,31 @@ document.addEventListener('alpine:init', () => {
          */
         initTOC() {
             const tocNavigation = document.getElementById('toc-nav');
+            const tocCard = document.getElementById('toc-card');
             if (!tocNavigation) return;
 
             // 只从文章正文内容区域获取标题元素
             const articleContent = document.getElementById('article-content');
-            if (!articleContent) return;
+            if (!articleContent) {
+                if (tocCard) tocCard.style.display = 'none';
+                return;
+            }
 
             const headingElements = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
-            if (headingElements.length === 0) return;
+            if (headingElements.length === 0) {
+                if (tocCard) tocCard.style.display = 'none';
+                return;
+            }
 
             // 动态识别层级结构 - 自动检测最高级标题
             const hierarchyInfo = this.analyzeHeadingHierarchy(headingElements);
-            if (hierarchyInfo.filteredHeadings.length === 0) return;
+            if (hierarchyInfo.filteredHeadings.length === 0) {
+                if (tocCard) tocCard.style.display = 'none';
+                return;
+            }
+            
+            // 有目录，显示卡片
+            if (tocCard) tocCard.style.display = 'block';
 
             // 构建动态目录树结构
             const tocTree = this.buildDynamicTocTree(hierarchyInfo.filteredHeadings, hierarchyInfo.minLevel);
@@ -351,26 +364,12 @@ document.addEventListener('alpine:init', () => {
             
             const actualContentHeight = tocNav.scrollHeight;
 
-            // 动态计算最大高度
-            const viewportHeight = window.innerHeight;
-            const navHeight = 120; // 导航栏高度
-            const cardPadding = 32; // 卡片内边距
-            const titleHeight = 60; // 标题高度
-            const buffer = 40; // 缓冲区
-
-            const maxHeight = viewportHeight - navHeight - cardPadding - titleHeight - buffer;
+            // 使用 CSS 的 max-height 限制，不手动设置
+            // 如果内容少，容器会自动收缩
             
-            // 设置最小高度限制
-            const minHeight = 200;
-            const calculatedMaxHeight = Math.max(maxHeight, minHeight);
-            
-            // 如果实际内容高度小于最大高度，使用实际高度
-            const finalHeight = Math.min(actualContentHeight + 20, calculatedMaxHeight);
-
-            tocContainer.style.maxHeight = `${finalHeight}px`;
-
             // 检查是否需要滚动
-            const needsScroll = actualContentHeight > finalHeight;
+            const maxHeight = parseFloat(getComputedStyle(tocContainer).maxHeight);
+            const needsScroll = actualContentHeight > maxHeight;
             tocContainer.classList.toggle('has-scroll', needsScroll);
         },
 

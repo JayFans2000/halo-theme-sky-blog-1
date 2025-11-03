@@ -1,120 +1,8 @@
 
 <!-- 主要内容区域 -->
 <main class="relative" th:fragment="post-content">
-  <!-- 顶部Banner区域 -->
-  <header class="post-banner relative w-full h-[70vh]  overflow-hidden transition-all duration-500 ease-out">
-    <!-- 背景图片层 -->
-    <div class="absolute inset-0 z-0">
-      <!-- 第一层：原始图片背景 -->
-      <img class="absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
-           src="https://www.dmoe.cc/random.php" 
-           alt="文章背景图">
-
-      <!-- 第二层：组合蒙版容器 -->
-      <div class="absolute inset-0">
-        <!-- 默认基础蒙版 + 渐变蒙版组合 -->
-        <div class="absolute inset-0 bg-black/30 bg-gradient-to-b from-black/10 via-black/50 to-black/80"></div>
-        
-        <!-- 滚动深邃效果蒙版 -->
-        <div class="absolute inset-0 bg-black/20 transition-opacity duration-500"></div>
-      </div>
-    </div>
-
-    <!-- Banner内容 -->
-    <div class="relative z-10 flex flex-col justify-end items-center h-full px-4 pb-16 text-center text-white">
-      <!-- 栏目和标签 - 一行显示，栏目在前 -->
-      <div class="mb-4 flex items-center gap-3">
-        <!-- 栏目 -->
-        <span class="inline-block px-3 py-1 text-sm bg-primary bg-opacity-80 rounded-full text-white">
-          技术分享
-        </span>
-        <!-- 分隔符 -->
-        <span class="text-white opacity-60">•</span>
-        <!-- 标签 -->
-        <div class="flex gap-2">
-          <span class="px-2 py-1 bg-opacity-20 rounded-full text-xs text-white">JavaScript</span>
-          <span class="px-2 py-1 bg-opacity-20 rounded-full text-xs text-white">Vue.js</span>
-          <span class="px-2 py-1 bg-opacity-20 rounded-full text-xs text-white">前端开发</span>
-        </div>
-      </div>
-
-      <!-- 文章标题 - 突出显示 -->
-      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight max-w-4xl text-white" 
-          th:text="${post.spec.title}">
-        ${title}
-      </h1>
-
-      <!-- 美观分隔符 -->
-      <div class="w-16 h-0.5 bg-white mb-4 rounded-full opacity-80"></div>
-
-      <!-- 文章简要 - 限制25字 -->
-      <p class="text-base md:text-lg mb-6 max-w-2xl leading-relaxed opacity-90 text-white truncate-25">
-        这是一篇关于现代Web开发技术的深度分析文章，探讨最新的前端框架和开发实践方法。
-      </p>
-
-      <!-- 功能块一行布局 -->
-      <div class="flex flex-wrap justify-center items-center gap-4 text-sm opacity-90 text-white">
-        <!-- 作者头像和作者 -->
-        <div class="flex items-center gap-2">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
-               alt="作者头像" 
-               class="w-6 h-6 rounded-full">
-          <span>Sky Developer</span>
-        </div>
-        
-        <!-- 分隔符 -->
-        <span class="text-white opacity-40">|</span>
-        
-        <!-- 时间 -->
-        <div class="flex items-center gap-1">
-          <span class="icon-[heroicons--calendar-days] w-4 h-4"></span>
-          <span>2024.01.15</span>
-        </div>
-        
-        <!-- 分隔符 -->
-        <span class="text-white opacity-40">|</span>
-        
-        <!-- 阅读 -->
-        <div class="flex items-center gap-1">
-          <span class="icon-[heroicons--eye] w-4 h-4"></span>
-          <span>1,234</span>
-        </div>
-        
-        <!-- 分隔符 -->
-        <span class="text-white opacity-40">|</span>
-        
-        <!-- 分享 -->
-        <button class="flex items-center gap-1 hover:text-white hover:opacity-80 transition-colors text-white" 
-                tabindex="0" 
-                aria-label="分享文章">
-          <span class="icon-[heroicons--share] w-4 h-4"></span>
-          <span>分享</span>
-        </button>
-        
-        <!-- 分隔符 -->
-        <span class="text-white opacity-40">|</span>
-        
-        <!-- 收藏 -->
-        <button class="flex items-center gap-1 hover:text-white hover:opacity-80 transition-colors text-white" 
-                tabindex="0" 
-                aria-label="收藏文章">
-          <span class="icon-[heroicons--star] w-4 h-4"></span>
-          <span>收藏</span>
-        </button>
-        
-        <!-- 分隔符 -->
-        <span class="text-white opacity-40">|</span>
-        
-        <!-- 点赞 -->
-        <button class="flex items-center gap-1 hover:text-white hover:opacity-80 transition-colors text-white" 
-                tabindex="0" 
-                aria-label="点赞文章">
-          <span class="icon-[heroicons--hand-thumb-up] w-4 h-4"></span>
-          <span>点赞</span>
-        </button>
-      </div>
-    </div>
-  </header>
+  <!-- 顶部 Banner -->
+  <th:block th:replace="~{modules/post/header :: banner}" />
 
   <!-- 主体内容区域 -->
   <div class="max-w-7xl mx-auto px-4 py-8">
@@ -134,126 +22,22 @@
 
       <!-- 右侧功能区块 -->
       <aside class="right-sidebar w-80 space-y-6 hidden lg:block">
+        <!-- 博客统计 -->
+        <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+        
         <!-- 文章目录 -->
-        <div class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card sticky top-20 z-10" 
-             style="transition: box-shadow 0.2s ease;">
-          <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
-            <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
-            目录
-          </h3>
-          <div class="toc-container overflow-y-auto pr-2" style="scrollbar-width: thin;">
-            <nav id="toc-nav" class="space-y-1" role="navigation" aria-label="文章目录">
-              <!-- 目录将由JavaScript自动生成 -->
-            </nav>
-          </div>
-        </div>
-
-        <!-- 博客详情 -->
-        <div class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-             style="transition: box-shadow 0.2s ease;">
-          <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
-            <span class="icon-[heroicons--information-circle] w-5 h-5"></span>
-            博客详情
-          </h3>
-          <div class="space-y-3 text-sm">
-            <div class="flex justify-between">
-              <span>总文章数</span>
-              <span class="font-medium">128</span>
-            </div>
-            <div class="flex justify-between">
-              <span>总访问量</span>
-              <span class="font-medium">25,680</span>
-            </div>
-            <div class="flex justify-between">
-              <span>建站时间</span>
-              <span class="font-medium">2023.06.15</span>
-            </div>
-          </div>
-        </div>
-
+        <th:block th:replace="~{modules/post/toc :: widget}" />
+        
+        <!-- 分类 -->
+        <th:block th:replace="~{modules/widgets/categories :: list}" />
+        
+        <!-- 标签 -->
+        <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+        
         <!-- 热门文章 -->
-        <div class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-             style="transition: box-shadow 0.2s ease;">
-          <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
-            <span class="icon-[heroicons--fire] w-5 h-5"></span>
-            热门文章
-          </h3>
-          <div class="space-y-3">
-            <div class="block">
-              <div class="text-sm font-medium line-clamp-2">Vue 3 组合式 API 深度解析与最佳实践</div>
-              <div class="text-xs text-gray-500 mt-1">2,456 阅读</div>
-            </div>
-            <div class="block">
-              <div class="text-sm font-medium line-clamp-2">现代前端工程化实践：从零搭建完整开发环境</div>
-              <div class="text-xs text-gray-500 mt-1">1,892 阅读</div>
-            </div>
-            <div class="block">
-              <div class="text-sm font-medium line-clamp-2">TypeScript 高级类型系统详解</div>
-              <div class="text-xs text-gray-500 mt-1">1,634 阅读</div>
-            </div>
-            <div class="block">
-              <div class="text-sm font-medium line-clamp-2">微前端架构设计与实现方案</div>
-              <div class="text-xs text-gray-500 mt-1">1,423 阅读</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 标签云 -->
-        <div class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-             style="transition: box-shadow 0.2s ease;">
-          <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
-            <span class="icon-[heroicons--tag] w-5 h-5"></span>
-            标签云
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-2 py-1 bg-primary bg-opacity-20 text-primary rounded text-xs">JavaScript</span>
-            <span class="px-2 py-1 bg-secondary bg-opacity-20 text-secondary rounded text-xs">Vue.js</span>
-            <span class="px-2 py-1 bg-accent bg-opacity-20 text-accent rounded text-xs">React</span>
-            <span class="px-2 py-1 bg-warning bg-opacity-20 text-warning rounded text-xs">TypeScript</span>
-            <span class="px-2 py-1 bg-error bg-opacity-20 text-error rounded text-xs">Node.js</span>
-            <span class="px-2 py-1 bg-info bg-opacity-20 text-info rounded text-xs">前端工程化</span>
-            <span class="px-2 py-1 bg-success bg-opacity-20 text-success rounded text-xs">性能优化</span>
-            <span class="px-2 py-1 bg-neutral bg-opacity-20 text-neutral rounded text-xs">微前端</span>
-            <span class="px-2 py-1 bg-primary bg-opacity-20 text-primary rounded text-xs">Webpack</span>
-            <span class="px-2 py-1 bg-secondary bg-opacity-20 text-secondary rounded text-xs">Vite</span>
-          </div>
-        </div>
-
-        <!-- 归档 -->
-        <div class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
-             style="transition: box-shadow 0.2s ease;">
-          <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
-            <span class="icon-[heroicons--archive-box] w-5 h-5"></span>
-            归档
-          </h3>
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between">
-              <span>2024年01月</span>
-              <span class="text-base-content opacity-60">8篇</span>
-            </div>
-            <div class="flex justify-between">
-              <span>2023年12月</span>
-              <span class="text-base-content opacity-60">12篇</span>
-            </div>
-            <div class="flex justify-between">
-              <span>2023年11月</span>
-              <span class="text-base-content opacity-60">15篇</span>
-            </div>
-            <div class="flex justify-between">
-              <span>2023年10月</span>
-              <span class="text-base-content opacity-60">10篇</span>
-            </div>
-            <div class="flex justify-between">
-              <span>2023年09月</span>
-              <span class="text-base-content opacity-60">14篇</span>
-            </div>
-            <div class="flex justify-between">
-              <span>2023年08月</span>
-              <span class="text-base-content opacity-60">11篇</span>
-            </div>
-          </div>
-        </div>
+        <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
       </aside>
     </div>
   </div>
 </main>
+

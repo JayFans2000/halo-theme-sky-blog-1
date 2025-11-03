@@ -31,7 +31,7 @@
             <a th:each="menuItem : ${dockMenu.menuItems}"
                th:href="@{${menuItem.status.href}}"
                th:target="${menuItem.spec.target?.value}"
-               class="dock-item btn  btn-circle btn-xs hover:bg-primary/10 hover:text-primary transition-all duration-200 group relative"
+               class="dock-item dock-btn group relative"
                th:title="${menuItem.status.displayName}">
               <!-- 使用菜单的自定义元数据 icon 字段（SVG 代码） -->
               <div th:if="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
@@ -42,7 +42,6 @@
               <span th:unless="${menuItem.metadata?.annotations != null && menuItem.metadata.annotations['icon'] != null}"
                     class="icon-[heroicons--home] w-4 h-4 transition-transform duration-200 group-hover:scale-110">
               </span>
-              <!-- Tooltip -->
               <span class="dock-tooltip absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-base-content text-base-100 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
                     th:text="${menuItem.status.displayName}">
               </span>
@@ -51,11 +50,11 @@
         </th:block>
         
         <!-- 分隔线 -->
-        <div class="w-px h-6 bg-base-300/30"></div>
+        <div class="w-px h-6"></div>
         
         <!-- 返回顶部按钮 -->
         <button @click="scrollToTop()"
-                class="dock-item btn  btn-circle btn-xs hover:bg-primary/10 hover:text-primary transition-all duration-200"
+                class="dock-item dock-btn"
                 title="返回顶部">
           <span class="icon-[heroicons--arrow-up] w-4 h-4"></span>
         </button>

@@ -142,6 +142,26 @@
   color: var(--color-base-content);
 }
 
+/* Dock 分隔线 */
+.dock-container .w-px {
+  background: color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
+/* 深色主题分隔线更亮 */
+[data-theme="dark"] .dock-container .w-px,
+[data-theme="night"] .dock-container .w-px,
+[data-theme="black"] .dock-container .w-px,
+[data-theme="dracula"] .dock-container .w-px,
+[data-theme="forest"] .dock-container .w-px,
+[data-theme="business"] .dock-container .w-px,
+[data-theme="coffee"] .dock-container .w-px,
+[data-theme="dim"] .dock-container .w-px,
+[data-theme="synthwave"] .dock-container .w-px,
+[data-theme="halloween"] .dock-container .w-px,
+[data-theme="luxury"] .dock-container .w-px {
+  background: color-mix(in srgb, var(--color-base-content) 25%, transparent);
+}
+
 /* Tooltip 增强 */
 .dock-tooltip {
   font-size: 0.75rem;

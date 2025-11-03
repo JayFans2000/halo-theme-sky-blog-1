@@ -1099,17 +1099,12 @@
  * 6. 动态目录导航样式 - 自适应布局系统
  * ==================================================*/
 
-/* 目录容器 - 固定高度布局系统 */
+/* 目录容器 - 自适应高度布局 */
 .toc-container {
-    /* 固定高度 - 防止遮挡其他功能组件 */
-    max-height: 400px;
-    min-height: 200px;
-    height: 400px;
+    /* 自适应高度，最大不超过视口高度 */
+    max-height: min(70vh, 400px);
     overflow-y: auto;
     overflow-x: hidden;
-    
-    /* 渐变遮罩效果 - 顶部和底部 */
-    position: relative;
     
     /* 滚动条样式优化 */
     scrollbar-width: thin;

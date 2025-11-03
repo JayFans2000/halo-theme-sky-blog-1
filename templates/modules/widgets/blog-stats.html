@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--           博客统计信息组件                  -->
+<!-- ========================================== -->
+
+<div th:fragment="stats" class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card" 
+     style="transition: box-shadow 0.2s ease;"
+     th:with="stats = ${siteStatsFinder.getStats()}">
+  <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
+    <span class="icon-[heroicons--information-circle] w-5 h-5"></span>
+    <span>博客详情</span>
+  </h3>
+  <div class="space-y-3 text-sm">
+    <div class="flex justify-between">
+      <span>总文章数</span>
+      <span class="font-medium" th:text="${stats.post}"></span>
+    </div>
+    <div class="flex justify-between">
+      <span>总分类数</span>
+      <span class="font-medium" th:text="${stats.category}"></span>
+    </div>
+    <div class="flex justify-between">
+      <span>总点赞数</span>
+      <span class="font-medium" th:text="${stats.upvote}"></span>
+    </div>
+    <div class="flex justify-between">
+      <span>总评论数</span>
+      <span class="font-medium" th:text="${stats.comment}"></span>
+    </div>
+    <div class="flex justify-between">
+      <span>总访问量</span>
+      <span class="font-medium" th:text="${stats.visit}"></span>
+    </div>
+  </div>
+</div>
+
+</html>
+

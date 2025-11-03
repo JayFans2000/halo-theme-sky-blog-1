@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<!-- ========================================== -->
+<!--           文章页头部 Banner                 -->
+<!-- ========================================== -->
+
+<header th:fragment="banner" class="post-banner relative w-full h-[70vh] overflow-hidden transition-all duration-500 ease-out">
+  <!-- 背景图片层 -->
+  <div class="absolute inset-0 z-0">
+    <!-- 第一层：原始图片背景 -->
+    <img class="absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
+         src="https://www.dmoe.cc/random.php" 
+         alt="文章背景图">
+
+    <!-- 第二层：组合蒙版容器 -->
+    <div class="absolute inset-0">
+      <!-- 默认基础蒙版 + 渐变蒙版组合 -->
+      <div class="absolute inset-0 bg-black/30 bg-gradient-to-b from-black/10 via-black/50 to-black/80"></div>
+      
+      <!-- 滚动深邃效果蒙版 -->
+      <div class="absolute inset-0 bg-black/20 transition-opacity duration-500"></div>
+    </div>
+  </div>
+
+  <!-- Banner内容 -->
+  <div class="relative z-10 flex flex-col justify-end items-center h-full px-4 pb-16 text-center text-white">
+    <!-- 栏目和标签 -->
+    <div class="mb-4 flex flex-wrap items-center justify-center gap-3">
+      <!-- 栏目 -->
+      <th:block th:if="${post.categories != null and !#lists.isEmpty(post.categories)}">
+        <a th:each="category : ${post.categories}"
+           th:href="@{${category.status.permalink}}"
+           th:title="${category.spec.displayName}"
+           class="inline-block px-3 py-1 text-sm bg-primary/80 rounded-full text-white hover:bg-primary transition-colors">
+          <span th:text="${category.spec.displayName}"></span>
+        </a>
+        <span class="text-white opacity-60">•</span>
+      </th:block>
+      <!-- 标签 -->
+      <th:block th:if="${post.tags != null and !#lists.isEmpty(post.tags)}">
+        <div class="flex flex-wrap gap-2 justify-center">
+          <a th:each="tag : ${post.tags}"
+             th:href="@{${tag.status.permalink}}"
+             th:title="${tag.spec.displayName}"
+             class="px-2 py-1 bg-white/20 rounded-full text-xs text-white hover:bg-white/30 transition-colors">
+            <span th:text="|#${tag.spec.displayName}|"></span>
+          </a>
+        </div>
+      </th:block>
+    </div>
+
+    <!-- 文章标题 - 突出显示 -->
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight max-w-4xl text-white" 
+        th:text="${post.spec.title}">
+      ${title}
+    </h1>
+
+    <!-- 美观分隔符 -->
+    <div class="w-16 h-0.5 bg-white mb-4 rounded-full opacity-80"></div>
+
+    <!-- 文章简要 -->
+    <p class="text-base md:text-lg mb-6 max-w-2xl leading-relaxed opacity-90 text-white line-clamp-2"
+       th:if="${post.spec.excerpt != null and !#strings.isEmpty(post.spec.excerpt)}"
+       th:text="${post.spec.excerpt}">
+    </p>
+
+    <!-- 文章元信息 -->
+    <div class="flex flex-wrap justify-center items-center gap-3 text-sm text-white/90">
+      <!-- 作者 -->
+      <div class="flex items-center gap-2"
+           th:if="${post.owner != null}">
+        <img th:if="${post.owner.avatar != null}"
+             th:src="${post.owner.avatar}" 
+             th:alt="${post.owner.displayName}"
+             class="w-6 h-6 rounded-full">
+        <span th:text="${post.owner.displayName}"></span>
+      </div>
+      
+      <span class="text-white/40">|</span>
+      
+      <!-- 发布时间 -->
+      <div class="flex items-center gap-1">
+        <span class="icon-[heroicons--calendar-days] w-4 h-4"></span>
+        <span th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd')}"></span>
+      </div>
+      
+      <span class="text-white/40">|</span>
+      
+      <!-- 阅读量 -->
+      <div class="flex items-center gap-1">
+        <span class="icon-[heroicons--eye] w-4 h-4"></span>
+        <span th:text="${post.stats.visit ?: 0}"></span>
+      </div>
+      
+      <!-- 评论数 -->
+      <th:block th:if="${post.stats.comment != null and post.stats.comment > 0}">
+        <span class="text-white/40">|</span>
+        <div class="flex items-center gap-1">
+          <span class="icon-[heroicons--chat-bubble-left] w-4 h-4"></span>
+          <span th:text="${post.stats.comment}"></span>
+        </div>
+      </th:block>
+      
+      <!-- 点赞数 -->
+      <th:block th:if="${post.stats.upvote != null and post.stats.upvote > 0}">
+        <span class="text-white/40">|</span>
+        <div class="flex items-center gap-1">
+          <span class="icon-[heroicons--heart] w-4 h-4"></span>
+          <span th:text="${post.stats.upvote}"></span>
+        </div>
+      </th:block>
+    </div>
+  </div>
+</header>
+
+</html>
+
