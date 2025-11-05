@@ -93,7 +93,7 @@ spec:
               max: 3000
               step: 100
     - group: nav
-      label: 导航栏
+      label: 顶部
       formSchema:
         - $formkit: group
           name: logo_settings
@@ -299,45 +299,57 @@ spec:
                   value: false
 
     - group: footer
-      label: 页脚设置
+      label: 页脚
       formSchema:
         - $formkit: group
           name: brand_settings
-          label: 品牌信息设置
+          label: 站点信息设置
           value:
-            show_brand_icon: true
+            brand_icon_type: svg
             brand_icon_html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M17.5 19H6.5C4.01472 19 2 16.9853 2 14.5C2 12.1597 3.79594 10.1953 6.08203 10.021C6.55632 6.45499 9.49378 3.5 13.25 3.5C16.3663 3.5 19.0378 5.50437 19.932 8.33691C22.0368 8.88413 23.5 10.864 23.5 13.25C23.5 15.7353 21.4853 17.75 19 17.75H18.75C18.3358 17.75 18 17.4142 18 17C18 16.5858 18.3358 16.25 18.75 16.25H19C20.6569 16.25 22 14.9069 22 13.25C22 11.5931 20.6569 10.25 19 10.25C18.5858 10.25 18.25 9.91421 18.25 9.5C18.25 7.01472 16.2353 5 13.75 5C11.2647 5 9.25 7.01472 9.25 9.5C9.25 9.91421 8.91421 10.25 8.5 10.25C6.01472 10.25 4 12.2647 4 14.75C4 16.2353 5.21472 17.5 6.75 17.5H17.25C17.6642 17.5 18 17.8358 18 18.25C18 18.6642 17.6642 19 17.25 19Z"/></svg>'
+            brand_icon_image: ""
             show_brand_title: true
-            custom_brand_title: "Sky Blog"
+            custom_brand_title: ""
             show_brand_subtitle: true
             brand_subtitle: "现代博客主题"
             show_site_days: true
             site_start_date: "2024-01-01"
           children:
             - $formkit: radio
-              id: show_brand_icon
-              name: show_brand_icon
-              label: 显示品牌图标
-              help: 是否显示页脚品牌区域的图标
+              id: brand_icon_type
+              name: brand_icon_type
+              label: 站点图标类型
+              help: 选择站点图标的显示方式
+              value: svg
               options:
-                - label: 显示
-                  value: true
                 - label: 隐藏
-                  value: false
+                  value: none
+                - label: SVG 代码
+                  value: svg
+                - label: 上传图片
+                  value: image
             - $formkit: code
               name: brand_icon_html
-              id: brand_icon_html_field
               key: brand_icon_html_field
-              if: $get(show_brand_icon).value
-              label: 品牌图标代码
+              if: $get(brand_icon_type).value === 'svg'
+              label: 站点图标 SVG 代码
               help: 直接输入 SVG 或其他 HTML 代码，将在页面中直接渲染
               language: html
               height: 120
+              value: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M17.5 19H6.5C4.01472 19 2 16.9853 2 14.5C2 12.1597 3.79594 10.1953 6.08203 10.021C6.55632 6.45499 9.49378 3.5 13.25 3.5C16.3663 3.5 19.0378 5.50437 19.932 8.33691C22.0368 8.88413 23.5 10.864 23.5 13.25C23.5 15.7353 21.4853 17.75 19 17.75H18.75C18.3358 17.75 18 17.4142 18 17C18 16.5858 18.3358 16.25 18.75 16.25H19C20.6569 16.25 22 14.9069 22 13.25C22 11.5931 20.6569 10.25 19 10.25C18.5858 10.25 18.25 9.91421 18.25 9.5C18.25 7.01472 16.2353 5 13.75 5C11.2647 5 9.25 7.01472 9.25 9.5C9.25 9.91421 8.91421 10.25 8.5 10.25C6.01472 10.25 4 12.2647 4 14.75C4 16.2353 5.21472 17.5 6.75 17.5H17.25C17.6642 17.5 18 17.8358 18 18.25C18 18.6642 17.6642 19 17.25 19Z"/></svg>'
+            - $formkit: attachment
+              name: brand_icon_image
+              key: brand_icon_image_field
+              if: $get(brand_icon_type).value === 'image'
+              label: 站点图标图片
+              help: 上传站点图标图片，支持 PNG、JPG、SVG 等格式，建议尺寸 32x32 或 64x64
+              accepts:
+                - image/*
             - $formkit: radio
               id: show_brand_title
               name: show_brand_title
-              label: 显示品牌标题
-              help: 是否显示页脚品牌标题
+              label: 显示站点标题
+              help: 是否显示页脚站点标题
               options:
                 - label: 显示
                   value: true
@@ -348,13 +360,13 @@ spec:
               id: custom_brand_title_field
               key: custom_brand_title_field
               if: $get(show_brand_title).value
-              label: 自定义品牌标题
+              label: 自定义站点标题
               help: 留空则使用站点标题，填写则使用自定义标题
             - $formkit: radio
               id: show_brand_subtitle
               name: show_brand_subtitle
-              label: 显示品牌副标题
-              help: 是否显示页脚品牌副标题
+              label: 显示站点副标题
+              help: 是否显示页脚站点副标题
               options:
                 - label: 显示
                   value: true
@@ -365,8 +377,8 @@ spec:
               id: brand_subtitle_field
               key: brand_subtitle_field
               if: $get(show_brand_subtitle).value
-              label: 品牌副标题
-              help: 品牌标题下方的描述文字
+              label: 站点副标题
+              help: 站点标题下方的描述文字
             - $formkit: radio
               id: show_site_days
               name: show_site_days
@@ -386,10 +398,10 @@ spec:
               help: 网站建立日期，格式：YYYY-MM-DD
         - $formkit: group
           name: navigation_settings
-          label: 快速导航设置
+          label: 底部导航设置
           value:
             show_quick_nav: true
-            nav_title: "快速导航"
+            nav_title: "底部导航"
             nav_links:
               - name: "首页"
                 url: "/"
@@ -403,7 +415,7 @@ spec:
             - $formkit: radio
               id: show_quick_nav
               name: show_quick_nav
-              label: 显示快速导航
+              label: 显示底部导航
               help: 是否显示页脚快速导航区域
               options:
                 - label: 显示
@@ -433,7 +445,7 @@ spec:
                   label: 链接地址
         - $formkit: group
           name: social_settings
-          label: 社交媒体设置
+          label: 底部社交链接设置
           value:
             show_social_links: true
             social_title: "关注我们"

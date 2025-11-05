@@ -11,8 +11,8 @@
   <!-- 页脚内容区域 -->
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     
-    <!-- 简洁版页脚内容区域 -->
-    <div class="py-12 md:py-14">
+    <!-- 简洁版页脚内容区域 - 增加底部空间避免悬浮框遮挡 -->
+    <div class="pt-12 pb-24 md:pt-14 md:pb-28">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         
         <!-- 主要内容区域 -->
@@ -21,9 +21,19 @@
           <!-- 品牌信息 -->
           <div class="md:col-span-2 lg:col-span-1" th:fragment="brand-section">
             <div class="flex items-center gap-3 mb-4">
-              <div class="w-8 h-8 flex items-center justify-center text-primary" 
-                   th:if="${theme.config.footer.brand_settings.show_brand_icon}">
-                <th:block th:utext="${theme.config.footer.brand_settings.brand_icon_html}"></th:block>
+              <!-- 站点图标 - 支持 SVG 代码和图片上传 -->
+              <div class="w-8 h-8 flex items-center justify-center text-primary">
+                <!-- SVG 代码类型 -->
+                <span th:if="${theme.config.footer.brand_settings.brand_icon_type == 'svg'}"
+                  th:utext="${theme.config.footer.brand_settings.brand_icon_html}"
+                  class="w-full h-full flex items-center justify-center">
+                </span>
+                <!-- 图片类型 -->
+                <img th:if="${theme.config.footer.brand_settings.brand_icon_type == 'image' && !#strings.isEmpty(theme.config.footer.brand_settings.brand_icon_image)}"
+                  th:src="${theme.config.footer.brand_settings.brand_icon_image}"
+                  th:alt="${#strings.isEmpty(theme.config.footer.brand_settings.custom_brand_title) ? site.title : theme.config.footer.brand_settings.custom_brand_title}"
+                  class="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <h3 class="text-lg font-bold text-base-content" 
