@@ -6,6 +6,9 @@
 // 导入首页特定样式
 import './index.css';
 
+// 注意：特效CSS (index-effects.css) 在模板中条件加载
+// 参见 templates/modules/index/layout.html
+
 
 
 /**

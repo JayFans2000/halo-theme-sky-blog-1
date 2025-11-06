@@ -93,7 +93,7 @@ function createShareModal() {
         name: "微信",
         icon: "icon-[simple-icons--wechat]",
         type: "qrcode",  // 特殊类型：打开二维码页面
-        url: "/themes/theme-sky-blog-1/assets/qrcode-share.html?url={url}"
+        url: "/themes/theme-sky-blog-1/assets/qrcode/qrcode-share.html?url={url}"
       },
       {
         id: "x",
@@ -309,7 +309,7 @@ function createShareModal() {
       const features = `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,scrollbars=no,resizable=no`;
       
       // 构建二维码页面 URL（使用 assets 路径）
-      const qrcodePageUrl = `/themes/theme-sky-blog-1/assets/qrcode-share.html?url=${encodeURIComponent(this.permalink)}`;
+      const qrcodePageUrl = `/themes/theme-sky-blog-1/assets/qrcode/qrcode-share.html?url=${encodeURIComponent(this.permalink)}`;
       
       // console.log('📱 打开微信二维码页面:', {
       //   链接: this.permalink,

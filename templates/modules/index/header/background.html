@@ -1,15 +1,17 @@
-<!-- 背景层模块 -->
-<!-- 背景层：图片Banner背景 -->
-<div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.show_background}">
-    <!-- 第一层：原始图片背景 -->
-    <img class="absolute inset-0 w-full h-full object-cover object-center sm:object-center md:object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
+<!-- ========================================== -->
+<!--           首页背景层模块                    -->
+<!-- ========================================== -->
+
+<!-- 背景层：图片背景 -->
+<div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.background_type == 'image'}">
+    <!-- 原始图片背景 -->
+    <img class="absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 filter blur-[0.5px] will-change-transform"
         th:src="${theme.config.index.background_settings.background_image}" alt="背景图片">
 
-    <!-- 第二层：组合蒙版容器 -->
+    <!-- 组合蒙版容器 -->
     <div class="absolute inset-0">
-        <!-- 默认基础蒙版 + 渐变蒙版组合 -->
+        <!-- 基础渐变蒙版 -->
         <div class="absolute inset-0 bg-black/30 bg-gradient-to-b from-black/10 via-black/50 to-black/80"></div>
-
         <!-- 滚动深邃效果蒙版 -->
         <div class="absolute inset-0 bg-black transition-opacity duration-500"
             :style="`opacity: ${scrolled ? 0.4 : 0.1}`">
@@ -17,106 +19,103 @@
     </div>
 </div>
 
-<!-- 视觉震撼动态背景层：当隐藏图片背景时显示 -->
-<div class="absolute inset-0 z-0 overflow-hidden" th:unless="${theme.config.index.background_settings.show_background}">
-    <!-- 第一层：智能主题适配渐变基底 -->
-    <div class="absolute inset-0 theme-adaptive-base"></div>
-
-    <!-- 第二层：动态色彩流动背景 -->
-    <div class="absolute inset-0 dynamic-gradient-bg theme-adaptive-opacity"></div>
-
-    <!-- 第三层：粒子引力系统 -->
-    <div class="absolute inset-0 particle-system">
-        <!-- 主要粒子群 -->
-        <div class="particle-cluster particle-cluster-1">
-            <div class="particle particle-large particle-blue"></div>
-            <div class="particle particle-medium particle-purple"></div>
-            <div class="particle particle-small particle-cyan"></div>
-            <div class="particle particle-tiny particle-white"></div>
-        </div>
-
-        <div class="particle-cluster particle-cluster-2">
-            <div class="particle particle-large particle-purple"></div>
-            <div class="particle particle-medium particle-cyan"></div>
-            <div class="particle particle-small particle-blue"></div>
-            <div class="particle particle-tiny particle-white"></div>
-        </div>
-
-        <div class="particle-cluster particle-cluster-3">
-            <div class="particle particle-large particle-cyan"></div>
-            <div class="particle particle-medium particle-blue"></div>
-            <div class="particle particle-small particle-purple"></div>
-            <div class="particle particle-tiny particle-white"></div>
-        </div>
-
-        <!-- 连接线系统 -->
-        <svg class="absolute inset-0 w-full h-full particle-connections" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="connection-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.4" />
-                    <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.6" />
-                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.4" />
-                </linearGradient>
-                <filter id="glow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                    <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-
-            <!-- 动态连接线 -->
-            <path class="connection-line connection-line-1" stroke="url(#connection-gradient)" stroke-width="1"
-                fill="none" filter="url(#glow)"></path>
-            <path class="connection-line connection-line-2" stroke="url(#connection-gradient)" stroke-width="0.8"
-                fill="none" filter="url(#glow)"></path>
-            <path class="connection-line connection-line-3" stroke="url(#connection-gradient)" stroke-width="0.6"
-                fill="none" filter="url(#glow)"></path>
-        </svg>
+<!-- 背景层：CSS 特效（4种优化特效） -->
+<div class="absolute inset-0 z-0 overflow-hidden" th:if="${theme.config.index.background_settings.background_type == 'effect'}">
+    
+    <!-- 特效 1：流体渐变 - 优化加强版 -->
+    <div class="effect-fluid-gradient" th:if="${theme.config.index.background_settings.effect_style == 'fluid-gradient'}">
+        <!-- 暗色基底 -->
+        <div class="effect-bg-base"></div>
+        <!-- 流体层 - 6个blob -->
+        <div class="fluid-blob fluid-blob-1"></div>
+        <div class="fluid-blob fluid-blob-2"></div>
+        <div class="fluid-blob fluid-blob-3"></div>
+        <div class="fluid-blob fluid-blob-4"></div>
+        <div class="fluid-blob fluid-blob-5"></div>
+        <div class="fluid-blob fluid-blob-6"></div>
+        <!-- 柔和蒙版 -->
+        <div class="effect-overlay"></div>
     </div>
-
-    <!-- 第四层：多层视差几何 -->
-    <div class="absolute inset-0 parallax-geometry">
-        <!-- 远景层 -->
-        <div class="parallax-layer parallax-far">
-            <div class="geometric-shape geo-hexagon geo-far-1"></div>
-            <div class="geometric-shape geo-triangle geo-far-2"></div>
-            <div class="geometric-shape geo-circle geo-far-3"></div>
-        </div>
-
-        <!-- 中景层 -->
-        <div class="parallax-layer parallax-mid">
-            <div class="geometric-shape geo-diamond geo-mid-1"></div>
-            <div class="geometric-shape geo-pentagon geo-mid-2"></div>
-            <div class="geometric-shape geo-star geo-mid-3"></div>
-        </div>
-
-        <!-- 近景层 -->
-        <div class="parallax-layer parallax-near">
-            <div class="geometric-shape geo-square geo-near-1"></div>
-            <div class="geometric-shape geo-octagon geo-near-2"></div>
-        </div>
+    
+    <!-- 特效 2：霓虹线条 -->
+    <div class="effect-neon-lines" th:if="${theme.config.index.background_settings.effect_style == 'neon-lines'}">
+        <!-- 暗色基底 -->
+        <div class="effect-bg-base"></div>
+        <!-- 霓虹线条 - 8条 -->
+        <div class="neon-line neon-1"></div>
+        <div class="neon-line neon-2"></div>
+        <div class="neon-line neon-3"></div>
+        <div class="neon-line neon-4"></div>
+        <div class="neon-line neon-5"></div>
+        <div class="neon-line neon-6"></div>
+        <div class="neon-line neon-7"></div>
+        <div class="neon-line neon-8"></div>
+        <!-- 柔和蒙版 -->
+        <div class="effect-overlay"></div>
     </div>
-
-    <!-- 第五层：光效系统 -->
-    <div class="absolute inset-0 light-effects">
-        <!-- 主光源 -->
-        <div class="light-source light-primary"></div>
-        <div class="light-source light-secondary"></div>
-        <div class="light-source light-accent"></div>
-
-        <!-- 光束效果 -->
-        <div class="light-beam light-beam-1"></div>
-        <div class="light-beam light-beam-2"></div>
-        <div class="light-beam light-beam-3"></div>
+    
+    <!-- 特效 3：流星雨 -->
+    <div class="effect-meteor-shower" th:if="${theme.config.index.background_settings.effect_style == 'meteor-shower'}">
+        <!-- 暗色基底 -->
+        <div class="effect-bg-base"></div>
+        <!-- 流星 - 25颗 -->
+        <div class="meteor meteor-1"></div>
+        <div class="meteor meteor-2"></div>
+        <div class="meteor meteor-3"></div>
+        <div class="meteor meteor-4"></div>
+        <div class="meteor meteor-5"></div>
+        <div class="meteor meteor-6"></div>
+        <div class="meteor meteor-7"></div>
+        <div class="meteor meteor-8"></div>
+        <div class="meteor meteor-9"></div>
+        <div class="meteor meteor-10"></div>
+        <div class="meteor meteor-11"></div>
+        <div class="meteor meteor-12"></div>
+        <div class="meteor meteor-13"></div>
+        <div class="meteor meteor-14"></div>
+        <div class="meteor meteor-15"></div>
+        <div class="meteor meteor-16"></div>
+        <div class="meteor meteor-17"></div>
+        <div class="meteor meteor-18"></div>
+        <div class="meteor meteor-19"></div>
+        <div class="meteor meteor-20"></div>
+        <div class="meteor meteor-21"></div>
+        <div class="meteor meteor-22"></div>
+        <div class="meteor meteor-23"></div>
+        <div class="meteor meteor-24"></div>
+        <div class="meteor meteor-25"></div>
+        <!-- 柔和蒙版 -->
+        <div class="effect-overlay"></div>
     </div>
-
-    <!-- 第六层：深度蒙版 -->
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/40"></div>
-
-    <!-- 第七层：滚动交互蒙版 -->
+    
+    <!-- 特效 4：深邃星空 -->
+    <div class="effect-starry-sky" th:if="${theme.config.index.background_settings.effect_style == 'starry-sky'}">
+        <!-- 暗色基底 -->
+        <div class="effect-bg-base"></div>
+        <!-- 星空层 -->
+        <div class="star-field">
+            <!-- 远景星空层 -->
+            <div class="star-layer-far"></div>
+            <!-- 中景星空层 -->
+            <div class="star-layer-mid"></div>
+            <!-- 近景星空层 -->
+            <div class="star-layer-near"></div>
+        </div>
+        <!-- 主题色特别星星 -->
+        <div class="star-accent-1"></div>
+        <div class="star-accent-2"></div>
+        <div class="star-accent-3"></div>
+        <div class="star-accent-4"></div>
+        <div class="star-accent-5"></div>
+        <!-- 银河带 -->
+        <div class="milky-way"></div>
+        <!-- 柔和蒙版 -->
+        <div class="effect-overlay"></div>
+    </div>
+    
+    <!-- 滚动交互蒙版（所有特效共用） -->
     <div class="absolute inset-0 bg-black transition-opacity duration-700 ease-out"
-        :style="`opacity: ${scrolled ? 0.25 : 0.02}`">
+        :style="`opacity: ${scrolled ? 0.25 : 0.05}`">
     </div>
+    
 </div>

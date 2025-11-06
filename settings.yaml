@@ -614,35 +614,51 @@ spec:
                   name: url
                   label: 链接地址
     - group: index
-      label: 首页设置
+      label: 首页
       formSchema:
         - $formkit: group
           name: background_settings
           label: 头部背景设置
           value:
-            show_background: true
+            background_type: image
             background_image: "https://www.dmoe.cc/random.php"
+            effect_style: fluid-gradient
           children:
             - $formkit: radio
-              id: show_background
-              name: show_background
-              label: 显示背景图片
-              help: 是否显示首页头部背景图片
+              id: background_type
+              name: background_type
+              label: 背景类型
+              help: 选择首页头部背景的显示方式
+              value: image
               options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: attachment
+                - label: 背景图片
+                  value: image
+                - label: CSS 特效
+                  value: effect
+            - $formkit: text
               name: background_image
               key: background_image_field
-              if: $get(show_background).value
-              label: 背景图片
-              help: 上传首页头部背景图片（支持 JPG/PNG/WebP 格式）
-              accepts:
-                - image/jpeg
-                - image/png
-                - image/webp
+              if: $get(background_type).value === 'image'
+              label: 背景图片地址
+              help: 输入图片 URL 地址，支持随机图片 API（如 https://www.dmoe.cc/random.php）或上传后的图片地址
+              placeholder: "https://www.dmoe.cc/random.php"
+              value: "https://www.dmoe.cc/random.php"
+            - $formkit: select
+              name: effect_style
+              key: effect_style_field
+              if: $get(background_type).value === 'effect'
+              label: 特效样式
+              help: 选择 CSS 特效的视觉风格，支持自动适配主题色
+              value: fluid-gradient
+              options:
+                - label: 流体渐变
+                  value: fluid-gradient
+                - label: 霓虹线条
+                  value: neon-lines
+                - label: 流星雨
+                  value: meteor-shower
+                - label: 深邃星空
+                  value: starry-sky
         - $formkit: group
           name: title_settings
           label: 主标题设置

@@ -46,7 +46,7 @@ function generateEntries() {
   const entries: Record<string, string> = {};
   
   // 公共资源入口
-    entries['main'] = 'src/common/main.js';
+  entries['main'] = 'src/common/main.js';
   
   // 扫描页面JS文件
   const jsFiles = glob.sync("src/pages/**/*.js");
