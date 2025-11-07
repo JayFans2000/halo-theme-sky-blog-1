@@ -222,24 +222,24 @@ body[style*="overflow: hidden"] {
     }
 }
 
-/* 深色模式组件微光效果 - 使用 data-theme-mode 统一判断亮暗模式 */
+/* 深色模式组件微光效果 - 使用 data-color-scheme 统一判断亮暗模式 */
 /* 优势：无需枚举所有暗色主题，新增暗色主题自动生效 */
 
 /* 卡片组件阴影 */
-[data-theme-mode="dark"] .card {
+[data-color-scheme="dark"] .card {
     box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
-[data-theme-mode="dark"] .card:hover {
+[data-color-scheme="dark"] .card:hover {
     box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 
 /* 模态框阴影 */
-[data-theme-mode="dark"] .modal-box {
+[data-color-scheme="dark"] .modal-box {
     box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 
 /* 抽屉侧边栏阴影 */
-[data-theme-mode="dark"] .drawer-side > div {
+[data-color-scheme="dark"] .drawer-side > div {
     box-shadow: -4px 0 16px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }

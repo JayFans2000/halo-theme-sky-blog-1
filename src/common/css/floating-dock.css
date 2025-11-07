@@ -146,8 +146,8 @@
   background: color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
-/* 深色模式分隔线更亮 - 使用 data-theme-mode 统一判断 */
-[data-theme-mode="dark"] .dock-container .w-px {
+/* 深色模式分隔线更亮 - 使用 data-color-scheme 统一判断 */
+[data-color-scheme="dark"] .dock-container .w-px {
   background: color-mix(in srgb, var(--color-base-content) 25%, transparent);
 }
 
@@ -258,12 +258,12 @@
   user-select: none;
 }
 
-/* 深色模式微光圈效果 - 使用 data-theme-mode 统一判断 */
-[data-theme-mode="dark"] .dock-container {
+/* 深色模式微光圈效果 - 使用 data-color-scheme 统一判断 */
+[data-color-scheme="dark"] .dock-container {
   box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 15%, transparent);
 }
 
-[data-theme-mode="dark"] .dock-container:hover {
+[data-color-scheme="dark"] .dock-container:hover {
   box-shadow: 0 6px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 

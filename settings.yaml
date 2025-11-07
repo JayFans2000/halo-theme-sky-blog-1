@@ -668,6 +668,7 @@ spec:
             decoration_effect: effect-particles
             title_font: font-titan-one
             style_effect: effect-marker-pop
+            effect_color: "var(--color-primary)"
           children:
             - $formkit: radio
               id: show_title
@@ -685,71 +686,91 @@ spec:
               if: $get(show_title).value
               label: 自定义主标题
               help: 留空则使用站点标题，填写则使用自定义标题
-            - $formkit: select
-              name: decoration_effect
-              key: decoration_effect_field
-              if: $get(show_title).value
-              label: 装饰效果
-              help: 选择主标题的装饰特效
-              value: none
-              options:
-                - value: none
-                  label: 无
-                - value: effect-particles
-                  label: 粒子特效
-                - value: effect-starlight
-                  label: 星光特效
-                - value: effect-neon-edge
-                  label: 标题发光
-            - $formkit: select
+            - $formkit: radio
+              id: title_font
               name: title_font
-              key: title_font_field
               if: $get(show_title).value
-              label: 主标题字体
+              label: 字体
               help: 选择主标题的字体
               value: font-titan-one
               options:
                 - value: font-default
-                  label: 默认字体
+                  label: 无
                 - value: font-monoton
-                  label: Monoton (英文开源)
+                  label: Monoton（推荐斜切双色）
                 - value: font-titan-one
-                  label: Titan One (英文开源)
+                  label: Titan One（推荐麦克笔感）
                 - value: font-lxgw-wenkai-bright
-                  label: 霞鹜文楷亮 (中文开源)
+                  label: 霞鹜文楷亮
                 - value: font-siyuan-songti
-                  label: 思源屏显臻宋 (中文开源)
+                  label: 思源宋
             - $formkit: select
               name: style_effect
               key: style_effect_field
               if: $get(show_title).value
               label: 样式效果
-              help: 选择主标题的样式特效
+              help: |
+                选择标题的视觉样式
+                - 固定颜色：麦克笔感、斜切双色
+                - 🎨可自定义颜色：其他效果可在下方设置特效主色
               value: effect-marker-pop
               options:
                 - value: none
                   label: 无
                 - value: effect-marker-pop
-                  label: 麦克笔感
+                  label: 麦克笔感（推荐Titan One）
                 - value: effect-diagonal-split
-                  label: 斜切双色
-                - value: effect-neon-glow
-                  label: 霓虹发光
-                - value: effect-text-shadow
-                  label: 立体阴影
+                  label: 斜切双色（推荐Monoton）
+                - value: gradient-flow
+                  label: 🎨 流光渐变
+                - value: stroke-glow
+                  label: 🎨 描边发光
+                - value: text-glow
+                  label: 🎨 微光晕染
+                - value: simple-shadow
+                  label: 🎨 简约阴影
+            - $formkit: text
+              name: effect_color
+              key: effect_color_field
+              if: $get(show_title).value && $get(style_effect).value !== 'effect-marker-pop' && $get(style_effect).value !== 'effect-diagonal-split' && $get(style_effect).value !== 'none'
+              label: 特效主色
+              help: |
+                设置发光、描边、渐变等特效的颜色（文字本身保持白色）
+                支持格式：
+                - 颜色值：#3b82f6、#8b5cf6
+                - CSS变量：var(--color-primary)、var(--color-secondary)
+              placeholder: "var(--color-primary)"
+              value: "var(--color-primary)"
+            - $formkit: radio
+              id: decoration_effect
+              name: decoration_effect
+              if: $get(show_title).value
+              label: 装饰效果（可选）
+              help: 为标题添加动态装饰元素
+              value: none
+              options:
+                - value: none
+                  label: 无
+                - value: effect-particles
+                  label: 粒子轨道
+                - value: effect-starlight
+                  label: 星光闪烁
         - $formkit: group
           name: subtitle_settings
           label: 副标题设置
           value:
             show_subtitle: true
             subtitle_text: "记录生活，分享思考，探索无限可能"
+            subtitle_font: font-default
             subtitle_effect: typewriter
+            subtitle_color: ""
           children:
             - $formkit: radio
               id: show_subtitle
               name: show_subtitle
               label: 显示副标题
               help: 是否显示首页头部的副标题
+              value: true
               options:
                 - label: 显示
                   value: true
@@ -761,38 +782,57 @@ spec:
               if: $get(show_subtitle).value
               label: 副标题文本
               help: 首页头部副标题的文字内容
-            - $formkit: select
-              name: subtitle_effect
-              key: subtitle_effect_field
-              if: $get(show_subtitle).value
-              label: 副标题效果
-              help: 选择副标题的显示效果
-              value: none
-              options:
-                - value: none
-                  label: 无
-                - value: typewriter
-                  label: 打字机效果
-                - value: gradient-flow
-                  label: 渐变流动效果
-            - $formkit: select
+            - $formkit: radio
+              id: subtitle_font
               name: subtitle_font
-              key: subtitle_font_field
               if: $get(show_subtitle).value
-              label: 副标题字体
-              help: 选择副标题的字体样式
+              label: 字体
+              help: 选择副标题的字体
               value: font-default
               options:
                 - value: font-default
                   label: 默认字体
                 - value: font-monoton
-                  label: Monoton (英文开源)
+                  label: Monoton
                 - value: font-titan-one
-                  label: Titan One (英文开源)
+                  label: Titan One
                 - value: font-lxgw-wenkai-bright
-                  label: 霞鹜文楷亮 (中文开源)
+                  label: 霞鹜文楷亮
                 - value: font-siyuan-songti
-                  label: 思源屏显臻宋 (中文开源)
+                  label: 思源宋
+            - $formkit: select
+              name: subtitle_effect
+              key: subtitle_effect_field
+              if: $get(show_subtitle).value
+              label: 样式效果
+              help: |
+                选择副标题的视觉样式
+                - 固定颜色：渐变流动
+                - 🎨可自定义颜色：打字机、微发光、呼吸
+              value: typewriter
+              options:
+                - value: none
+                  label: 无
+                - value: typewriter
+                  label: 🎨 打字机
+                - value: gradient-flow
+                  label: 渐变流动
+                - value: subtle-glow
+                  label: 🎨 微发光
+                - value: fade-pulse
+                  label: 🎨 呼吸
+            - $formkit: text
+              name: subtitle_color
+              key: subtitle_color_field
+              if: $get(show_subtitle).value && $get(subtitle_effect).value !== 'typewriter' && $get(subtitle_effect).value !== 'gradient-flow' && $get(subtitle_effect).value !== 'none'
+              label: 特效主色
+              help: |
+                设置光晕、渐变等特效的颜色
+                支持格式：
+                - 颜色值：#3b82f6、#8b5cf6
+                - CSS变量：var(--color-primary)、var(--color-secondary)
+              placeholder: "var(--color-primary)"
+              value: "var(--color-primary)"
         - $formkit: group
           name: wave_transition_settings
           label: 底部过渡设置
