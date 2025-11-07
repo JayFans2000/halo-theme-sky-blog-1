@@ -721,7 +721,7 @@ spec:
                 - value: effect-diagonal-split
                   label: 🎨 斜切双色（推荐Monoton）
                 - value: gradient-flow
-                  label: 🎨 流光渐变
+                  label: 流光渐变
                 - value: stroke-glow
                   label: 🎨 描边发光
                 - value: text-glow
