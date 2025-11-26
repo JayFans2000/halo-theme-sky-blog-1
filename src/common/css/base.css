@@ -64,59 +64,56 @@
 
 /* ========================================== */
 /* Halo 评论组件样式适配                        */
-/* 全部使用 DaisyUI/TW 变量，自动跟随主题        */
+/* 全部使用 DaisyUI 5 变量，自动跟随主题         */
 /* ========================================== */
 
-/* 评论组件变量 - 亮色模式 */
-html,
-html[data-color-scheme="light"] {
-    /* 主色 */
-    --halo-cw-primary-1-color: oklch(0.6 0.25 264);
-    --halo-cw-primary-2-color: oklch(0.6 0.25 264 / 0.8);
-    --halo-cw-primary-3-color: oklch(0.6 0.25 264 / 0.6);
+/* 评论组件变量 - 使用 DaisyUI 5 变量 */
+html {
+    /* 主色 - 使用 DaisyUI primary */
+    --halo-cw-primary-1-color: var(--color-primary);
+    --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent);
+    --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent);
     
-    /* 文本色 - 亮色模式用深色文字 */
-    --halo-cw-text-1-color: oklch(0.25 0.02 264);
-    --halo-cw-text-2-color: oklch(0.35 0.02 264);
-    --halo-cw-text-3-color: oklch(0.5 0.02 264);
+    /* 文本色 - 使用 DaisyUI base-content */
+    --halo-cw-text-1-color: var(--color-base-content);
+    --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent);
+    --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent);
     
-    /* 背景/边框色 */
-    --halo-cw-muted-1-color: oklch(0.9 0.01 264);
-    --halo-cw-muted-2-color: oklch(0.95 0.01 264);
-    --halo-cw-muted-3-color: oklch(0.98 0.01 264);
+    /* 背景/边框色 - 使用 DaisyUI base 系列 */
+    --halo-cw-muted-1-color: var(--color-base-300);
+    --halo-cw-muted-2-color: var(--color-base-200);
+    --halo-cw-muted-3-color: var(--color-base-100);
     
-    /* 基础样式 */
-    --halo-cw-base-rounded: 0.5rem;
+    /* 基础样式 - 使用 DaisyUI 变量 */
+    --halo-cw-base-rounded: var(--radius-box, 0.5rem);
     --halo-cw-avatar-rounded: 9999px;
     --halo-cw-avatar-size: 2.5rem;
     --halo-cw-base-font-size: 0.875rem;
     --halo-cw-base-font-family: inherit;
     
     /* Emoji 选择器 */
-    --halo-cw-emoji-picker-color-border: oklch(0.9 0.01 264);
-    --halo-cw-emoji-picker-color-border-over: oklch(0.6 0.25 264);
+    --halo-cw-emoji-picker-color-border: var(--color-base-300);
+    --halo-cw-emoji-picker-color-border-over: var(--color-primary);
 }
 
-/* 评论组件变量 - 暗色模式 */
-html[data-color-scheme="dark"] {
-    /* 主色 */
-    --halo-cw-primary-1-color: oklch(0.7 0.2 264);
-    --halo-cw-primary-2-color: oklch(0.7 0.2 264 / 0.8);
-    --halo-cw-primary-3-color: oklch(0.7 0.2 264 / 0.6);
+/* 深色模式覆盖 - 使用高优先级选择器 */
+html[data-color-scheme="dark"],
+.dark,
+.color-scheme-dark {
+    --halo-cw-primary-1-color: var(--color-primary) !important;
+    --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent) !important;
+    --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent) !important;
     
-    /* 文本色 - 暗色模式用浅色文字 */
-    --halo-cw-text-1-color: oklch(0.95 0.01 264);
-    --halo-cw-text-2-color: oklch(0.8 0.01 264);
-    --halo-cw-text-3-color: oklch(0.6 0.01 264);
+    --halo-cw-text-1-color: var(--color-base-content) !important;
+    --halo-cw-text-2-color: color-mix(in oklch, var(--color-base-content) 75%, transparent) !important;
+    --halo-cw-text-3-color: color-mix(in oklch, var(--color-base-content) 50%, transparent) !important;
     
-    /* 背景/边框色 */
-    --halo-cw-muted-1-color: oklch(0.35 0.02 264);
-    --halo-cw-muted-2-color: oklch(0.25 0.02 264);
-    --halo-cw-muted-3-color: oklch(0.2 0.02 264);
+    --halo-cw-muted-1-color: var(--color-base-300) !important;
+    --halo-cw-muted-2-color: var(--color-base-200) !important;
+    --halo-cw-muted-3-color: var(--color-base-100) !important;
     
-    /* Emoji 选择器 */
-    --halo-cw-emoji-picker-color-border: oklch(0.35 0.02 264);
-    --halo-cw-emoji-picker-color-border-over: oklch(0.7 0.2 264);
+    --halo-cw-emoji-picker-color-border: var(--color-base-300) !important;
+    --halo-cw-emoji-picker-color-border-over: var(--color-primary) !important;
 }
 
 /* 评论组件按钮文字颜色修复 */
