@@ -70,17 +70,22 @@
 
       <!-- 分页导航 -->
       <div th:if="${photos != null && (photos.hasPrevious() || photos.hasNext())}" 
-           class="flex justify-center items-center gap-4 mt-12">
-        <a th:if="${photos.hasPrevious()}"
-           th:href="@{${photos.prevUrl}}"
-           class="btn btn-sm btn-ghost btn-circle">
-          <span class="icon-[mdi--chevron-left] w-5 h-5"></span>
+           class="flex justify-center items-center gap-6 mt-12">
+        <!-- 上一页 -->
+        <a th:href="@{${photos.prevUrl}}"
+           class="inline-flex items-center gap-1 text-sm text-base-content/60 hover:text-base-content hover:font-medium transition-all"
+           th:classappend="${!photos.hasPrevious()} ? ' pointer-events-none opacity-40' : ''">
+          <span class="icon-[heroicons--chevron-left] w-4 h-4"></span>
+          <span>上一页</span>
         </a>
-        <span class="text-base-content/60 px-2" th:text="${photos.page} + ' / ' + ${photos.totalPages}">1 / 1</span>
-        <a th:if="${photos.hasNext()}"
-           th:href="@{${photos.nextUrl}}"
-           class="btn btn-sm btn-ghost btn-circle">
-          <span class="icon-[mdi--chevron-right] w-5 h-5"></span>
+        <!-- 页码 -->
+        <span class="text-sm text-base-content/50" th:text="${photos.page} + ' / ' + ${photos.totalPages}">1/1</span>
+        <!-- 下一页 -->
+        <a th:href="@{${photos.nextUrl}}"
+           class="inline-flex items-center gap-1 text-sm text-base-content/60 hover:text-base-content hover:font-medium transition-all"
+           th:classappend="${!photos.hasNext()} ? ' pointer-events-none opacity-40' : ''">
+          <span>下一页</span>
+          <span class="icon-[heroicons--chevron-right] w-4 h-4"></span>
         </a>
       </div>
 

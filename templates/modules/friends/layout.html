@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN" th:fragment="html (content)">
+
+<!-- ========================================== -->
+<!--        朋友圈页面布局                       -->
+<!-- 路由：/friends                             -->
+<!-- 插件：plugin-friends                       -->
+<!-- ========================================== -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- 防止主题闪烁 -->
+  <th:block th:replace="~{modules/theme-script :: inline-script}" />
+
+  <!-- 页面标题 -->
+  <title th:text="${site.title} + ' - ' + (${theme.config.friends_page_settings?.page_title} ?: '朋友圈')"></title>
+  <!-- 字体 -->
+  <link rel="stylesheet" th:href="@{/assets/fonts/open-fonts.css?v={version}(version=${theme.spec.version})}" />
+  <!-- 主题样式 -->
+  <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
+</head>
+
+<body class="min-h-screen bg-base-200 text-base-content"
+      th:with="cfg=${theme.config.friends_page_settings}, showSidebar=${cfg?.enable_sidebar == true}">
+  <!-- 导航栏 -->
+  <th:block th:replace="~{modules/nav :: navbar}" />
+
+  <!-- 主要内容区域 -->
+  <main class="flex-1 pt-20">
+    <div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+      <div class="flex gap-8">
+        <!-- 主内容 -->
+        <div class="flex-1 min-w-0" th:classappend="${!showSidebar} ? 'max-w-2xl mx-auto' : ''">
+          <th:block th:replace="${content}" />
+        </div>
+        <!-- 侧边栏 -->
+        <aside th:if="${showSidebar}" class="w-80 space-y-6 hidden lg:block shrink-0">
+          <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
+          <th:block th:replace="~{modules/widgets/categories :: list}" />
+          <th:block th:replace="~{modules/widgets/tags :: cloud}" />
+          <th:block th:replace="~{modules/widgets/popular-posts :: list}" />
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <th:block th:replace="~{modules/footer :: footer}" />
+
+  <!-- 悬浮 Dock 控制栏 -->
+  <th:block th:replace="~{modules/floating-dock :: dock}" />
+
+  <!-- JavaScript -->
+  <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
+</body>
+
+</html>

@@ -1051,6 +1051,17 @@ spec:
               value: 10
               min: 3
               max: 20
+            - $formkit: radio
+              name: list_style
+              if: $get(show_friends_tab).value
+              label: 列表样式
+              help: 选择首页朋友动态的展示样式
+              value: two_columns
+              options:
+                - label: 两列
+                  value: two_columns
+                - label: 单列
+                  value: single_column
     - group: article
       label: 文章
       formSchema:
@@ -1740,4 +1751,39 @@ spec:
             - label: 启用
               value: true
             - label: 禁用
+              value: false
+
+    - group: friends_page_settings
+      label: 朋友圈
+      formSchema:
+        - $formkit: text
+          name: page_title
+          label: 页面标题
+          value: "朋友圈"
+          placeholder: "朋友圈页面的标题"
+        - $formkit: textarea
+          name: page_description
+          label: 页面描述
+          value: "订阅朋友们的最新动态"
+          rows: 2
+          placeholder: "朋友圈页面的描述"
+        - $formkit: radio
+          name: list_style
+          label: 列表样式
+          help: 选择朋友圈页面的展示样式
+          value: single_column
+          options:
+            - label: 单列
+              value: single_column
+            - label: 双列
+              value: two_columns
+        - $formkit: radio
+          name: enable_sidebar
+          label: 显示侧边栏
+          help: 开启后显示通用侧边栏，页面变为左右布局
+          value: false
+          options:
+            - label: 开启
+              value: true
+            - label: 关闭
               value: false
