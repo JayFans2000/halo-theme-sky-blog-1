@@ -2485,6 +2485,16 @@ spec:
               value: true
             - label: 禁用
               value: false
+        - $formkit: radio
+          name: enable_publish
+          label: 前端发布
+          help: 允许登录用户在前端发布瞬间
+          value: true
+          options:
+            - label: 启用
+              value: true
+            - label: 禁用
+              value: false
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock

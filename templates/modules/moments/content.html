@@ -8,6 +8,7 @@
     pageTitle=${cfg?.page_title ?: '瞬间'},
     enableUpvote=${cfg?.enable_upvote != false},
     enableComment=${cfg?.enable_comment != false},
+    enablePublish=${cfg?.enable_publish != false},
     showSidebar=${cfg?.enable_sidebar == true},
     globalSidebarCfg = ${theme.config.general.sidebar_settings},
     useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
@@ -20,9 +21,10 @@
         <!-- 主内容区 -->
         <section class="flex-1 min-w-0" th:classappend="${!showSidebar} ? 'max-w-xl mx-auto' : ''">
 
-          <!-- 标签筛选 -->
-          <div th:if="${tags != null && !tags.isEmpty()}" class="mb-6">
-            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <!-- 标签筛选 + 发布按钮 -->
+          <div class="mb-6 flex items-center justify-between gap-4">
+            <!-- 左侧标签 -->
+            <div th:if="${tags != null && !tags.isEmpty()}" class="flex gap-2 overflow-x-auto pb-1 scrollbar-none flex-1">
               <a th:href="@{/moments}" 
                  class="btn btn-sm rounded-full"
                  th:classappend="${param.tag == null || #lists.isEmpty(param.tag)} ? 'btn-primary' : 'btn-ghost'">
@@ -35,6 +37,14 @@
                    th:text="${tag.name}">标签</a>
               </th:block>
             </div>
+            
+            <!-- 右侧发布按钮（启用发布且登录用户可见） -->
+            <button th:if="${enablePublish && #authorization.expression('isAuthenticated()')}"
+                    onclick="openMomentModal()"
+                    class="btn btn-ghost btn-sm gap-1 shrink-0">
+              <span class="icon-[heroicons--pencil-square] w-4 h-4"></span>
+              <span>发布</span>
+            </button>
           </div>
 
           <!-- 瞬间列表 -->
@@ -191,6 +201,292 @@
         </aside>
 
       </div>
+    </div>
+
+    <!-- 发布瞬间模态框 - 启用发布且登录用户可见 -->
+    <div id="moment-publish-modal" 
+         th:if="${enablePublish && #authorization.expression('isAuthenticated()')}" 
+         th:with="currentUser = ${contributorFinder.getContributor(#authentication.name)}"
+         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-100 items-center justify-center hidden"
+         onclick="if(event.target === this) closeMomentModal();"
+         style="display: none;">
+      
+      <!-- 引入表情选择器 -->
+      <link rel="stylesheet" th:href="@{/assets/emoji/emoji-selector.css}">
+      <script th:src="@{/assets/emoji/emoji-selector.js}"></script>
+      
+      <div class="w-full max-w-md mx-4 bg-base-100 rounded-2xl shadow-2xl overflow-hidden"
+           onclick="event.stopPropagation();">
+        
+        <!-- 顶部标题栏 -->
+        <div class="flex items-center justify-between px-4 py-3 border-b border-base-200">
+          <button type="button" onclick="closeMomentModal()" 
+                  class="text-base-content/60 hover:text-base-content text-sm">
+            取消
+          </button>
+          <span class="font-medium text-base-content">发布瞬间</span>
+          <button type="submit" form="moment-publish-form" id="moment-publish-btn"
+                  class="btn btn-primary btn-sm rounded-full px-4 min-h-0 h-8">
+            发布
+          </button>
+        </div>
+        
+        <!-- 模态框内容 -->
+        <form id="moment-publish-form">
+          <div class="p-4">
+            <!-- 用户信息 -->
+            <div class="flex items-center gap-3 mb-3">
+              <div class="avatar">
+                <div class="w-10 h-10 rounded-full ring ring-primary/20 ring-offset-base-100 ring-offset-1">
+                  <img th:if="${currentUser.avatar != null}" th:src="${currentUser.avatar}" />
+                  <div th:if="${currentUser.avatar == null}" 
+                       class="w-full h-full bg-primary flex items-center justify-center text-white font-bold"
+                       th:text="${#strings.substring(currentUser.displayName, 0, 1)}">U</div>
+                </div>
+              </div>
+              <div>
+                <div class="font-medium text-base-content" th:text="${currentUser.displayName}">用户名</div>
+                <div class="text-xs text-base-content/50">公开发布</div>
+              </div>
+            </div>
+            
+            <!-- 输入区 -->
+            <textarea id="moment-content"
+                      class="w-full bg-transparent text-base-content placeholder-base-content/40 resize-none border-0 focus:outline-none text-base leading-relaxed min-h-24"
+                      placeholder="分享新鲜事..." 
+                      maxlength="1000"
+                      oninput="document.getElementById('moment-char-count').textContent = this.value.length + '/1000'"></textarea>
+            
+            <!-- 标签显示区 -->
+            <div id="moment-tags-display" class="hidden mt-3">
+              <div class="flex flex-wrap gap-2" id="moment-tags-list"></div>
+            </div>
+          </div>
+          
+          <!-- 底部工具栏 -->
+          <div class="px-4 py-3 border-t border-base-200 bg-base-50">
+            <div class="flex items-center justify-between">
+              <!-- 左侧工具按钮 -->
+              <div class="flex items-center gap-0.5">
+                <button type="button" id="moment-emoji-btn"
+                        onclick="showEmojiSelector(document.getElementById('moment-content'), this)"
+                        class="btn btn-ghost btn-sm btn-square hover:bg-primary/10 hover:text-primary"
+                        title="表情">
+                  <span class="icon-[heroicons--face-smile] w-5 h-5"></span>
+                </button>
+                <button type="button"
+                        onclick="toggleTagInput()"
+                        class="btn btn-ghost btn-sm btn-square hover:bg-primary/10 hover:text-primary"
+                        title="标签">
+                  <span class="icon-[heroicons--hashtag] w-5 h-5"></span>
+                </button>
+              </div>
+              
+              <!-- 右侧字数统计 -->
+              <span id="moment-char-count" class="text-xs text-base-content/40">0/1000</span>
+            </div>
+            
+            <!-- 标签输入行（默认隐藏） -->
+            <div id="moment-tags-input-row" class="mt-3 items-center gap-2" style="display: none;">
+              <span class="text-primary">#</span>
+              <input type="text" 
+                     id="moment-tags"
+                     class="flex-1 bg-transparent border-0 focus:outline-none text-sm placeholder-base-content/40"
+                     placeholder="输入标签，回车添加"
+                     onkeydown="if(event.key === 'Enter') { event.preventDefault(); addMomentTag(); }" />
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <!-- 发布逻辑 -->
+      <script th:inline="javascript">
+        (function() {
+          'use strict';
+          
+          // 当前用户信息
+          const CURRENT_USER_NAME = /*[[${currentUser.name}]]*/ '';
+          
+          // 已选择的标签
+          let selectedTags = [];
+          
+          // 打开模态框
+          window.openMomentModal = function() {
+            const modal = document.getElementById('moment-publish-modal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            document.getElementById('moment-content').focus();
+          };
+          
+          // 关闭模态框
+          window.closeMomentModal = function() {
+            const modal = document.getElementById('moment-publish-modal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            if (window.hideEmojiSelector) hideEmojiSelector();
+          };
+          
+          // 切换标签输入
+          window.toggleTagInput = function() {
+            const row = document.getElementById('moment-tags-input-row');
+            if (row.style.display === 'none') {
+              row.style.display = 'flex';
+              document.getElementById('moment-tags').focus();
+            } else {
+              row.style.display = 'none';
+            }
+          };
+          
+          // 添加标签
+          window.addMomentTag = function() {
+            const input = document.getElementById('moment-tags');
+            const tag = input.value.trim();
+            if (tag && !selectedTags.includes(tag)) {
+              selectedTags.push(tag);
+              updateTagsDisplay();
+            }
+            input.value = '';
+          };
+          
+          // 移除标签
+          window.removeMomentTag = function(index) {
+            selectedTags.splice(index, 1);
+            updateTagsDisplay();
+          };
+          
+          // 更新标签显示
+          function updateTagsDisplay() {
+            const container = document.getElementById('moment-tags-display');
+            const list = document.getElementById('moment-tags-list');
+            
+            if (selectedTags.length === 0) {
+              container.classList.add('hidden');
+              return;
+            }
+            
+            container.classList.remove('hidden');
+            list.innerHTML = selectedTags.map((tag, i) => `
+              <span class="badge badge-primary badge-outline gap-1">
+                #${tag}
+                <button type="button" onclick="removeMomentTag(${i})" class="hover:text-error">×</button>
+              </span>
+            `).join('');
+          }
+          
+          // 发布瞬间
+          async function publishMoment(content, tags) {
+            const momentName = 'moment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            
+            const response = await fetch('/apis/moment.halo.run/v1alpha1/moments', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                apiVersion: 'moment.halo.run/v1alpha1',
+                kind: 'Moment',
+                metadata: {
+                  name: momentName,
+                  labels: { 'moment.halo.run/visible': 'PUBLIC' }
+                },
+                spec: {
+                  approved: true,
+                  approvedTime: new Date().toISOString(),
+                  content: {
+                    raw: content.trim(),
+                    html: content.trim().replace(/\n/g, '<br>')
+                  },
+                  owner: CURRENT_USER_NAME,
+                  visible: 'PUBLIC',
+                  releaseTime: new Date().toISOString(),
+                  tags: tags || []
+                }
+              })
+            });
+            
+            if (!response.ok) {
+              const err = await response.json().catch(() => ({}));
+              throw new Error(err.detail || err.message || '发布失败');
+            }
+            return true;
+          }
+          
+          // 局部刷新瞬间列表
+          async function refreshMomentsList() {
+            try {
+              const response = await fetch(window.location.href);
+              const html = await response.text();
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, 'text/html');
+              
+              const newList = doc.getElementById('moments-list');
+              const currentList = document.getElementById('moments-list');
+              
+              if (newList && currentList) {
+                currentList.innerHTML = newList.innerHTML;
+              }
+            } catch (error) {
+              console.error('刷新失败:', error);
+              window.location.reload();
+            }
+          }
+          
+          // 表单提交
+          document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('moment-publish-form');
+            if (!form) return;
+            
+            form.addEventListener('submit', async function(e) {
+              e.preventDefault();
+              
+              const contentInput = document.getElementById('moment-content');
+              const publishBtn = document.getElementById('moment-publish-btn');
+              const content = contentInput.value.trim();
+              
+              if (!content) {
+                alert('请输入内容');
+                return;
+              }
+              
+              // 使用已添加的标签
+              const tags = [...selectedTags];
+              
+              // 显示加载状态
+              publishBtn.disabled = true;
+              publishBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span>';
+              
+              try {
+                const success = await publishMoment(content, tags);
+                
+                if (success) {
+                  // 清空并关闭
+                  contentInput.value = '';
+                  selectedTags = [];
+                  updateTagsDisplay();
+                  document.getElementById('moment-char-count').textContent = '0/1000';
+                  document.getElementById('moment-tags').value = '';
+                  document.getElementById('moment-tags-input-row').style.display = 'none';
+                  closeMomentModal();
+                  
+                  // 刷新列表
+                  setTimeout(refreshMomentsList, 500);
+                }
+              } catch (err) {
+                console.error('发布异常:', err);
+                alert('发布失败: ' + err.message);
+              } finally {
+                publishBtn.disabled = false;
+                publishBtn.textContent = '发布';
+              }
+            });
+            
+            // Ctrl+Enter 快捷发布
+            document.getElementById('moment-content')?.addEventListener('keydown', function(e) {
+              if (e.ctrlKey && e.key === 'Enter') {
+                form.dispatchEvent(new Event('submit'));
+              }
+            });
+          });
+        })();
+      </script>
     </div>
 
   </th:block>
