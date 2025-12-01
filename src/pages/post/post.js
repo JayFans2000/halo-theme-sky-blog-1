@@ -946,10 +946,29 @@ document.addEventListener('alpine:init', () => {
     };
 
     /**
+     * 文章内容图片懒加载
+     * 跳过首屏前 N 张图片，后续图片添加 loading="lazy"
+     */
+    function setupContentLazyLoad() {
+        const content = document.getElementById('article-content');
+        if (!content) return;
+        
+        const images = content.querySelectorAll('img:not([loading])');
+        const skipCount = 2; // 跳过前2张（首屏可能可见）
+        
+        images.forEach((img, index) => {
+            if (index >= skipCount) {
+                img.setAttribute('loading', 'lazy');
+            }
+        });
+    }
+
+    /**
      * 页面加载完成后初始化
      */
     document.addEventListener('DOMContentLoaded', () => {
         pageManager.init();
+        setupContentLazyLoad();
     });
 
 })();
