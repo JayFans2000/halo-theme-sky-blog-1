@@ -8,15 +8,19 @@
 
 ## 预览
 
-- **在线演示**: [5ee 博客](https://5ee.cc)
-- **主题文档**: [简介 - halo-theme-sky-blog-1](https://docs.5ee.cc)
+- **在线演示**: [5ee 博客](https://5ee.net)
+- **主题文档**: [简介 - halo-theme-sky-blog-1](https://5ee.net/docs/halo-theme-sky-blog-1/jianjie)
 
 ## 技术栈
 
-- **Vite** - 现代构建工具
-- **Tailwind CSS 4** - 原子化 CSS 框架
-- **DaisyUI 5** - UI 组件库
-- **Alpine.js** - 轻量级响应式框架
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| **Vite** | 7.x | 下一代前端构建工具，极速热更新 |
+| **Tailwind CSS** | 4.x | 原子化 CSS 框架，无需编写自定义 CSS |
+| **DaisyUI** | 5.x | 基于 Tailwind 的 UI 组件库，提供丰富的预设样式 |
+| **Alpine.js** | 3.x | 轻量级响应式框架，替代复杂的前端框架 |
+| **TypeScript** | 5.x | 类型安全的 JavaScript 超集 |
+| **Thymeleaf** | 3.x | Halo 模板引擎，服务端渲染 |
 
 ## 功能特性
 
