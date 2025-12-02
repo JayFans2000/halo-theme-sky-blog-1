@@ -490,6 +490,157 @@ function createThemeToggle() {
 
 
 /**
+ * 简单悬浮 Dock 控制器
+ * 模板使用：templates/modules/doc/floating-dock.html (docs-dock, catalog-dock)
+ * 与主站 floatingDock 保持一致：页面顶部隐藏，滚动后显示
+ */
+function createSimpleFloatingDock() {
+  return {
+    isVisible: false,
+    
+    init() {
+      this.updateVisibility();
+      window.addEventListener('scroll', () => this.updateVisibility(), { passive: true });
+    },
+    
+    updateVisibility() {
+      // 滚动超过 50px 时显示
+      this.isVisible = window.scrollY >= 50;
+    },
+    
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+}
+
+/**
+ * 文档页悬浮 Dock 控制器
+ * 模板使用：templates/modules/doc/floating-dock.html (doc-dock)
+ * 与主站 floatingDock 保持一致：页面顶部隐藏，滚动后显示
+ */
+function createDocFloatingDock() {
+  return {
+    isVisible: false,
+    
+    init() {
+      this.updateVisibility();
+      window.addEventListener('scroll', () => this.updateVisibility(), { passive: true });
+    },
+    
+    updateVisibility() {
+      // 滚动超过 50px 时显示
+      this.isVisible = window.scrollY >= 50;
+    },
+    
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    
+    toggleCommentDrawer() {
+      window.dispatchEvent(new CustomEvent('toggle-doc-comment-drawer'));
+    },
+    
+    toggleTocDrawer() {
+      window.dispatchEvent(new CustomEvent('toggle-doc-toc-drawer'));
+    },
+    
+    toggleSidebarDrawer() {
+      window.dispatchEvent(new CustomEvent('toggle-doc-sidebar-drawer'));
+    }
+  };
+}
+
+/**
+ * 文档评论抽屉控制器
+ * 模板使用：templates/modules/doc/floating-dock.html
+ */
+function createDocCommentDrawer() {
+  return {
+    isOpen: false,
+    
+    closeDrawer() {
+      this.isOpen = false;
+    }
+  };
+}
+
+/**
+ * 文档目录抽屉控制器
+ * 模板使用：templates/modules/doc/floating-dock.html
+ */
+function createDocTocDrawer() {
+  return {
+    isOpen: false,
+    retryCount: 0,
+    maxRetries: 10,
+    
+    init() {
+      // 监听 isOpen 变化，在打开时初始化目录
+      this.$watch('isOpen', (value) => {
+        if (value) {
+          this.retryCount = 0;
+          this.$nextTick(() => this.initTocContent());
+        }
+      });
+    },
+    
+    initTocContent() {
+      const drawerNav = document.getElementById('doc-toc-drawer-nav');
+      const tocNav = document.getElementById('toc-nav');
+      
+      if (!drawerNav) return;
+      
+      // 如果抽屉已经有内容，不重复初始化
+      if (drawerNav.querySelector('.toc-list')) return;
+      
+      // 复制侧边栏目录内容
+      if (tocNav && tocNav.innerHTML.trim()) {
+        drawerNav.innerHTML = tocNav.innerHTML;
+        this.bindClickEvents(drawerNav);
+      } else if (this.retryCount < this.maxRetries) {
+        // 目录可能还没生成，延迟重试
+        this.retryCount++;
+        setTimeout(() => this.initTocContent(), 100);
+      }
+    },
+    
+    bindClickEvents(container) {
+      const links = container.querySelectorAll('.toc-link');
+      const self = this;
+      links.forEach(link => {
+        // 移除旧的事件监听器（克隆替换）
+        const newLink = link.cloneNode(true);
+        link.parentNode.replaceChild(newLink, link);
+        
+        newLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          const headingId = this.getAttribute('data-heading-id') || this.getAttribute('href').slice(1);
+          const heading = document.getElementById(headingId);
+          if (heading) {
+            window.scrollTo({
+              top: heading.offsetTop - 80,
+              behavior: 'smooth'
+            });
+            self.isOpen = false;
+          }
+        });
+      });
+    }
+  };
+}
+
+/**
+ * 文档菜单抽屉控制器
+ * 模板使用：templates/modules/doc/floating-dock.html
+ */
+function createDocSidebarDrawer() {
+  return {
+    isOpen: false
+  };
+}
+
+/**
  * 初始化所有组件
  * 注册模板中实际使用的 Alpine.js 组件
  */
@@ -502,6 +653,12 @@ function initializeAll() {
   Alpine.data('navbarController', createNavbarController);
   Alpine.data('createThemeToggle', createThemeToggle);
   
+  // 文档页组件
+  Alpine.data('simpleFloatingDock', createSimpleFloatingDock);
+  Alpine.data('docFloatingDock', createDocFloatingDock);
+  Alpine.data('docCommentDrawer', createDocCommentDrawer);
+  Alpine.data('docTocDrawer', createDocTocDrawer);
+  Alpine.data('docSidebarDrawer', createDocSidebarDrawer);
 }
 
 
@@ -512,5 +669,10 @@ export {
   createCommentDrawer,
   createHeaderController,
   createNavbarController,
-  createThemeToggle
+  createThemeToggle,
+  createSimpleFloatingDock,
+  createDocFloatingDock,
+  createDocCommentDrawer,
+  createDocTocDrawer,
+  createDocSidebarDrawer
 };

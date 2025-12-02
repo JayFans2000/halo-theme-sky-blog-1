@@ -1,0 +1,59 @@
+<!-- 文档目录页 - 适配主题样式 -->
+<div th:fragment="content" class="max-w-7xl mx-auto px-4 py-8">
+  
+  <!-- 面包屑 -->
+  <div class="breadcrumbs text-sm mb-6">
+    <ul>
+      <li>
+        <a th:href="${project.status.permalink}" class="text-base-content/70 hover:text-primary flex items-center gap-1">
+          <span class="icon-[heroicons--home] w-4 h-4"></span>
+          首页
+        </a>
+      </li>
+      <li th:each="crumb : ${crumbs}">
+        <a th:href="${crumb.status.permalink}" th:text="${crumb.spec.title}" class="text-base-content/70 hover:text-primary"></a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 目录卡片 -->
+  <div class="card bg-base-100 shadow-sm rounded-lg p-6 lg:p-8 mb-6">
+    <!-- 目录标题 -->
+    <h1 class="text-2xl lg:text-3xl font-bold text-base-content mb-2 flex items-center gap-3">
+      <span class="icon-[heroicons--folder-open] w-7 h-7 text-primary"></span>
+      <span th:text="${docTree.spec.title}">目录名称</span>
+    </h1>
+    <p class="text-base-content/60 text-sm" th:if="${sonNodes != null}" th:text="|共 ${#lists.size(sonNodes)} 个项目|">共 0 个项目</p>
+  </div>
+
+  <!-- 子项目列表 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <a th:each="node : ${sonNodes}"
+       th:href="${node.status.permalink}"
+       class="card bg-base-100 shadow-sm rounded-lg p-4 hover:shadow-md border border-transparent hover:border-primary transition-all group">
+      <div class="flex items-center gap-4">
+        <!-- 图标 -->
+        <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+          <span th:if="${node.spec.type == 'TREE'}" class="icon-[heroicons--folder] w-6 h-6 text-primary"></span>
+          <span th:if="${node.spec.type == 'DOC'}" class="icon-[heroicons--document-text] w-6 h-6 text-primary"></span>
+        </div>
+        <!-- 内容 -->
+        <div class="flex-1 min-w-0">
+          <h3 class="font-medium text-base-content group-hover:text-primary transition-colors truncate" th:text="${node.spec.title}">项目名称</h3>
+          <p class="text-xs text-base-content/50 mt-1">
+            <span th:if="${node.spec.type == 'TREE'}">文件夹</span>
+            <span th:if="${node.spec.type == 'DOC'}">文档</span>
+          </p>
+        </div>
+        <!-- 箭头 -->
+        <span class="icon-[heroicons--chevron-right] w-5 h-5 text-base-content/30 group-hover:text-primary transition-colors"></span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 空状态 -->
+  <div th:if="${sonNodes == null || sonNodes.isEmpty()}" class="card bg-base-100 shadow-sm rounded-lg p-12 text-center">
+    <span class="icon-[heroicons--folder-open] w-16 h-16 mx-auto text-base-content/20 mb-4"></span>
+    <p class="text-base-content/50 text-lg">此目录暂无内容</p>
+  </div>
+</div>
