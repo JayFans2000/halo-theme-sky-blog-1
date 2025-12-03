@@ -641,6 +641,34 @@ function createDocSidebarDrawer() {
 }
 
 /**
+ * 右侧可折叠悬浮 Dock 控制器
+ * 模板使用：templates/modules/floating-dock-side.html
+ */
+function createSideFloatingDock() {
+  return {
+    isVisible: false,
+    isExpanded: false,
+    
+    init() {
+      this.updateVisibility();
+      window.addEventListener('scroll', () => this.updateVisibility(), { passive: true });
+    },
+    
+    updateVisibility() {
+      this.isVisible = window.scrollY >= 50;
+      // 滚动时自动收起展开的菜单
+      if (!this.isVisible) {
+        this.isExpanded = false;
+      }
+    },
+    
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+}
+
+/**
  * 初始化所有组件
  * 注册模板中实际使用的 Alpine.js 组件
  */
@@ -652,6 +680,7 @@ function initializeAll() {
   Alpine.data('headerController', createHeaderController);
   Alpine.data('navbarController', createNavbarController);
   Alpine.data('createThemeToggle', createThemeToggle);
+  Alpine.data('sideFloatingDock', createSideFloatingDock);
   
   // 文档页组件
   Alpine.data('simpleFloatingDock', createSimpleFloatingDock);
@@ -670,6 +699,7 @@ export {
   createHeaderController,
   createNavbarController,
   createThemeToggle,
+  createSideFloatingDock,
   createSimpleFloatingDock,
   createDocFloatingDock,
   createDocCommentDrawer,

@@ -56,7 +56,7 @@
 
   <!-- 悬浮 Dock（由各页面传入自定义 dock） -->
   <th:block th:if="${dock != null}">
-    <th:block th:replace="${dock}" />
+    <th:block th:insert="${dock}" />
   </th:block>
   <!-- 如果没有传入自定义 dock，使用默认 dock -->
   <th:block th:if="${dock == null}">

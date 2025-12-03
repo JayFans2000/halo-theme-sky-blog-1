@@ -97,6 +97,7 @@ spec:
           label: 悬浮控制栏
           value:
             enable_dock: true
+            dock_style: bottom
             dock_menu: primary
             enable_back_to_top: true
           children:
@@ -110,6 +111,16 @@ spec:
                   value: true
                 - label: 禁用
                   value: false
+            - $formkit: radio
+              name: dock_style
+              label: Dock 样式
+              help: 选择悬浮控制栏的展示样式
+              if: $get(fd_general_enable_dock).value
+              options:
+                - label: 底部居中
+                  value: bottom
+                - label: 右侧可折叠
+                  value: side
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
@@ -1346,6 +1357,7 @@ spec:
           label: 悬浮控制栏
           value:
             enable_dock: true
+            dock_style: global
             enable_like: true
             post_dock_menu: primary
             enable_share: true
@@ -1363,6 +1375,18 @@ spec:
                   value: true
                 - label: 禁用
                   value: false
+            - $formkit: radio
+              name: dock_style
+              label: Dock 样式
+              help: 选择悬浮控制栏的展示样式
+              if: $get(fd_post_enable_dock).value
+              options:
+                - label: 跟随全局设置
+                  value: global
+                - label: 底部居中
+                  value: bottom
+                - label: 右侧可折叠
+                  value: side
             - $formkit: menuRadio
               name: post_dock_menu
               label: 文章页 Dock 菜单
@@ -2666,6 +2690,7 @@ spec:
           label: 📄 文档内容页
           value:
             enable_dock: true
+            dock_style: global
             dock_menu: primary
             enable_comment: true
             enable_toc_drawer: true
@@ -2683,6 +2708,18 @@ spec:
                   value: true
                 - label: 禁用
                   value: false
+            - $formkit: radio
+              name: dock_style
+              label: Dock 样式
+              help: 选择悬浮控制栏的展示样式
+              if: $get(docsme_doc_enable_dock).value
+              options:
+                - label: 跟随全局设置
+                  value: global
+                - label: 底部居中
+                  value: bottom
+                - label: 右侧可折叠
+                  value: side
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
@@ -2741,6 +2778,7 @@ spec:
           label: 📚 文档列表页
           value:
             enable_dock: true
+            dock_style: global
             dock_menu: primary
             enable_back_to_top: true
           children:
@@ -2755,6 +2793,18 @@ spec:
                   value: true
                 - label: 禁用
                   value: false
+            - $formkit: radio
+              name: dock_style
+              label: Dock 样式
+              help: 选择悬浮控制栏的展示样式
+              if: $get(docsme_docs_enable_dock).value
+              options:
+                - label: 跟随全局设置
+                  value: global
+                - label: 底部居中
+                  value: bottom
+                - label: 右侧可折叠
+                  value: side
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
@@ -2777,6 +2827,7 @@ spec:
           label: 📂 文档目录页
           value:
             enable_dock: true
+            dock_style: global
             dock_menu: primary
             enable_back_to_top: true
           children:
@@ -2791,6 +2842,18 @@ spec:
                   value: true
                 - label: 禁用
                   value: false
+            - $formkit: radio
+              name: dock_style
+              label: Dock 样式
+              help: 选择悬浮控制栏的展示样式
+              if: $get(docsme_catalog_enable_dock).value
+              options:
+                - label: 跟随全局设置
+                  value: global
+                - label: 底部居中
+                  value: bottom
+                - label: 右侧可折叠
+                  value: side
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单

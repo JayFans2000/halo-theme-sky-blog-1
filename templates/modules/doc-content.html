@@ -9,7 +9,7 @@
           <span class="icon-[heroicons--book-open] w-5 h-5 shrink-0"></span>
           <span class="truncate" th:text="${project.spec.displayName}">文档项目</span>
         </a>
-        <ul class="menu menu-sm bg-transparent p-0">
+        <ul class="menu bg-transparent p-0">
           <th:block th:replace="~{modules/doc-content :: tree-item(docTrees=${docTrees})}" />
         </ul>
       </div>
