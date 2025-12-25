@@ -123,11 +123,54 @@
  * 功能：抽屉式菜单、触摸优化、动画效果
  */
 
-/* 移动端抽屉背景模糊效果 */
-.drawer-side {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: color-mix(in srgb, var(--color-base-content) 5%, transparent);
+/* 移动端抽屉渐变背景 */
+.drawer-gradient-bg {
+  background: linear-gradient(
+    to right,
+    var(--color-base-100) 0%,
+    var(--color-base-100) 30%,
+    color-mix(in srgb, var(--color-base-100) 95%, transparent) 40%,
+    color-mix(in srgb, var(--color-base-100) 88%, transparent) 50%,
+    color-mix(in srgb, var(--color-base-100) 76%, transparent) 60%,
+    color-mix(in srgb, var(--color-base-100) 58%, transparent) 70%,
+    color-mix(in srgb, var(--color-base-100) 38%, transparent) 80%,
+    color-mix(in srgb, var(--color-base-100) 18%, transparent) 90%,
+    transparent 100%
+  );
+}
+
+/* 移动端抽屉滑入动画 */
+.drawer-slide-in {
+  animation: drawerSlideIn 0.3s ease-out;
+}
+
+@keyframes drawerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 移动端菜单项依次淡入动画 */
+.drawer-menu-item {
+  opacity: 0;
+  animation: menuItemFadeIn 0.4s ease-out forwards;
+  animation-delay: calc(var(--item-index, 0) * 0.06s + 0.1s);
+}
+
+@keyframes menuItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* 移动端菜单项触摸交互优化 */

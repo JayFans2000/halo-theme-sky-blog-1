@@ -216,60 +216,49 @@
   <!-- 移动端菜单抽屉 -->
   <div class="drawer-side z-[100]">
     <!-- 抽屉遮罩层 -->
-    <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+    <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay bg-transparent"></label>
 
     <!-- 抽屉主体内容 -->
-    <aside class="min-h-full w-80 bg-base-100/95 backdrop-blur-xl shadow-2xl border-r border-base-200/50">
+    <aside class="min-h-full w-80 drawer-gradient-bg drawer-slide-in">
 
       <!-- 抽屉头部区域 -->
-      <div
-        class="flex items-center justify-between mb-6 pb-3 border-b border-base-200/50 bg-gradient-to-r from-primary/5 to-secondary/5 p-6">
+      <div class="flex items-center gap-3 px-5 py-5 drawer-menu-item" style="--item-index: 0">
         <!-- Logo 区域 -->
-        <a href="/" class="text-lg font-bold flex items-center gap-2">
-          <!-- Logo 图标 -->
-          <th:block th:replace="~{modules/logo :: icon('w-6 h-6')}" />
-          <!-- 站点标题 -->
+        <a href="/" class="flex items-center gap-2">
+          <th:block th:replace="~{modules/logo :: icon('w-8 h-8')}" />
           <th:block th:replace="~{modules/logo :: title}" />
         </a>
-
-        <!-- 关闭按钮 -->
-        <label for="mobile-menu-drawer"
-          class="btn btn-ghost btn-circle hover:bg-error/10 hover:text-error transition-all duration-200">
-          <span class="icon-[heroicons--x-mark] w-6 h-6"></span>
-        </label>
       </div>
 
       <!-- 移动端导航菜单区域 -->
-      <div class="px-6">
-        <nav class="space-y-3">
+      <div class="px-3 py-4">
+        <nav class="space-y-1">
           <!-- 主菜单数据获取 -->
           <th:block
             th:with="primaryMenu = ${menuFinder.getByName(theme.config.nav.menu_settings.primary_menu ?: 'primary')}">
             <!-- 菜单项遍历 -->
-            <div th:each="menuItem : ${primaryMenu.menuItems}" class="mobile-menu-item">
+            <div th:each="menuItem, iterStat : ${primaryMenu.menuItems}">
 
               <!-- 带子菜单的菜单项 -->
               <th:block th:if="${menuItem.children != null and !menuItem.children.isEmpty()}">
                 <!-- 使用 DaisyUI collapse 组件（适合移动端点击展开） -->
-                <div class="collapse collapse-arrow w-full" x-data="{ open: false }">
-                  <!-- 折叠控制器 -->
-                  <input type="checkbox" class="peer" x-model="open" />
-                  <!-- 主菜单项标题 -->
+                <div class="collapse drawer-menu-item" x-data="{ open: false }" th:style="'--item-index: ' + ${iterStat.index + 1}">
+                  <input type="checkbox" class="peer min-h-0 absolute opacity-0" x-model="open" />
                   <div
-                    class="collapse-title mobile-menu-link flex items-center justify-between p-4 font-semibold text-base-content hover:text-base-content/90 hover:bg-primary/10 transition-all duration-300 rounded-xl border-l-3 border-transparent hover:border-primary relative overflow-hidden min-h-0 py-4"
+                    class="collapse-title min-h-0 flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-base-content/5 cursor-pointer"
                     @click="open = !open">
-                    <span th:text="${menuItem.status.displayName}">菜单项</span>
-                    <i class="icon-[heroicons--chevron-down] w-5 h-5 text-base-content/70 transition-transform duration-300 ease-in-out"
+                    <span class="icon-[heroicons--folder] w-5 h-5 text-base-content/70"></span>
+                    <span class="text-sm text-base-content" th:text="${menuItem.status.displayName}">菜单项</span>
+                    <i class="icon-[heroicons--chevron-down] w-4 h-4 text-base-content/40 transition-transform duration-200"
                       :class="{ 'rotate-180': open }"></i>
                   </div>
-                  <!-- 子菜单内容区 -->
-                  <div class="collapse-content px-0">
-                    <div class="menu rounded-box w-full p-2 ml-4 mt-2 border-l-2 border-primary/20">
-                      <!-- 子菜单项遍历 -->
-                      <div th:each="childItem : ${menuItem.children}" class="menu-item mobile-menu-item">
-                        <a th:href="@{${childItem.status.href}}" th:text="${childItem.status.displayName}"
+                  <div class="collapse-content p-0">
+                    <div class="ml-8 py-1 space-y-0.5">
+                      <div th:each="childItem : ${menuItem.children}">
+                        <a th:href="@{${childItem.status.href}}"
                           th:target="${childItem.spec.target?.value}"
-                          class="flex items-center p-3 text-sm text-base-content/80 hover:text-base-content hover:bg-primary/5 transition-all duration-200 rounded-lg">
+                          class="block px-3 py-2 text-sm text-base-content/60 hover:text-base-content hover:bg-base-content/5 rounded-md">
+                          <span th:text="${childItem.status.displayName}"></span>
                         </a>
                       </div>
                     </div>
@@ -279,9 +268,12 @@
 
               <!-- 无子菜单的菜单项 -->
               <th:block th:unless="${menuItem.children != null and !menuItem.children.isEmpty()}">
-                <a th:href="@{${menuItem.status.href}}" th:text="${menuItem.status.displayName}"
+                <a th:href="@{${menuItem.status.href}}"
                   th:target="${menuItem.spec.target?.value}"
-                  class="mobile-menu-link flex items-center p-4 font-semibold text-base-content hover:text-base-content/90 hover:bg-primary/10 transition-all duration-300 rounded-xl border-l-3 border-transparent hover:border-primary relative overflow-hidden">
+                  class="flex items-center gap-3 px-3 py-2.5 text-sm text-base-content rounded-md hover:bg-base-content/5 drawer-menu-item"
+                  th:style="'--item-index: ' + ${iterStat.index + 1}">
+                  <span class="icon-[heroicons--home] w-5 h-5 text-base-content/70"></span>
+                  <span th:text="${menuItem.status.displayName}"></span>
                 </a>
               </th:block>
 
