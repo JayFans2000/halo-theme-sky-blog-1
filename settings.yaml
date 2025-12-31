@@ -39,8 +39,6 @@ spec:
               options:
                 - label: 内置 CSS 动画
                   value: css
-                - label: 自定义 SVG 动画
-                  value: svg
                 - label: 自定义 GIF 动图
                   value: gif
             - $formkit: select
@@ -59,15 +57,6 @@ spec:
                   value: bars
                 - label: DaisyUI Ring
                   value: ring
-            - $formkit: code
-              name: custom_svg
-              key: custom_svg_field
-              if: $get(animation_type).value === 'svg'
-              label: 自定义 SVG 代码
-              help: 输入完整的 SVG 动画代码，建议尺寸 48x48 或 64x64
-              language: html
-              height: 150
-              placeholder: '<svg width="48" height="48" viewBox="0 0 48 48">...</svg>'
             - $formkit: attachment
               name: custom_gif
               key: custom_gif_field
@@ -155,13 +144,16 @@ spec:
                   value: left
                 - label: 右侧
                   value: right
-            - $formkit: repeater
+            - $formkit: array
               name: widgets
               label: 小工具列表
               help: 拖拽排序、添加或删除侧边栏小工具（各页面可单独覆盖）
               addLabel: 添加小工具
               min: 0
               max: 10
+              itemLabels:
+                - type: text
+                  label: $value.widget
               value:
                 - widget: author_card
                 - widget: blog_stats
@@ -206,8 +198,9 @@ spec:
           name: logo_settings
           label: Logo 设置
           value:
-            logo_type: svg
-            logo_icon_html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M17.5 19H6.5C4.01472 19 2 16.9853 2 14.5C2 12.1597 3.79594 10.1953 6.08203 10.021C6.55632 6.45499 9.49378 3.5 13.25 3.5C16.3663 3.5 19.0378 5.50437 19.932 8.33691C22.0368 8.88413 23.5 10.864 23.5 13.25C23.5 15.7353 21.4853 17.75 19 17.75H18.75C18.3358 17.75 18 17.4142 18 17C18 16.5858 18.3358 16.25 18.75 16.25H19C20.6569 16.25 22 14.9069 22 13.25C22 11.5931 20.6569 10.25 19 10.25C18.5858 10.25 18.25 9.91421 18.25 9.5C18.25 7.01472 16.2353 5 13.75 5C11.2647 5 9.25 7.01472 9.25 9.5C9.25 9.91421 8.91421 10.25 8.5 10.25C6.01472 10.25 4 12.2647 4 14.75C4 16.2353 5.21472 17.5 6.75 17.5H17.25C17.6642 17.5 18 17.8358 18 18.25C18 18.6642 17.6642 19 17.25 19Z"/></svg>'
+            logo_type: iconify
+            logo_icon: null
+            logo_icon_html: ''
             logo_image: ""
             show_logo_title: true
             custom_logo_title: "5ee.net"
@@ -217,16 +210,26 @@ spec:
               name: logo_type
               label: Logo 图标类型
               help: 选择 Logo 图标的显示方式
-              value: svg
+              value: iconify
               options:
                 - label: 隐藏
                   value: none
                 - label: 使用系统设置
                   value: system
-                - label: SVG 代码
+                - label: Iconify 图标选择器
+                  value: iconify
+                - label: SVG 代码（高级）
                   value: svg
                 - label: 上传图片
                   value: image
+            - $formkit: iconify
+              name: logo_icon
+              key: logo_icon_field
+              if: $get(logo_type).value === 'iconify'
+              label: Logo 图标
+              help: 从图标库中选择 Logo 图标
+              format: svg
+              value-only: true
             - $formkit: code
               name: logo_icon_html
               key: logo_icon_html_field
@@ -235,7 +238,7 @@ spec:
               help: 直接输入 SVG 或其他 HTML 代码，将在页面中直接渲染
               language: html
               height: 120
-              value: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M17.5 19H6.5C4.01472 19 2 16.9853 2 14.5C2 12.1597 3.79594 10.1953 6.08203 10.021C6.55632 6.45499 9.49378 3.5 13.25 3.5C16.3663 3.5 19.0378 5.50437 19.932 8.33691C22.0368 8.88413 23.5 10.864 23.5 13.25C23.5 15.7353 21.4853 17.75 19 17.75H18.75C18.3358 17.75 18 17.4142 18 17C18 16.5858 18.3358 16.25 18.75 16.25H19C20.6569 16.25 22 14.9069 22 13.25C22 11.5931 20.6569 10.25 19 10.25C18.5858 10.25 18.25 9.91421 18.25 9.5C18.25 7.01472 16.2353 5 13.75 5C11.2647 5 9.25 7.01472 9.25 9.5C9.25 9.91421 8.91421 10.25 8.5 10.25C6.01472 10.25 4 12.2647 4 14.75C4 16.2353 5.21472 17.5 6.75 17.5H17.25C17.6642 17.5 18 17.8358 18 18.25C18 18.6642 17.6642 19 17.25 19Z"/></svg>'
+              value: ''
             - $formkit: attachment
               name: logo_image
               key: logo_image_field
@@ -414,8 +417,9 @@ spec:
           name: brand_settings
           label: 站点信息设置
           value:
-            brand_icon_type: svg
-            brand_icon_html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M17.5 19H6.5C4.01472 19 2 16.9853 2 14.5C2 12.1597 3.79594 10.1953 6.08203 10.021C6.55632 6.45499 9.49378 3.5 13.25 3.5C16.3663 3.5 19.0378 5.50437 19.932 8.33691C22.0368 8.88413 23.5 10.864 23.5 13.25C23.5 15.7353 21.4853 17.75 19 17.75H18.75C18.3358 17.75 18 17.4142 18 17C18 16.5858 18.3358 16.25 18.75 16.25H19C20.6569 16.25 22 14.9069 22 13.25C22 11.5931 20.6569 10.25 19 10.25C18.5858 10.25 18.25 9.91421 18.25 9.5C18.25 7.01472 16.2353 5 13.75 5C11.2647 5 9.25 7.01472 9.25 9.5C9.25 9.91421 8.91421 10.25 8.5 10.25C6.01472 10.25 4 12.2647 4 14.75C4 16.2353 5.21472 17.5 6.75 17.5H17.25C17.6642 17.5 18 17.8358 18 18.25C18 18.6642 17.6642 19 17.25 19Z"/></svg>'
+            brand_icon_type: iconify
+            brand_icon: null
+            brand_icon_html: ''
             brand_icon_image: ""
             show_brand_title: true
             custom_brand_title: ""
@@ -429,14 +433,24 @@ spec:
               name: brand_icon_type
               label: 站点图标类型
               help: 选择站点图标的显示方式
-              value: svg
+              value: iconify
               options:
                 - label: 隐藏
                   value: none
-                - label: SVG 代码
+                - label: Iconify 图标选择器
+                  value: iconify
+                - label: SVG 代码（高级）
                   value: svg
                 - label: 上传图片
                   value: image
+            - $formkit: iconify
+              name: brand_icon
+              key: brand_icon_field
+              if: $get(brand_icon_type).value === 'iconify'
+              label: 站点图标
+              help: 从图标库中选择站点图标
+              format: svg
+              value-only: true
             - $formkit: code
               name: brand_icon_html
               key: brand_icon_html_field
@@ -445,7 +459,7 @@ spec:
               help: 直接输入 SVG 或其他 HTML 代码，将在页面中直接渲染
               language: html
               height: 120
-              value: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M17.5 19H6.5C4.01472 19 2 16.9853 2 14.5C2 12.1597 3.79594 10.1953 6.08203 10.021C6.55632 6.45499 9.49378 3.5 13.25 3.5C16.3663 3.5 19.0378 5.50437 19.932 8.33691C22.0368 8.88413 23.5 10.864 23.5 13.25C23.5 15.7353 21.4853 17.75 19 17.75H18.75C18.3358 17.75 18 17.4142 18 17C18 16.5858 18.3358 16.25 18.75 16.25H19C20.6569 16.25 22 14.9069 22 13.25C22 11.5931 20.6569 10.25 19 10.25C18.5858 10.25 18.25 9.91421 18.25 9.5C18.25 7.01472 16.2353 5 13.75 5C11.2647 5 9.25 7.01472 9.25 9.5C9.25 9.91421 8.91421 10.25 8.5 10.25C6.01472 10.25 4 12.2647 4 14.75C4 16.2353 5.21472 17.5 6.75 17.5H17.25C17.6642 17.5 18 17.8358 18 18.25C18 18.6642 17.6642 19 17.25 19Z"/></svg>'
+              value: ''
             - $formkit: attachment
               name: brand_icon_image
               key: brand_icon_image_field
@@ -538,13 +552,16 @@ spec:
               if: $get(show_quick_nav).value
               label: 导航标题
               help: 快速导航区域的标题
-            - $formkit: repeater
+            - $formkit: array
               name: nav_links
               id: nav_links_field
               key: nav_links_field
               if: $get(show_quick_nav).value
               label: 导航链接
               help: 配置快速导航的链接项
+              itemLabels:
+                - type: text
+                  label: $value.name
               children:
                 - $formkit: text
                   name: name
@@ -561,19 +578,19 @@ spec:
             social_links:
               - name: "GitHub"
                 url: "https://github.com/sky121666/halo-theme-sky-blog-1"
-                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>'
+                icon: null
               - name: "Twitter"
                 url: "https://twitter.com/username"
-                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+                icon: null
               - name: "Telegram"
                 url: "https://t.me/username"
-                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>'
+                icon: null
               - name: "邮箱"
                 url: "mailto:sky@5ee.net"
-                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>'
+                icon: null
               - name: "RSS 订阅"
                 url: "/rss.xml"
-                icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M3.429 2.25c9.615 0 17.321 7.706 17.321 17.321a.75.75 0 01-1.5 0c0-8.786-7.035-15.821-15.821-15.821a.75.75 0 010-1.5z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M3.429 7.5c6.902 0 12.321 5.419 12.321 12.321a.75.75 0 01-1.5 0c0-5.983-4.838-10.821-10.821-10.821a.75.75 0 010-1.5z" clip-rule="evenodd"/><path d="M6.75 15a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>'
+                icon: null
           children:
             - $formkit: radio
               id: show_social_links
@@ -592,13 +609,18 @@ spec:
               if: $get(show_social_links).value
               label: 社交媒体标题
               help: 社交媒体区域的标题
-            - $formkit: repeater
+            - $formkit: array
               name: social_links
               id: social_links_field
               key: social_links_field
               if: $get(show_social_links).value
               label: 社交媒体链接
               help: 配置社交媒体链接
+              itemLabels:
+                - type: iconify
+                  label: $value.icon
+                - type: text
+                  label: $value.name
               children:
                 - $formkit: text
                   name: name
@@ -606,12 +628,12 @@ spec:
                 - $formkit: text
                   name: url
                   label: 链接地址
-                - $formkit: code
+                - $formkit: iconify
                   name: icon
-                  label: 图标 SVG 代码
-                  help: 输入 SVG 代码，建议使用 24x24 viewBox，class="w-4 h-4"
-                  language: html
-                  height: 80
+                  label: 图标
+                  help: 从图标库中选择图标
+                  format: svg
+                  value-only: true
         - $formkit: group
           name: copyright_settings
           label: 版权信息设置
@@ -646,13 +668,16 @@ spec:
                   value: true
                 - label: 隐藏
                   value: false
-            - $formkit: repeater
+            - $formkit: array
               name: legal_links
               id: legal_links_field
               key: legal_links_field
               if: $get(show_legal_links).value
               label: 法律链接
               help: 配置法律相关链接
+              itemLabels:
+                - type: text
+                  label: $value.name
               children:
                 - $formkit: text
                   name: name
@@ -708,13 +733,16 @@ spec:
                   value: true
                 - label: 隐藏
                   value: false
-            - $formkit: repeater
+            - $formkit: array
               name: hosting_links
               id: hosting_links_field
               key: hosting_links_field
               if: $get(show_hosting_info).value
               label: 托管服务链接
               help: 配置CDN和托管服务相关链接
+              itemLabels:
+                - type: text
+                  label: $value.name
               children:
                 - $formkit: text
                   name: name
@@ -1035,13 +1063,16 @@ spec:
                   value: left
                 - label: 右侧
                   value: right
-            - $formkit: repeater
+            - $formkit: array
               name: sidebar_widgets
               if: $get(index_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
               min: 0
               max: 10
+              itemLabels:
+                - type: text
+                  label: $value.widget
               value:
                 - widget: author_card
                 - widget: blog_stats
@@ -1322,13 +1353,16 @@ spec:
                   value: left
                 - label: 右侧
                   value: right
-            - $formkit: repeater
+            - $formkit: array
               name: sidebar_widgets
               if: $get(post_enable_custom_sidebar).value
               label: 小工具列表
               addLabel: 添加小工具
               min: 0
               max: 10
+              itemLabels:
+                - type: text
+                  label: $value.widget
               value:
                 - widget: author_card
                 - widget: blog_stats
@@ -1529,13 +1563,16 @@ spec:
               value: left
             - label: 右侧
               value: right
-        - $formkit: repeater
+        - $formkit: array
           name: sidebar_widgets
           if: $get(cat_enable_custom_sidebar).value
           label: 小工具列表
           addLabel: 添加小工具
           min: 0
           max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
           value:
             - widget: author_card
             - widget: blog_stats
@@ -1708,13 +1745,16 @@ spec:
               value: left
             - label: 右侧
               value: right
-        - $formkit: repeater
+        - $formkit: array
           name: sidebar_widgets
           if: $get(tag_enable_custom_sidebar).value
           label: 小工具列表
           addLabel: 添加小工具
           min: 0
           max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
           value:
             - widget: author_card
             - widget: blog_stats
@@ -1885,13 +1925,16 @@ spec:
               value: left
             - label: 右侧
               value: right
-        - $formkit: repeater
+        - $formkit: array
           name: sidebar_widgets
           if: $get(archive_enable_custom_sidebar).value
           label: 小工具列表
           addLabel: 添加小工具
           min: 0
           max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
           value:
             - widget: author_card
             - widget: blog_stats
@@ -2028,13 +2071,16 @@ spec:
               value: left
             - label: 右侧
               value: right
-        - $formkit: repeater
+        - $formkit: array
           name: sidebar_widgets
           if: $get(links_enable_custom_sidebar).value
           label: 小工具列表
           addLabel: 添加小工具
           min: 0
           max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
           value:
             - widget: author_card
             - widget: blog_stats
@@ -2195,22 +2241,27 @@ spec:
                   value: true
                 - label: 隐藏
                   value: false
-        - $formkit: repeater
+        - $formkit: array
           name: social_links
           label: 社交链接
           help: 添加社交平台链接
           min: 0
           max: 10
+          itemLabels:
+            - type: iconify
+              label: $value.icon
+            - type: text
+              label: $value.name
           value:
             - name: "GitHub"
               url: "https://github.com"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>'
+              icon: ''
             - name: "Twitter"
               url: "https://twitter.com"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.205 2.25h3.308l-7.227 8.26l8.502 11.24H16.13l-5.214-6.817L4.95 21.75H1.64l7.73-8.835L1.215 2.25H8.04l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>'
+              icon: ''
             - name: "邮箱"
               url: "mailto:example@email.com"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z"/></svg>'
+              icon: ''
           children:
             - $formkit: text
               name: name
@@ -2220,42 +2271,47 @@ spec:
               name: url
               label: 链接地址
               placeholder: "https://..."
-            - $formkit: code
+            - $formkit: iconify
               name: icon
-              label: 图标 SVG
-              help: '填入纯 SVG 代码，可从 https://icon-sets.iconify.design/ 复制'
-              language: html
-              height: 80
-        - $formkit: repeater
+              label: 图标
+              help: 从图标库中选择图标
+              format: svg
+              value-only: true
+        - $formkit: array
           name: tech_stack
           label: 技术栈
           help: 添加你掌握的技术
           min: 0
           max: 20
+          itemLabels:
+            - type: iconify
+              label: $value.icon
+            - type: text
+              label: $value.name
           value:
             - name: "Vue.js"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2 3h3.5L12 15l6.5-12H22L12 21zm4.5 0h3L12 8l2.5-5h3L12 13.5z"/></svg>'
+              icon: ''
             - name: "TypeScript"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 3h18v18H3zm10.71 13.44v1.86c.3.16.67.28 1.1.37s.86.13 1.3.13c.44 0 .84-.05 1.21-.14s.69-.24.96-.45c.27-.21.48-.47.63-.79s.22-.7.22-1.13c0-.32-.05-.6-.15-.84s-.25-.46-.44-.65s-.42-.36-.69-.51a7.5 7.5 0 0 0-.92-.41c-.27-.1-.51-.2-.71-.3a2.1 2.1 0 0 1-.5-.31a1.2 1.2 0 0 1-.3-.38a1.1 1.1 0 0 1-.1-.48c0-.16.03-.31.1-.44s.17-.25.3-.35s.29-.17.48-.22s.41-.08.65-.08c.17 0 .34.01.53.04s.37.07.55.12s.35.12.51.2s.31.17.44.27l.66-1.61c-.25-.18-.58-.33-1-.46s-.9-.19-1.44-.19c-.42 0-.82.05-1.18.15s-.68.25-.95.45c-.27.2-.48.46-.64.78s-.23.7-.23 1.14c0 .42.07.77.21 1.06s.33.54.58.75s.54.39.87.54s.68.29 1.06.43c.27.1.5.19.69.29s.36.21.49.32s.22.24.29.38s.1.3.1.48c0 .16-.03.3-.1.44s-.17.26-.3.36s-.3.18-.5.24s-.43.08-.69.08a4 4 0 0 1-.82-.08a4 4 0 0 1-.75-.22a3.5 3.5 0 0 1-.63-.32a2.5 2.5 0 0 1-.46-.38M10 11.5H8v6h2v-6z"/></svg>'
+              icon: ''
             - name: "Tailwind CSS"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6c-2.67 0-4.33 1.33-5 4c1-1.33 2.17-1.83 3.5-1.5c.76.19 1.31.74 1.91 1.35c.98 1 2.09 2.15 4.59 2.15c2.67 0 4.33-1.33 5-4c-1 1.33-2.17 1.83-3.5 1.5c-.76-.19-1.3-.74-1.91-1.35C15.61 7.15 14.51 6 12 6m-5 6c-2.67 0-4.33 1.33-5 4c1-1.33 2.17-1.83 3.5-1.5c.76.19 1.3.74 1.91 1.35c.98 1 2.09 2.15 4.59 2.15c2.67 0 4.33-1.33 5-4c-1 1.33-2.17 1.83-3.5 1.5c-.76-.19-1.3-.74-1.91-1.35c-.99-1-2.09-2.15-4.59-2.15"/></svg>'
+              icon: ''
             - name: "Java"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211c0 0 .552.346 1.321.646c-4.699 2.013-10.633-.118-6.943-1.149m-.575-2.627s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308c0 0 .384.389.987.602c-5.679 1.661-12.007.13-7.942-1.218m4.84-4.458c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688c0 0-8.216 2.051-4.292 6.573m6.163 8.963s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033c-.856-.373.75-.89 1.254-.998c.527-.114.828-.093.828-.093c-.953-.671-6.156 1.317-2.643 1.887c9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062c1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568c2.082-1.006 3.776-.892 3.776-.892m7.824 4.373c4.503-2.34 2.421-4.589.968-4.285c-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562c0 0 .07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.888 4.832-.001 6.836c-2.274-2.053-3.943-3.858-2.824-5.539c1.644-2.469 6.197-3.665 5.19-7.627M9.734 23.924c4.322.277 10.959-.153 11.116-2.198c0 0-.302.775-3.572 1.391c-3.688.694-8.239.613-10.937.168c0 0 .553.457 3.393.639"/></svg>'
+              icon: ''
             - name: "Docker"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.185.185 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.185-.186H5.136a.186.186 0 0 0-.186.185v1.888c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51c-.338.001-.676.03-1.01.087c-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199l-.226.327c-.284.438-.49.922-.612 1.43c-.23.97-.09 1.882.403 2.661c-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748a11.4 11.4 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124c1.18.723 3.1 1.137 5.275 1.137c.983.003 1.963-.086 2.93-.266a12.2 12.2 0 0 0 3.823-1.389a10.5 10.5 0 0 0 2.61-2.136c1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009c.309-.293.55-.65.707-1.046l.098-.288z"/></svg>'
+              icon: ''
             - name: "MySQL"
-              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5.75 14.75a.75.75 0 0 0-.75.75v6.5a.75.75 0 0 0 .75.75h12.5a.75.75 0 0 0 .75-.75v-6.5a.75.75 0 0 0-.75-.75zm.75 6.5v-5h11v5zM12 2a7.5 7.5 0 0 0-7.5 7.5V14h2v-4.5a5.5 5.5 0 1 1 11 0V14h2V9.5A7.5 7.5 0 0 0 12 2m0 15a1 1 0 1 0 0 2a1 1 0 0 0 0-2"/></svg>'
+              icon: ''
           children:
             - $formkit: text
               name: name
               label: 技术名称
               placeholder: "如：Vue.js"
-            - $formkit: code
+            - $formkit: iconify
               name: icon
-              label: 图标 SVG（可选）
-              help: '填入纯 SVG 代码，可从 https://icon-sets.iconify.design/ 复制'
-              language: html
-              height: 80
+              label: 图标（可选）
+              help: 从图标库中选择图标
+              format: svg
+              value-only: true
         - $formkit: group
           name: display
           label: 显示设置
@@ -2459,13 +2515,16 @@ spec:
               value: left
             - label: 右侧
               value: right
-        - $formkit: repeater
+        - $formkit: array
           name: sidebar_widgets
           if: $get(moments_enable_custom_sidebar).value
           label: 小工具列表
           addLabel: 添加小工具
           min: 0
           max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
           value:
             - widget: author_card
             - widget: blog_stats
@@ -2612,13 +2671,16 @@ spec:
               value: left
             - label: 右侧
               value: right
-        - $formkit: repeater
+        - $formkit: array
           name: sidebar_widgets
           if: $get(friends_page_enable_custom_sidebar).value
           label: 小工具列表
           addLabel: 添加小工具
           min: 0
           max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
           value:
             - widget: author_card
             - widget: blog_stats

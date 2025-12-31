@@ -19,67 +19,21 @@
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
   <!-- 背景特效样式 - 只在选择 CSS 特效背景时加载 -->
-  <link th:if="${theme.config.index.background_settings.background_type == 'effect'}" 
-        rel="stylesheet" 
-        th:href="@{/assets/css/index-effects.css?v={version}(version=${theme.spec.version})}" />
+  <link th:if="${theme.config.index.background_settings.background_type == 'effect'}" rel="stylesheet"
+    th:href="@{/assets/css/index-effects.css?v={version}(version=${theme.spec.version})}" />
   <!-- 标题特效样式 - 只在显示标题时加载 -->
-  <link th:if="${theme.config.index.title_settings.show_title}" 
-        rel="stylesheet" 
-        th:href="@{/assets/css/index-title-effects.css?v={version}(version=${theme.spec.version})}" />
+  <link th:if="${theme.config.index.title_settings.show_title}" rel="stylesheet"
+    th:href="@{/assets/css/index-title-effects.css?v={version}(version=${theme.spec.version})}" />
   <!-- 副标题特效样式 - 只在显示副标题时加载 -->
-  <link th:if="${theme.config.index.subtitle_settings.show_subtitle}"
-        rel="stylesheet"
-        th:href="@{/assets/css/index-subtitle-effects.css?v={version}(version=${theme.spec.version})}" />
+  <link th:if="${theme.config.index.subtitle_settings.show_subtitle}" rel="stylesheet"
+    th:href="@{/assets/css/index-subtitle-effects.css?v={version}(version=${theme.spec.version})}" />
 
 </head>
 
 <body class="min-h-screen bg-base-100 text-base-content">
   <!-- 加载屏幕 -->
-  <div th:if="${theme.config.general != null && theme.config.general.loading_screen != null && theme.config.general.loading_screen.enable_loading}" 
-       id="loading-screen"
-       th:with="loadingSettings=${theme.config.general.loading_screen}"
-       th:attr="data-min-duration=${loadingSettings.min_duration ?: 500}">
-    
-    <!-- 动画内容（根据配置选择） -->
-    <div th:with="
-      animationType=${loadingSettings.animation_type ?: 'css'},
-      cssStyle=${loadingSettings.css_style ?: 'spinner'}
-    ">
-      <!-- CSS 动画 - Spinner -->
-      <div th:if="${animationType == 'css' && cssStyle == 'spinner'}" 
-           class="loading-spinner"></div>
-      
-      <!-- CSS 动画 - Dots -->
-      <div th:if="${animationType == 'css' && cssStyle == 'dots'}" 
-           class="loading-dots">
-        <span></span><span></span><span></span>
-      </div>
-      
-      <!-- CSS 动画 - Bars -->
-      <div th:if="${animationType == 'css' && cssStyle == 'bars'}" 
-           class="loading-bars">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-      
-      <!-- CSS 动画 - Ring -->
-      <div th:if="${animationType == 'css' && cssStyle == 'ring'}" 
-           class="loading-ring"></div>
-      
-      <!-- 自定义 SVG -->
-      <div th:if="${animationType == 'svg' && loadingSettings.custom_svg != null && !loadingSettings.custom_svg.isEmpty()}"
-           th:utext="${loadingSettings.custom_svg}"></div>
-      
-      <!-- 自定义 GIF -->
-      <img th:if="${animationType == 'gif' && loadingSettings.custom_gif != null && !loadingSettings.custom_gif.isEmpty()}"
-           th:src="${loadingSettings.custom_gif}"
-           alt="加载中"
-           class="loading-gif">
-    </div>
-    
-    <!-- 加载文字 -->
-    <p class="loading-text" th:text="${loadingSettings.loading_text ?: '加载中...'}"></p>
-  </div>
-  
+  <th:block th:replace="~{modules/loading-screen :: loading-screen}" />
+
   <!-- 导航栏 -->
   <th:block th:replace="~{modules/nav :: navbar}" />
   <th:block th:replace="~{modules/index/header}" />
@@ -91,7 +45,7 @@
 
   <!-- 页脚 -->
   <th:block th:replace="~{modules/footer :: footer}" />
-  
+
   <!-- 悬浮 Dock 控制栏 -->
   <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.index}, 'basic')}" />
 
