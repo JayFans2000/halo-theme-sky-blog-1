@@ -143,25 +143,25 @@
       <span class="text-white/40">|</span>
       <div class="flex items-center gap-2">
         <!-- 上一篇 -->
-        <a th:if="${postCursor.hasPrevious()}"
+        <a th:if="${postCursor.previous != null}"
            th:href="@{${postCursor.previous.status.permalink}}"
            th:title="|上一篇：${postCursor.previous.spec.title}|"
            class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white/30 hover:border-white hover:bg-white/10 transition-all">
           <span class="icon-[heroicons--chevron-left] w-4 h-4"></span>
         </a>
-        <div th:unless="${postCursor.hasPrevious()}"
+        <div th:unless="${postCursor.previous != null}"
              class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white/10 opacity-30">
           <span class="icon-[heroicons--chevron-left] w-4 h-4"></span>
         </div>
         
         <!-- 下一篇 -->
-        <a th:if="${postCursor.hasNext()}"
+        <a th:if="${postCursor.next != null}"
            th:href="@{${postCursor.next.status.permalink}}"
            th:title="|下一篇：${postCursor.next.spec.title}|"
            class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white/30 hover:border-white hover:bg-white/10 transition-all">
           <span class="icon-[heroicons--chevron-right] w-4 h-4"></span>
         </a>
-        <div th:unless="${postCursor.hasNext()}"
+        <div th:unless="${postCursor.next != null}"
              class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white/10 opacity-30">
           <span class="icon-[heroicons--chevron-right] w-4 h-4"></span>
         </div>
