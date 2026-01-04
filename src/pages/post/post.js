@@ -969,6 +969,33 @@ document.addEventListener('alpine:init', () => {
     document.addEventListener('DOMContentLoaded', () => {
         pageManager.init();
         setupContentLazyLoad();
+        initAdmonitionGlow();
     });
+
+    /**
+     * Admonition 鼠标跟随发光效果
+     */
+    function initAdmonitionGlow() {
+        const admonitions = document.querySelectorAll('#article-content .admonition');
+        
+        admonitions.forEach(admonition => {
+            admonition.addEventListener('mouseenter', () => {
+                admonition.style.setProperty('--glow-opacity', '1');
+            });
+            
+            admonition.addEventListener('mouseleave', () => {
+                admonition.style.setProperty('--glow-opacity', '0');
+            });
+            
+            admonition.addEventListener('mousemove', (e) => {
+                const rect = admonition.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                admonition.style.setProperty('--glow-x', `${x}px`);
+                admonition.style.setProperty('--glow-y', `${y}px`);
+            });
+        });
+    }
 
 })();

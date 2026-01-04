@@ -806,6 +806,240 @@
 }
 
 /* ===================================================
+ * Admonition 提示框样式 - 通用基础
+ * ==================================================*/
+
+/* 基础结构样式 */
+#article-content .admonition {
+    --adm-color: var(--color-primary);
+    --glow-x: 50%;
+    --glow-y: 50%;
+    --glow-opacity: 0;
+    
+    position: relative;
+    margin: 1.5em 0;
+    overflow: hidden;
+}
+
+/* 标题栏基础 */
+#article-content .admonition-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+/* 图标基础 */
+#article-content .admonition-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#article-content .admonition-icon svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+/* 内容区基础 */
+#article-content .admonition-content {
+    font-size: 0.95em;
+    line-height: 1.7;
+}
+
+#article-content .admonition-content p {
+    margin: 0;
+}
+
+#article-content .admonition-content p + p {
+    margin-top: 0.75em;
+}
+
+/* ===================================================
+ * GitHub 风格 Admonition - 简洁左边框
+ * ==================================================*/
+#article-content.article-style-github .admonition {
+    border-radius: 6px;
+    border-left: 4px solid var(--adm-color);
+    background: color-mix(in srgb, var(--adm-color) 6%, var(--color-base-100));
+    border-top: 1px solid color-mix(in srgb, var(--adm-color) 15%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--adm-color) 15%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--adm-color) 15%, transparent);
+}
+
+#article-content.article-style-github .admonition-heading {
+    padding: 0.75rem 1rem;
+    color: var(--adm-color);
+    background: color-mix(in srgb, var(--adm-color) 8%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--adm-color) 12%, transparent);
+}
+
+#article-content.article-style-github .admonition-icon svg {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+#article-content.article-style-github .admonition-content {
+    padding: 0.875rem 1rem;
+    color: var(--color-base-content);
+}
+
+/* GitHub 风格颜色 */
+#article-content.article-style-github .admonition-info { --adm-color: var(--color-info); }
+#article-content.article-style-github .admonition-note { --adm-color: color-mix(in srgb, var(--color-base-content) 50%, transparent); }
+#article-content.article-style-github .admonition-tip { --adm-color: var(--color-success); }
+#article-content.article-style-github .admonition-warning { --adm-color: var(--color-warning); }
+#article-content.article-style-github .admonition-danger { --adm-color: var(--color-error); }
+
+/* ===================================================
+ * 苹果风格 Admonition - 玻璃拟态 + 四周立体发光
+ * ==================================================*/
+
+/* 容器包装 - 留出发光空间 */
+#article-content.article-style-default .admonition {
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 16px;
+    background: linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--color-base-100) 90%, transparent) 0%,
+        color-mix(in srgb, var(--color-base-200) 80%, transparent) 100%
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid color-mix(in srgb, var(--adm-color) 12%, color-mix(in srgb, var(--color-base-content) 5%, transparent));
+    box-shadow: 
+        /* 四周柔和发光 - 淡雅 */
+        0 0 8px -2px color-mix(in srgb, var(--adm-color) 6%, transparent),
+        /* 立体阴影 */
+        0 2px 4px color-mix(in srgb, var(--color-base-content) 3%, transparent),
+        0 4px 8px -2px color-mix(in srgb, var(--color-base-content) 4%, transparent),
+        /* 内部高光 */
+        inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 顶部彩色光带 */
+#article-content.article-style-default .admonition::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        color-mix(in srgb, var(--adm-color) 0%, transparent) 0%,
+        var(--adm-color) 30%,
+        var(--adm-color) 70%,
+        color-mix(in srgb, var(--adm-color) 0%, transparent) 100%
+    );
+    opacity: 0.5;
+    border-radius: 16px 16px 0 0;
+}
+
+/* 鼠标跟随光晕 */
+#article-content.article-style-default .admonition::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+        500px circle at var(--glow-x) var(--glow-y),
+        color-mix(in srgb, var(--adm-color) 8%, transparent),
+        transparent 40%
+    );
+    opacity: var(--glow-opacity);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 悬停效果 - 四周发光增强 */
+#article-content.article-style-default .admonition:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        /* 四周发光 - 淡雅 */
+        0 0 12px -2px color-mix(in srgb, var(--adm-color) 10%, transparent),
+        /* 立体阴影 */
+        0 4px 8px color-mix(in srgb, var(--color-base-content) 4%, transparent),
+        0 8px 16px -4px color-mix(in srgb, var(--adm-color) 8%, transparent),
+        /* 内部高光 */
+        inset 0 1px 0 color-mix(in srgb, #fff 10%, transparent);
+}
+
+/* 苹果风格标题栏 */
+#article-content.article-style-default .admonition-heading {
+    position: relative;
+    z-index: 2;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--adm-color) 8%, transparent) 0%,
+        color-mix(in srgb, var(--adm-color) 3%, transparent) 100%
+    );
+    border-bottom: 1px solid color-mix(in srgb, var(--adm-color) 10%, transparent);
+}
+
+/* 苹果风格图标容器 */
+#article-content.article-style-default .admonition-icon {
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 8px;
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--adm-color) 18%, transparent) 0%,
+        color-mix(in srgb, var(--adm-color) 8%, transparent) 100%
+    );
+    box-shadow: 
+        0 1px 4px color-mix(in srgb, var(--adm-color) 10%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #fff 15%, transparent);
+}
+
+#article-content.article-style-default .admonition-icon svg {
+    width: 1rem;
+    height: 1rem;
+    fill: var(--adm-color);
+    filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--adm-color) 20%, transparent));
+}
+
+/* 苹果风格标题 */
+#article-content.article-style-default .admonition-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--adm-color);
+    letter-spacing: -0.01em;
+}
+
+/* 苹果风格内容区 */
+#article-content.article-style-default .admonition-content {
+    position: relative;
+    z-index: 2;
+    padding: 1.125rem 1.25rem;
+    color: var(--color-base-content);
+}
+
+/* 苹果风格颜色定义 */
+#article-content.article-style-default .admonition-info { --adm-color: var(--color-info); }
+#article-content.article-style-default .admonition-tip { --adm-color: var(--color-success); }
+#article-content.article-style-default .admonition-warning { --adm-color: var(--color-warning); }
+#article-content.article-style-default .admonition-danger { --adm-color: var(--color-error); }
+
+/* 备注 - 中性灰调 */
+#article-content.article-style-default .admonition-note {
+    --adm-color: color-mix(in srgb, var(--color-base-content) 45%, var(--color-primary) 15%);
+}
+
+#article-content.article-style-default .admonition-note::before {
+    opacity: 0.5;
+}
+
+/* ===================================================
  * 5. 默认风格样式（苹果风）
  * ==================================================*/
 #article-content.article-style-default {
@@ -878,7 +1112,9 @@
 
 /* 引用块 */
 #article-content.article-style-default blockquote {
-    margin: 1.5em 0;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    margin: 1.5em auto;
     padding: 1.25rem 1.5rem;
     background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
     backdrop-filter: blur(8px);
@@ -1075,14 +1311,15 @@ halo-contact-form {
  * 表格
  * ==================================================*/
 #article-content.article-style-default table {
-    width: 100% !important;
-    margin: 1.5em 0;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px) !important;
+    margin: 1.5em auto;
     border-collapse: collapse;
     font-size: 0.95em;
     border: 1px solid color-mix(in srgb, var(--color-base-300) 60%, transparent);
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--color-base-content) 5%, transparent);
     background: color-mix(in srgb, var(--color-base-100) 80%, transparent);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -1143,18 +1380,27 @@ halo-contact-form {
 
 /* 图片 */
 #article-content.article-style-default img {
-    max-width: 100%;
+    /* 宽度略小于容器，让四周发光可见 */
+    max-width: calc(100% - 40px);
     height: auto;
     border-radius: 1rem;
     margin: 2em auto;
     display: block;
-    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 12%, transparent);
+    box-shadow: 
+        /* 四周柔和发光 - 淡雅 */
+        0 0 8px -2px color-mix(in srgb, var(--color-base-content) 6%, transparent),
+        /* 立体阴影 */
+        0 4px 16px color-mix(in srgb, var(--color-base-content) 8%, transparent);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #article-content.article-style-default img:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px color-mix(in srgb, var(--color-base-content) 18%, transparent);
+    transform: translateY(-2px);
+    box-shadow: 
+        /* 四周发光 - 淡雅 */
+        0 0 12px -2px color-mix(in srgb, var(--color-base-content) 8%, transparent),
+        /* 立体阴影 */
+        0 8px 24px color-mix(in srgb, var(--color-base-content) 12%, transparent);
 }
 
 /* 强调和加粗 */
@@ -1606,41 +1852,53 @@ halo-contact-form {
 
 /* 音频播放器 */
 #article-content.article-style-default audio {
-    width: 100%;
-    max-width: 100%;
-    margin: 1.5em 0;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
+    margin: 1.5em auto;
     border-radius: 1rem;
     display: block;
     background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 5%, transparent);
 }
 
 /* 视频播放器 */
 #article-content.article-style-default video {
-    width: 100%;
-    max-width: 100%;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
     height: auto;
     margin: 2em auto;
     border-radius: 1rem;
     display: block;
-    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 12%, transparent);
+    box-shadow: 
+        /* 四周柔和发光 - 淡雅 */
+        0 0 8px -2px color-mix(in srgb, var(--color-base-content) 6%, transparent),
+        /* 立体阴影 */
+        0 4px 16px color-mix(in srgb, var(--color-base-content) 8%, transparent);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #article-content.article-style-default video:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px color-mix(in srgb, var(--color-base-content) 18%, transparent);
+    transform: translateY(-2px);
+    box-shadow: 
+        /* 四周发光 - 淡雅 */
+        0 0 12px -2px color-mix(in srgb, var(--color-base-content) 8%, transparent),
+        /* 立体阴影 */
+        0 8px 24px color-mix(in srgb, var(--color-base-content) 12%, transparent);
 }
 
 /* iframe 嵌入内容 */
 #article-content.article-style-default iframe {
-    width: 100%;
-    max-width: 100%;
-    margin: 1.5em 0;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
+    margin: 1.5em auto;
+    display: block;
     border-radius: 1rem;
     border: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
     background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
-    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 10%, transparent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 6%, transparent);
 }
 
 /* embed 和 object */
@@ -1818,12 +2076,14 @@ halo-contact-form {
 #article-content.article-style-default .callout-warning,
 #article-content.article-style-default .callout-danger,
 #article-content.article-style-default .callout-info {
-    margin: 1.5em 0;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    margin: 1.5em auto;
     padding: 1.25rem 1.5rem;
     border-radius: 1rem;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--color-base-content) 5%, transparent);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1833,7 +2093,7 @@ halo-contact-form {
 #article-content.article-style-default .callout-danger:hover,
 #article-content.article-style-default .callout-info:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-base-content) 10%, transparent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 8%, transparent);
 }
 
 #article-content.article-style-default .callout-note {

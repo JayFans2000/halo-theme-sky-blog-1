@@ -19,16 +19,12 @@ spec:
             custom_svg: ''
             custom_gif: ''
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: enable_loading
               name: enable_loading
               label: 启用加载屏幕
               help: 在页面加载时显示加载动画，避免样式闪烁和变形
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
+              value: true
             - $formkit: radio
               id: animation_type
               name: animation_type
@@ -90,16 +86,12 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: fd_general_enable_dock
               name: enable_dock
               label: 启用悬浮 Dock
               help: 是否显示底部悬浮控制栏（通用页面）
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
+              value: true
             - $formkit: radio
               name: dock_style
               label: Dock 样式
@@ -116,16 +108,12 @@ spec:
               value: primary
               if: $get(fd_general_enable_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单。菜单项的图标通过【元数据】中的 icon 字段设置（填入 SVG 代码）
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               help: 控制悬浮 Dock 中是否显示"返回顶部"按钮
               if: $get(fd_general_enable_dock).value
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
         - $formkit: group
           name: sidebar_settings
           label: 全局侧边栏
@@ -247,17 +235,12 @@ spec:
               help: 上传 Logo 图片，支持 PNG、JPG、SVG 等格式，建议尺寸 32x32 或 64x64
               accepts:
                 - image/*
-            - $formkit: radio
+            - $formkit: switch
               id: show_logo_title
               name: show_logo_title
               label: 显示 Logo 标题
               help: 是否显示 Logo 右侧的标题文字
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
             - $formkit: text
               name: custom_logo_title
               key: custom_logo_title_field
@@ -285,15 +268,11 @@ spec:
             light_theme: light
             dark_theme: dark
           children:
-            - $formkit: radio
+            - $formkit: switch
               name: show_theme_toggle
               label: 主题前端开关
               help: 前端右上角主题切换按钮的显示控制
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: radio
               name: default_theme
               label: 默认主题
@@ -391,24 +370,16 @@ spec:
             show_search: true
             show_user_actions: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               name: show_search
               label: 搜索按钮
               help: 右上角搜索按钮
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+              value: true
+            - $formkit: switch
               name: show_user_actions
               label: 登录按钮
               help: 右上角登录/用户菜单按钮
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
 
     - group: footer
       label: 页脚
@@ -468,16 +439,12 @@ spec:
               help: 上传站点图标图片，支持 PNG、JPG、SVG 等格式，建议尺寸 32x32 或 64x64
               accepts:
                 - image/*
-            - $formkit: radio
+            - $formkit: switch
               id: show_brand_title
               name: show_brand_title
               label: 显示站点标题
               help: 是否显示页脚站点标题
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: custom_brand_title
               id: custom_brand_title_field
@@ -485,16 +452,12 @@ spec:
               if: $get(show_brand_title).value
               label: 自定义站点标题
               help: 留空则使用站点标题，填写则使用自定义标题
-            - $formkit: radio
+            - $formkit: switch
               id: show_brand_subtitle
               name: show_brand_subtitle
               label: 显示站点副标题
               help: 是否显示页脚站点副标题
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: brand_subtitle
               id: brand_subtitle_field
@@ -502,16 +465,12 @@ spec:
               if: $get(show_brand_subtitle).value
               label: 站点副标题
               help: 站点标题下方的描述文字
-            - $formkit: radio
+            - $formkit: switch
               id: show_site_days
               name: show_site_days
               label: 显示运行天数
               help: 是否显示网站运行天数统计
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: date
               name: site_start_date
               id: site_start_date_field
@@ -535,16 +494,12 @@ spec:
               - name: "RSS 订阅"
                 url: "/rss"
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_quick_nav
               name: show_quick_nav
               label: 显示底部导航
               help: 是否显示页脚快速导航区域
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: nav_title
               id: nav_title_field
@@ -592,16 +547,12 @@ spec:
                 url: "/rss.xml"
                 icon: null
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_social_links
               name: show_social_links
               label: 显示社交媒体
               help: 是否显示页脚社交媒体链接
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: social_title
               id: social_title_field
@@ -658,16 +609,12 @@ spec:
               - name: "阿里云"
                 url: "https://www.aliyun.com"
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_legal_links
               name: show_legal_links
               label: 显示法律链接
               help: 是否显示隐私政策、使用条款等法律链接
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: array
               name: legal_links
               id: legal_links_field
@@ -689,16 +636,12 @@ spec:
               name: copyright_text
               label: 版权文字
               help: 版权声明文字
-            - $formkit: radio
+            - $formkit: switch
               id: show_icp_info
               name: show_icp_info
               label: 显示ICP备案
               help: 是否显示ICP备案信息
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: icp_number
               id: icp_number_field
@@ -706,16 +649,12 @@ spec:
               if: $get(show_icp_info).value
               label: ICP备案号
               help: ICP备案号码
-            - $formkit: radio
+            - $formkit: switch
               id: show_police_info
               name: show_police_info
               label: 显示公安备案
               help: 是否显示公安备案信息
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: police_number
               id: police_number_field
@@ -723,16 +662,12 @@ spec:
               if: $get(show_police_info).value
               label: 公安备案号
               help: 公安备案号码
-            - $formkit: radio
+            - $formkit: switch
               id: show_hosting_info
               name: show_hosting_info
               label: 显示托管信息
               help: 是否显示CDN和托管服务信息
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: array
               name: hosting_links
               id: hosting_links_field
@@ -813,16 +748,12 @@ spec:
             style_effect: effect-marker-pop
             effect_color: "var(--color-primary)"
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_title
               name: show_title
               label: 显示主标题
               help: 是否显示首页头部的主标题
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: custom_title
               key: custom_title_field
@@ -907,17 +838,12 @@ spec:
             subtitle_effect: typewriter
             subtitle_color: ""
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_subtitle
               name: show_subtitle
               label: 显示副标题
               help: 是否显示首页头部的副标题
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
             - $formkit: text
               name: subtitle_text
               key: subtitle_text_field
@@ -982,16 +908,12 @@ spec:
             show_wave_transition: true
             wave_color: "var(--sky-container)"
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_wave_transition
               name: show_wave_transition
               label: 显示波浪过渡
               help: 是否显示首页头部底部的波浪过渡效果
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: wave_color
               key: wave_color_field
@@ -1005,16 +927,12 @@ spec:
             show_moment: true
             moment_title: "瞬间"
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_moment
               name: show_moment
               label: 显示瞬间说说
               help: 是否在首页显示瞬间说说模块
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
             - $formkit: text
               name: moment_title
               key: moment_title_field
@@ -1030,29 +948,19 @@ spec:
             show_github_calendar: true
             tab_style: chips
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: index_show_sidebar
               name: show_sidebar
               label: 显示侧边栏
               help: 是否在首页显示侧边栏
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               id: index_enable_custom_sidebar
               name: enable_custom_sidebar
               if: $get(index_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: radio
               name: sidebar_position
               if: $get(index_enable_custom_sidebar).value
@@ -1096,16 +1004,11 @@ spec:
                       value: popular_posts
                     - label: 最新文章
                       value: recent_posts
-            - $formkit: radio
+            - $formkit: switch
               name: show_github_calendar
               label: 显示 GitHub 热力图
               help: 是否在首页显示 GitHub 贡献热力图（需在"关于"设置中配置 GitHub 用户名）
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
             - $formkit: select
               name: tab_style
               label: Tab 切换风格
@@ -1152,17 +1055,12 @@ spec:
               value: 8
               min: 3
               max: 12
-            - $formkit: radio
+            - $formkit: switch
               id: index_cover_fallback_enable
               name: cover_fallback_enable
               label: 启用封面替代
               help: 启用后无封面的文章将使用指定图片替代
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: select
               name: cover_fallback_mode
               if: $get(index_cover_fallback_enable).value
@@ -1189,17 +1087,12 @@ spec:
             show_friends_tab: true
             friends_count: 10
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: show_friends_tab
               name: show_friends_tab
               label: 显示朋友动态
               help: 是否显示"朋友动态"Tab
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
             - $formkit: number
               name: friends_count
               if: $get(show_friends_tab).value
@@ -1228,33 +1121,23 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: index_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(index_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(index_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
     - group: article
       label: 文章
       formSchema:
@@ -1320,29 +1203,19 @@ spec:
             enable_custom_sidebar: false
             sidebar_position: right
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: post_show_sidebar
               name: show_sidebar
               label: 显示侧边栏
               help: 控制文章页是否显示侧边栏（包含目录、分类、标签等小部件）
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               id: post_enable_custom_sidebar
               name: enable_custom_sidebar
               if: $get(post_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: radio
               name: sidebar_position
               if: $get(post_enable_custom_sidebar).value
@@ -1399,16 +1272,12 @@ spec:
             enable_toc_drawer: false
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: fd_post_enable_dock
               name: enable_dock
               label: 启用文章页 Dock
               help: 仅控制文章页是否显示底部悬浮控制栏
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
+              value: true
             - $formkit: radio
               name: dock_style
               label: Dock 样式
@@ -1427,28 +1296,20 @@ spec:
               value: primary
               if: $get(fd_post_enable_dock).value
               help: 选择要在文章页 Dock 中显示的菜单（可以和通用 Dock 菜单一样，也可以选择不同的菜单）
-            - $formkit: radio
+            - $formkit: switch
               id: enable_like
               name: enable_like
               label: 启用点赞功能
               help: 文章页 Dock 中的点赞按钮
               if: $get(fd_post_enable_dock).value
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
-            - $formkit: radio
+              value: true
+            - $formkit: switch
               id: enable_share
               name: enable_share
               label: 启用分享功能
               help: 文章页 Dock 中的分享按钮
               if: $get(fd_post_enable_dock).value
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
+              value: true
             - $formkit: group
               name: share_settings
               label: 分享设置
@@ -1496,63 +1357,41 @@ spec:
                       value: douban
                     - label: 系统分享
                       value: native
-            - $formkit: radio
+            - $formkit: switch
               name: enable_comment_drawer
               label: 启用评论抽屉
               help: 从右侧展开的评论面板
               if: $get(fd_post_enable_dock).value
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
-            - $formkit: radio
+              value: true
+            - $formkit: switch
               id: enable_toc_drawer
               name: enable_toc_drawer
               label: 启用目录抽屉
               help: 点击后从右侧展开文章目录（隐藏侧边栏时推荐启用）
               if: $get(fd_post_enable_dock).value
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
-            - $formkit: radio
+              value: false
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               help: 控制文章页悬浮 Dock 中是否显示“返回顶部”按钮
               if: $get(fd_post_enable_dock).value
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
     - group: category_settings
       label: 分类
       formSchema:
-        - $formkit: radio
+        - $formkit: switch
           id: cat_show_sidebar
           name: show_sidebar
           label: 显示侧边栏
           help: 控制分类页是否显示侧边栏
           value: true
-          options:
-            - label: 显示
-              value: true
-            - label: 隐藏
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           id: cat_enable_custom_sidebar
           name: enable_custom_sidebar
           if: $get(cat_show_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-          options:
-            - label: 使用全局配置
-              value: false
-            - label: 启用定制
-              value: true
         - $formkit: radio
           name: sidebar_position
           if: $get(cat_enable_custom_sidebar).value
@@ -1636,18 +1475,13 @@ spec:
             mode: missing_only
             default_image: ""
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: cat_cover_fallback_enable
               name: enable
               key: cat_cover_fallback_enable_field
               label: 启用封面替代
               help: 启用后可在无封面或始终替代模式下使用指定图片。
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: select
               id: cat_cover_fallback_mode
               name: mode
@@ -1682,59 +1516,39 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: category_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(category_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(category_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
     - group: tag_settings
       label: 标签
       formSchema:
-        - $formkit: radio
+        - $formkit: switch
           id: tag_show_sidebar
           name: show_sidebar
           label: 显示侧边栏
           help: 控制标签页是否显示侧边栏
           value: false
-          options:
-            - label: 显示
-              value: true
-            - label: 隐藏
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           id: tag_enable_custom_sidebar
           name: enable_custom_sidebar
           if: $get(tag_show_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-          options:
-            - label: 使用全局配置
-              value: false
-            - label: 启用定制
-              value: true
         - $formkit: radio
           name: sidebar_position
           if: $get(tag_enable_custom_sidebar).value
@@ -1816,18 +1630,13 @@ spec:
             mode: missing_only
             default_image: ""
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: tag_cover_fallback_enable
               name: enable
               key: tag_cover_fallback_enable_field
               label: 启用封面替代
               help: 启用后可在无封面或始终替代模式下使用指定图片。
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: select
               id: tag_cover_fallback_mode
               name: mode
@@ -1862,59 +1671,39 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: tag_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(tag_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(tag_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
     - group: archive_settings
       label: 归档
       formSchema:
-        - $formkit: radio
+        - $formkit: switch
           id: archive_show_sidebar
           name: show_sidebar
           label: 显示侧边栏
           help: 控制归档页是否显示侧边栏
           value: false
-          options:
-            - label: 显示
-              value: true
-            - label: 隐藏
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           id: archive_enable_custom_sidebar
           name: enable_custom_sidebar
           if: $get(archive_show_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-          options:
-            - label: 使用全局配置
-              value: false
-            - label: 启用定制
-              value: true
         - $formkit: radio
           name: sidebar_position
           if: $get(archive_enable_custom_sidebar).value
@@ -1958,16 +1747,11 @@ spec:
                   value: popular_posts
                 - label: 最新文章
                   value: recent_posts
-        - $formkit: radio
+        - $formkit: switch
           name: enable_comment
           label: 启用评论
           help: 在归档页面底部显示评论区
           value: false
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -1978,44 +1762,29 @@ spec:
             enable_back_to_top: true
             enable_comment: false
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: archive_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(archive_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(archive_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               name: enable_comment
               label: 评论按钮（抽屉式）
               if: $get(archive_enable_custom_dock).value
               help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 不启用（使用内嵌式）
-                  value: false
     - group: links_settings
       label: 友链
       formSchema:
@@ -2038,29 +1807,19 @@ spec:
           label: 申请区描述
           value: "如果你也有一个优质的网站或博客，欢迎与我交换友链。请确保你的网站内容健康、定期更新，并已添加本站链接。"
           rows: 2
-        - $formkit: radio
+        - $formkit: switch
           id: links_show_sidebar
           name: show_sidebar
           label: 显示侧边栏
           help: 启用后显示侧边栏
           value: false
-          options:
-            - label: 显示
-              value: true
-            - label: 隐藏
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           id: links_enable_custom_sidebar
           name: enable_custom_sidebar
           if: $get(links_show_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-          options:
-            - label: 使用全局配置
-              value: false
-            - label: 启用定制
-              value: true
         - $formkit: radio
           name: sidebar_position
           if: $get(links_enable_custom_sidebar).value
@@ -2104,16 +1863,11 @@ spec:
                   value: popular_posts
                 - label: 最新文章
                   value: recent_posts
-        - $formkit: radio
+        - $formkit: switch
           name: enable_comment
           label: 启用评论
           help: 在友链页面底部显示评论区
           value: true
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -2124,44 +1878,29 @@ spec:
             enable_back_to_top: true
             enable_comment: false
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: links_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(links_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(links_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               name: enable_comment
               label: 评论按钮（抽屉式）
               if: $get(links_enable_custom_dock).value
               help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 不启用（使用内嵌式）
-                  value: false
     - group: about_settings
       label: 关于
       formSchema:
@@ -2225,22 +1964,14 @@ spec:
               label: Stats 服务地址
               help: 自部署 github-readme-stats 地址，留空使用默认
               placeholder: "https://github-readme-stats.vercel.app"
-            - $formkit: radio
+            - $formkit: switch
               name: show_stats
               label: 显示统计卡片
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+              value: true
+            - $formkit: switch
               name: show_calendar
               label: 显示贡献日历
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
+              value: true
         - $formkit: array
           name: social_links
           label: 社交链接
@@ -2320,31 +2051,19 @@ spec:
             show_site_stats: true
             enable_comment: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               name: show_page_content
               label: 显示更多介绍
               help: 启用后显示单页面编辑器中的内容
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+              value: false
+            - $formkit: switch
               name: show_site_stats
               label: 显示站点统计
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+              value: true
+            - $formkit: switch
               name: enable_comment
               label: 启用评论
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
+              value: true
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -2355,44 +2074,29 @@ spec:
             enable_back_to_top: true
             enable_comment: false
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: about_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(about_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(about_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               name: enable_comment
               label: 评论按钮（抽屉式）
               if: $get(about_enable_custom_dock).value
               help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 不启用（使用内嵌式）
-                  value: false
     - group: photos_settings
       label: 图库
       formSchema:
@@ -2406,26 +2110,16 @@ spec:
           label: 页面描述
           value: "记录生活中的美好瞬间"
           placeholder: "图库页面的描述文字"
-        - $formkit: radio
+        - $formkit: switch
           name: show_photo_info
           label: 显示图片信息
           help: 鼠标悬浮时显示标题和描述
           value: false
-          options:
-            - label: 显示
-              value: true
-            - label: 隐藏
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           name: enable_comment
           label: 启用评论
           help: 在图库页面底部显示评论区
           value: true
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -2436,44 +2130,29 @@ spec:
             enable_back_to_top: true
             enable_comment: false
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: photos_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(photos_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(photos_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               name: enable_comment
               label: 评论按钮（抽屉式）
               if: $get(photos_enable_custom_dock).value
               help: 启用后在悬浮栏显示评论按钮，使用抽屉式评论替代页面底部内嵌评论
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 不启用（使用内嵌式）
-                  value: false
     - group: moments_settings
       label: 瞬间
       formSchema:
@@ -2482,29 +2161,19 @@ spec:
           label: 页面标题
           value: "瞬间"
           placeholder: "瞬间页面的标题"
-        - $formkit: radio
+        - $formkit: switch
           id: moments_enable_sidebar
           name: enable_sidebar
           label: 显示侧边栏
           help: 启用后显示侧边栏，页面变为左右布局
           value: false
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           id: moments_enable_custom_sidebar
           name: enable_custom_sidebar
           if: $get(moments_enable_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
         - $formkit: radio
           name: sidebar_position
           if: $get(moments_enable_custom_sidebar).value
@@ -2548,36 +2217,21 @@ spec:
                   value: popular_posts
                 - label: 最新文章
                   value: recent_posts
-        - $formkit: radio
+        - $formkit: switch
           name: enable_upvote
           label: 启用点赞
           help: 在每条瞬间下方显示点赞按钮
           value: true
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           name: enable_comment
           label: 启用评论
           help: 在每条瞬间下方显示评论区
           value: true
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           name: enable_publish
           label: 前端发布
           help: 允许登录用户在前端发布瞬间
           value: true
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -2587,33 +2241,23 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: moments_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(moments_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(moments_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
     - group: friends_page_settings
       label: 朋友圈
       formSchema:
@@ -2638,29 +2282,19 @@ spec:
               value: single_column
             - label: 双列
               value: two_columns
-        - $formkit: radio
+        - $formkit: switch
           id: friends_page_enable_sidebar
           name: enable_sidebar
           label: 显示侧边栏
           help: 启用后显示侧边栏，页面变为左右布局
           value: false
-          options:
-            - label: 启用
-              value: true
-            - label: 禁用
-              value: false
-        - $formkit: radio
+        - $formkit: switch
           id: friends_page_enable_custom_sidebar
           name: enable_custom_sidebar
           if: $get(friends_page_enable_sidebar).value
           label: 定制侧边栏
           help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
           value: false
-          options:
-            - label: 使用全局配置
-              value: false
-            - label: 启用定制
-              value: true
         - $formkit: radio
           name: sidebar_position
           if: $get(friends_page_enable_custom_sidebar).value
@@ -2713,33 +2347,23 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: friends_page_enable_custom_dock
               name: enable_custom_dock
               label: 定制悬浮控制栏
               help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
               value: false
-              options:
-                - label: 使用全局配置
-                  value: false
-                - label: 启用定制
-                  value: true
             - $formkit: menuRadio
               name: dock_menu
               label: Dock 菜单
               value: primary
               if: $get(friends_page_enable_custom_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(friends_page_enable_custom_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
     # =========================================
     # Docsme 文档插件设置
     # =========================================
@@ -2759,17 +2383,12 @@ spec:
             enable_sidebar_drawer: true
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: docsme_doc_enable_dock
               name: enable_dock
               label: 启用悬浮控制栏
               help: 控制文档内容页是否显示底部悬浮控制栏
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: radio
               name: dock_style
               label: Dock 样式
@@ -2788,52 +2407,32 @@ spec:
               value: primary
               if: $get(docsme_doc_enable_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               id: docsme_doc_enable_comment
               name: enable_comment
               label: 启用评论抽屉
               help: 从右侧展开的评论面板
               if: $get(docsme_doc_enable_dock).value
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               id: docsme_doc_enable_toc
               name: enable_toc_drawer
               label: 启用目录抽屉
               help: 当屏幕较小目录隐藏时，可从悬浮栏打开目录
               if: $get(docsme_doc_enable_dock).value
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               id: docsme_doc_enable_sidebar
               name: enable_sidebar_drawer
               label: 启用菜单抽屉
               help: 当屏幕较小左侧文档树隐藏时，可从悬浮栏打开菜单
               if: $get(docsme_doc_enable_dock).value
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(docsme_doc_enable_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
         # 文档列表页设置 (docs.html)
         - $formkit: group
           name: docs_settings
@@ -2844,17 +2443,12 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: docsme_docs_enable_dock
               name: enable_dock
               label: 启用悬浮控制栏
               help: 控制文档列表页是否显示底部悬浮控制栏
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: radio
               name: dock_style
               label: Dock 样式
@@ -2873,16 +2467,11 @@ spec:
               value: primary
               if: $get(docsme_docs_enable_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(docsme_docs_enable_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
         # 文档目录页设置 (doc-catalog.html)
         - $formkit: group
           name: doc_catalog_settings
@@ -2893,17 +2482,12 @@ spec:
             dock_menu: primary
             enable_back_to_top: true
           children:
-            - $formkit: radio
+            - $formkit: switch
               id: docsme_catalog_enable_dock
               name: enable_dock
               label: 启用悬浮控制栏
               help: 控制文档目录页是否显示底部悬浮控制栏
               value: true
-              options:
-                - label: 启用
-                  value: true
-                - label: 禁用
-                  value: false
             - $formkit: radio
               name: dock_style
               label: Dock 样式
@@ -2922,14 +2506,9 @@ spec:
               value: primary
               if: $get(docsme_catalog_enable_dock).value
               help: 选择要在悬浮 Dock 中显示的菜单
-            - $formkit: radio
+            - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               if: $get(docsme_catalog_enable_dock).value
               value: true
-              options:
-                - label: 显示
-                  value: true
-                - label: 隐藏
-                  value: false
 
