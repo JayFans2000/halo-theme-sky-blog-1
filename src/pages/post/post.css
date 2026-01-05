@@ -1665,22 +1665,23 @@ halo-contact-form {
  * ==================================================*/
 
 #article-content.article-style-default details.details {
-    margin: 1.25em 0;
+    /* 宽度略小于容器，让四周发光可见 */
+    width: calc(100% - 40px);
+    margin: 1.25em auto;
     background: color-mix(in srgb, var(--color-base-200) 50%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid color-mix(in srgb, var(--color-base-300) 40%, transparent);
     border-radius: 1rem;
-    width: 100%;
     max-width: 100%;
     min-width: 0;
     overflow: hidden;
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-base-content) 5%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--color-base-content) 5%, transparent);
     transition: box-shadow 0.25s ease;
 }
 
 #article-content.article-style-default details.details:hover {
-    box-shadow: 0 6px 28px color-mix(in srgb, var(--color-base-content) 8%, transparent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 8%, transparent);
 }
 
 #article-content.article-style-default details.details summary {
@@ -1694,6 +1695,28 @@ halo-contact-form {
     list-style: none;
     position: relative;
     transition: all 0.2s ease;
+    outline: none;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#article-content.article-style-default details.details summary::-webkit-details-marker {
+    display: none;
+}
+
+#article-content.article-style-default details.details summary::marker {
+    display: none;
+    content: '';
+}
+
+#article-content.article-style-default details.details summary:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#article-content.article-style-default details.details summary:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
 
 #article-content.article-style-default details.details summary::before {
@@ -1718,7 +1741,7 @@ halo-contact-form {
 }
 
 #article-content.article-style-default details.details[open] summary {
-    border-bottom: 1px solid color-mix(in srgb, var(--color-base-300) 50%, transparent);
+    background: color-mix(in srgb, var(--color-base-200) 60%, transparent);
 }
 
 #article-content.article-style-default details.details > div {
