@@ -83,7 +83,7 @@
                 </div>
                 
                 <!-- 媒体区域 -->
-                <div th:if="${content.medium != null && !content.medium.isEmpty()}" class="mb-3">
+                <div th:if="${content.medium != null && !content.medium.isEmpty()}" class="moment-media mb-3">
                   <!-- 单图 -->
                   <th:block th:if="${#lists.size(content.medium) == 1}">
                     <th:block th:each="medium : ${content.medium}">
