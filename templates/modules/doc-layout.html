@@ -1,17 +1,20 @@
 <!doctype html>
 <html lang="zh-CN" th:fragment="html (head, content, scripts, dock)">
 <!-- Docsme 文档专用布局 - 取消加载界面提升体验 -->
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- 启用 View Transitions API (Safari 18+/Chrome 111+) -->
+  <meta name="view-transition" content="same-origin" />
 
-  <!-- 防止主题闪烁 -->
+  <!-- 防止主题闪烁 - 在渲染前立即应用主题 -->
   <th:block th:replace="~{modules/theme-script :: inline-script}" />
 
   <!-- 页面标题 -->
   <title th:text="${docTree?.spec?.title != null ? docTree.spec.title + ' | ' + site.title : site.title}"></title>
-  
+
   <!-- 字体 -->
   <link rel="stylesheet" href="https://cdn.5ee.net/fonts/open-fonts.css" />
   <!-- 主题样式 -->
@@ -31,7 +34,7 @@
 </head>
 
 <body class="min-h-screen bg-base-200 flex flex-col">
-  
+
   <!-- 文档中心不使用加载屏幕，提升即时访问体验 -->
 
   <!-- 主题导航栏 -->
@@ -58,7 +61,7 @@
   <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
   <!-- 文档页专用脚本 -->
   <script th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"></script>
-  
+
   <!-- 插件脚本（需要在 body 后加载） -->
   <th:block th:if="${scripts != null}">
     <th:block th:replace="${scripts}" />

@@ -40,7 +40,7 @@
 
   <!-- 主体内容区域（两列布局，与 post 一致） -->
   <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+    <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧：分类按钮与全部文章前 N（后台配置），并提供更多链接 -->
       <section class="flex-1" th:classappend="${cfg.show_sidebar == false ? 'max-w-6xl mx-auto' : ''}">
         <th:block th:with="categories = ${categoryFinder.listAsTree()}">

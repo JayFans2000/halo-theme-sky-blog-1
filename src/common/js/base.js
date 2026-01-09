@@ -33,7 +33,7 @@ window.SkyUtils = {
    */
   throttle(func, limit) {
     let inThrottle;
-    return function(...args) {
+    return function (...args) {
       if (!inThrottle) {
         func.apply(this, args);
         inThrottle = true;
@@ -53,7 +53,7 @@ window.SkyUtils = {
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
-    
+
     return format
       .replace('YYYY', year)
       .replace('MM', month)
@@ -69,12 +69,12 @@ window.SkyUtils = {
     const now = new Date();
     const target = new Date(date);
     const diff = now - target;
-    
+
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-    
+
     if (days > 0) return `${days}天前`;
     if (hours > 0) return `${hours}小时前`;
     if (minutes > 0) return `${minutes}分钟前`;
@@ -110,10 +110,10 @@ window.SkyUtils = {
   scrollToElement(target, offset = 0) {
     const element = typeof target === 'string' ? document.querySelector(target) : target;
     if (!element) return;
-    
+
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - offset;
-    
+
     window.scrollTo({
       top: offsetPosition,
       behavior: 'smooth'
@@ -127,24 +127,24 @@ window.SkyUtils = {
 window.SkyLoadingScreen = {
   startTime: Date.now(),
   isHidden: false,
-  
+
   /**
    * 隐藏加载屏幕
    */
   hide() {
     if (this.isHidden) return;
-    
+
     const loadingScreen = document.getElementById('loading-screen');
     if (!loadingScreen) return;
-    
+
     const minDuration = parseInt(loadingScreen.dataset.minDuration || '500');
     const elapsed = Date.now() - this.startTime;
     const delay = Math.max(0, minDuration - elapsed);
-    
+
     setTimeout(() => {
       loadingScreen.classList.add('loaded');
       this.isHidden = true;
-      
+
       // 动画结束后从 DOM 中移除
       setTimeout(() => {
         if (loadingScreen.parentNode) {
@@ -163,10 +163,13 @@ window.SkyEvents = {
    * 页面加载完成事件
    */
   onPageLoad() {
-    
+
     // 初始化懒加载图片
     this.initLazyImages();
-    
+
+    // 初始化懒加载动画
+    this.initLazyAnimations();
+
     // 初始化外部链接
     this.initExternalLinks();
   },
@@ -176,7 +179,7 @@ window.SkyEvents = {
    */
   initLazyImages() {
     const images = document.querySelectorAll('img[data-src]');
-    
+
     if ('IntersectionObserver' in window) {
       const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -188,7 +191,7 @@ window.SkyEvents = {
           }
         });
       });
-      
+
       images.forEach(img => imageObserver.observe(img));
     } else {
       // 降级方案
@@ -210,6 +213,35 @@ window.SkyEvents = {
         link.setAttribute('rel', 'noopener noreferrer');
       }
     });
+  },
+
+  /**
+   * 初始化懒加载动画 (Anti-Flicker)
+   * 监听页面元素进入视口，添加 .visible 类触发淡入动画
+   */
+  initLazyAnimations() {
+    const animElements = document.querySelectorAll('.lazy-anim');
+    if (animElements.length === 0) return;
+
+    if ('IntersectionObserver' in window) {
+      const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // 添加 visible 类触发 CSS 动画
+            entry.target.classList.add('visible');
+            animObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '50px 0px', // 提前 50px 触发
+        threshold: 0.05
+      });
+
+      animElements.forEach(el => animObserver.observe(el));
+    } else {
+      // 降级方案：不支持 Observer 直接显示
+      animElements.forEach(el => el.classList.add('visible'));
+    }
   }
 };
 

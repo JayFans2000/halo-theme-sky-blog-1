@@ -14,24 +14,23 @@
   2. 否则 → 使用默认配置主题
 -->
 <script th:fragment="inline-script" th:inline="javascript">
-  (function() {
+  (function () {
     const showThemeToggle = /*[[${theme.config.nav.theme_settings.show_theme_toggle}]]*/ true;
     const savedTheme = localStorage.getItem('theme-mode');
     const defaultTheme = /*[[${theme.config.nav.theme_settings.default_theme}]]*/ 'dark_theme';
     const lightTheme = /*[[${theme.config.nav.theme_settings.light_theme}]]*/ 'light';
     const darkTheme = /*[[${theme.config.nav.theme_settings.dark_theme}]]*/ 'dark';
-    
+
     // 如果前端开关关闭，忽略 localStorage，强制使用默认主题
-    const isDark = showThemeToggle && savedTheme 
-      ? (savedTheme === 'dark_theme') 
+    const isDark = showThemeToggle && savedTheme
+      ? (savedTheme === 'dark_theme')
       : (defaultTheme === 'dark_theme');
     const themeName = isDark ? darkTheme : lightTheme;
     const themeMode = isDark ? 'dark' : 'light';
-    
+
     document.documentElement.setAttribute('data-theme', themeName);
     document.documentElement.setAttribute('data-color-scheme', themeMode);
   })();
 </script>
 
 </html>
-

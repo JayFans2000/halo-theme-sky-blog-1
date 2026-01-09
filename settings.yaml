@@ -1146,10 +1146,11 @@ spec:
         - $formkit: group
           name: gallery_settings
           label: 图库模块
+          help: 需安装图库插件 (plugin-photos)
           value:
             enable_gallery: true
             gallery_title: "图库"
-            gallery_count: 8
+            gallery_subtitle: "Focus Moments"
           children:
             - $formkit: switch
               id: enable_gallery
@@ -1167,56 +1168,17 @@ spec:
               name: gallery_subtitle
               if: $get(enable_gallery).value
               label: 模块副标题
-              help: 图库模块的副标题文字（如：Focus Moments）
+              help: 图库模块的副标题文字
               value: "Focus Moments"
-            - $formkit: number
-              name: gallery_count
-              if: $get(enable_gallery).value
-              label: 显示数量
-              help: 首页显示的图片数量（4-12）
-              value: 8
-              min: 4
-              max: 12
-        # 文档中心模块设置
-        - $formkit: group
-          name: docs_settings
-          label: 文档中心模块
-          help: 需安装 plugin-docs 插件
-          value:
-            enable_docs: true
-            docs_title: "文档中心"
-            docs_count: 6
-          children:
-            - $formkit: switch
-              id: enable_docs
-              name: enable_docs
-              label: 启用文档中心
-              help: 是否在首页显示文档中心模块
-              value: true
-            - $formkit: text
-              name: docs_title
-              if: $get(enable_docs).value
-              label: 模块标题
-              help: 文档中心模块的标题文字
-              value: "文档中心"
-            - $formkit: number
-              name: docs_count
-              if: $get(enable_docs).value
-              label: 显示数量
-              help: 首页显示的文档项目数量（3-9）
-              value: 6
-              min: 3
-              max: 9
         # 友情链接模块设置
         - $formkit: group
           name: links_settings
           label: 友情链接模块
-          help: 需安装 plugin-links 插件
+          help: 需安装友链插件 (plugin-links)
           value:
             enable_links: true
             links_title: "友情链接"
-            links_groups: []
-            links_count: 10
+            links_subtitle: "Friends & Partners"
           children:
             - $formkit: switch
               id: enable_links
@@ -1234,31 +1196,8 @@ spec:
               name: links_subtitle
               if: $get(enable_links).value
               label: 模块副标题
-              help: 友情链接模块的副标题文字（如：Friends & Partners）
+              help: 友情链接模块的副标题文字
               value: "Friends & Partners"
-            - $formkit: select
-              name: links_groups
-              if: $get(enable_links).value
-              label: 显示分组
-              help: 选择要在首页显示的链接分组，留空则显示所有分组
-              clearable: true
-              multiple: true
-              searchable: true
-              action: /apis/core.halo.run/v1alpha1/linkgroups
-              requestOption:
-                method: GET
-                itemsField: items
-                labelField: spec.displayName
-                valueField: metadata.name
-                fieldSelectorKey: metadata.name
-            - $formkit: number
-              name: links_count
-              if: $get(enable_links).value
-              label: 显示数量
-              help: 首页显示的友链数量（5-20）
-              value: 10
-              min: 5
-              max: 20
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock

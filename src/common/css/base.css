@@ -7,11 +7,35 @@
  *   - Halo评论组件变量  
  *   - 主题自定义变量
  *   - 全局动画系统
+ *   - 全局动画系统
  *   - 暗色模式组件微光效果
+ *   - View Transitions API 支持 (Safari 18+/Chrome 111+)
  * 
  * @author Sky
  * @version 1.0.0
  */
+
+/* ========================================== */
+/* View Transitions API Support               */
+/* ========================================== */
+@view-transition {
+    navigation: auto;
+}
+
+/* 页面切换时的持久化元素 */
+.navbar {
+    view-transition-name: navbar;
+}
+
+.footer {
+    view-transition-name: footer;
+}
+
+/* 
+ * 只有在非 Safari 浏览器或明确支持时才为 main 启用
+ * 防止在某些情况下内容区域闪烁
+ */
+/* main { view-transition-name: main-content; } */
 
 /* ===================================================
  * CSS 变量定义 - Halo 官方组件适配
@@ -172,10 +196,14 @@ html.theme-transitioning * {
 /* 平板端优化和流畅动画系统 */
 /* 自定义缓动函数 */
 :root {
-    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    --ease-natural: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Subtle bounce, not harsh */
+    --ease-natural: cubic-bezier(0.16, 1, 0.3, 1);
+    /* Expo-out style */
+    --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Apple-like smooth */
 }
 
 /* 
@@ -209,11 +237,12 @@ html.theme-transitioning * {
     }
 }
 
-/* 流畅的淡入动画 */
+/* 流畅的淡入动画 - 更柔和的进入 */
 @keyframes smooth-fade-in {
     0% {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(8px);
+        /* 减少距离，更优雅 */
     }
 
     100% {
@@ -222,10 +251,11 @@ html.theme-transitioning * {
     }
 }
 
-/* 柔和的缩放动画 */
+/* 柔和的缩放动画 - 几乎无感知的微缩放 */
 @keyframes gentle-scale {
     0% {
-        transform: scale(0.95);
+        transform: scale(0.98);
+        /* 更微妙的起始 */
         opacity: 0;
     }
 
@@ -235,11 +265,12 @@ html.theme-transitioning * {
     }
 }
 
-/* 自然的滑入动画 */
+/* 自然的滑入动画 - 更流畅的上升 */
 @keyframes natural-slide-up {
     0% {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(12px);
+        /* 减少距离 */
     }
 
     100% {
@@ -248,17 +279,17 @@ html.theme-transitioning * {
     }
 }
 
-/* 动画工具类 */
+/* 动画工具类 - 使用优雅的缓动曲线 */
 .animate-smooth-fade-in {
-    animation: smooth-fade-in 0.4s var(--ease-natural) forwards;
+    animation: smooth-fade-in 0.5s var(--ease-elegant) forwards;
 }
 
 .animate-gentle-scale {
-    animation: gentle-scale 0.35s var(--ease-smooth) forwards;
+    animation: gentle-scale 0.4s var(--ease-elegant) forwards;
 }
 
 .animate-natural-slide-up {
-    animation: natural-slide-up 0.5s var(--ease-gentle) forwards;
+    animation: natural-slide-up 0.6s var(--ease-elegant) forwards;
 }
 
 /* 悬停效果增强 - 仅桌面端 */
@@ -546,7 +577,59 @@ html.theme-transitioning * {
     }
 }
 
-/* 缩放淡入（热力图等大块内容） */
+/* ========================================== */
+/* Lazy Animation System (Anti-Flicker)       */
+/* ========================================== */
+
+/* 初始状态：透明并下沉 */
+.lazy-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+/* 激活状态：显现并上浮 */
+.lazy-anim.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 交错延迟 - 让列表元素依次出现 */
+.lazy-anim-stagger>*:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.lazy-anim-stagger>*:nth-child(2) {
+    transition-delay: 50ms;
+}
+
+.lazy-anim-stagger>*:nth-child(3) {
+    transition-delay: 100ms;
+}
+
+.lazy-anim-stagger>*:nth-child(4) {
+    transition-delay: 150ms;
+}
+
+.lazy-anim-stagger>*:nth-child(5) {
+    transition-delay: 200ms;
+}
+
+.lazy-anim-stagger>*:nth-child(n+6) {
+    transition-delay: 250ms;
+}
+
+/* View Transition 优化：防止白色闪烁 */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.3s;
+    background-color: var(--color-base-100);
+    /* 强制背景色，防止透出白色 */
+}
+
+/* Alpine 缩放淡入（热力图等大块内容） */
 @keyframes alpine-scale-in {
     from {
         opacity: 0;

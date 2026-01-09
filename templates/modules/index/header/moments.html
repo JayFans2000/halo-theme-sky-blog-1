@@ -1,21 +1,21 @@
 <!-- 瞬间卡片发光效果脚本 -->
 <script th:inline="none">
-window.handleMomentCardGlow = window.handleMomentCardGlow || function(event, card) {
-    var glowElement = card.querySelector('.moment-glow');
-    if (!glowElement) return;
-    var rect = card.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
-    glowElement.style.background = 'radial-gradient(circle 180px at ' + x + 'px ' + y + 'px, oklch(var(--p) / 0.35), transparent 70%)';
-};
-window.showMomentCardGlow = window.showMomentCardGlow || function(card) {
-    var glow = card.querySelector('.moment-glow');
-    if (glow) glow.style.opacity = '1';
-};
-window.hideMomentCardGlow = window.hideMomentCardGlow || function(card) {
-    var glow = card.querySelector('.moment-glow');
-    if (glow) glow.style.opacity = '0';
-};
+    window.handleMomentCardGlow = window.handleMomentCardGlow || function (event, card) {
+        var glowElement = card.querySelector('.moment-glow');
+        if (!glowElement) return;
+        var rect = card.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        glowElement.style.background = 'radial-gradient(circle 180px at ' + x + 'px ' + y + 'px, oklch(var(--p) / 0.35), transparent 70%)';
+    };
+    window.showMomentCardGlow = window.showMomentCardGlow || function (card) {
+        var glow = card.querySelector('.moment-glow');
+        if (glow) glow.style.opacity = '1';
+    };
+    window.hideMomentCardGlow = window.hideMomentCardGlow || function (card) {
+        var glow = card.querySelector('.moment-glow');
+        if (glow) glow.style.opacity = '0';
+    };
 </script>
 
 <!-- 瞬间模块 - 统一布局方案 -->
@@ -25,105 +25,105 @@ window.hideMomentCardGlow = window.hideMomentCardGlow || function(card) {
     <!-- 瞬间卡片容器 -->
     <div class="w-full max-w-6xl">
 
-    <!-- 未安装插件时的简单提醒 -->
-    <th:block th:unless="${pluginFinder.available('PluginMoments')}">
-        <div class="moment-card shadow-xl rounded-2xl border border-primary/20 backdrop-blur-sm"
-            onmousemove="handleMomentCardGlow(event, this)" onmouseenter="showMomentCardGlow(this)"
-            onmouseleave="hideMomentCardGlow(this)">
-            <!-- 发光效果容器 -->
-            <div class="moment-glow-container">
-                <div class="moment-glow"></div>
-            </div>
-            <div class="p-5 text-center">
-                <p class="text-white/80 mb-4">需要安装瞬间插件来展示动态内容</p>
-                <a href="https://github.com/halo-sigs/plugin-moments" target="_blank"
-                    class="inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg transition-all duration-300 text-white hover:text-primary hover:bg-primary/30">
-                    <span class="icon-[material-symbols--download] w-4 h-4"></span>
-                    <span>下载瞬间插件</span>
-                </a>
-            </div>
-        </div>
-    </th:block>
-
-    <!-- 已安装插件时显示完整功能 -->
-    <th:block th:if="${pluginFinder.available('PluginMoments')}">
-        <div class="moment-card shadow-xl rounded-2xl border border-primary/20 backdrop-blur-sm"
-            onmousemove="handleMomentCardGlow(event, this)" onmouseenter="showMomentCardGlow(this)"
-            onmouseleave="hideMomentCardGlow(this)">
-            <!-- 发光效果容器 -->
-            <div class="moment-glow-container">
-                <div class="moment-glow"></div>
-            </div>
-            <div class="moment-card-content p-5">
-                <!-- 标题栏 - 增强动画效果 -->
-                <div class="flex items-center justify-between mb-4 md:mb-6">
-                    <div class="flex items-center space-x-2 md:space-x-3 animate-gentle-scale stagger-1">
-                        <!-- 对齐优化：标题图标与文字行高匹配，消除视觉偏差 -->
-                        <span class="icon-[material-symbols--chat-rounded] w-5 h-5 md:w-6 md:h-6 text-primary
-                                     transition-all duration-300"></span>
-                        <h3 class="moment-title text-base md:text-lg leading-5 md:leading-6 font-medium text-white transition-all duration-200"
-                            th:text="${theme.config.index.moment_settings.moment_title ?: '瞬间'}">瞬间</h3>
-                    </div>
-                    <!-- 查看全部/发布按钮 -->
-                    <a href="/moments"
-                        class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 
-                               rounded-full text-xs md:text-sm leading-4 text-white hover:text-primary-200 
-                               transition-all duration-300 ease-out hover:scale-105 animate-natural-slide-up stagger-2" 
-                        th:title="${#authorization.expression('isAuthenticated()') ? '发布瞬间' : '查看全部瞬间'}">
-                        <span th:if="${#authorization.expression('isAuthenticated()')}" class="icon-[material-symbols--add] w-3.5 h-3.5 md:w-4 md:h-4 mr-1"></span>
-                        <span th:if="${#authorization.expression('isAuthenticated()')}" >发布</span>
-                        <span th:unless="${#authorization.expression('isAuthenticated()')}" class="icon-[material-symbols--arrow-forward] w-4 h-4"></span>
+        <!-- 未安装插件时的简单提醒 -->
+        <th:block th:unless="${pluginFinder.available('PluginMoments')}">
+            <div class="moment-card shadow-xl rounded-2xl border border-primary/20 backdrop-blur-sm"
+                onmousemove="handleMomentCardGlow(event, this)" onmouseenter="showMomentCardGlow(this)"
+                onmouseleave="hideMomentCardGlow(this)">
+                <!-- 发光效果容器 -->
+                <div class="moment-glow-container">
+                    <div class="moment-glow"></div>
+                </div>
+                <div class="p-5 text-center">
+                    <p class="text-white/80 mb-4">需要安装瞬间插件来展示动态内容</p>
+                    <a href="https://github.com/halo-sigs/plugin-moments" target="_blank"
+                        class="inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg transition-all duration-300 text-white hover:text-primary hover:bg-primary/30">
+                        <span class="icon-[material-symbols--download] w-4 h-4"></span>
+                        <span>下载瞬间插件</span>
                     </a>
                 </div>
+            </div>
+        </th:block>
 
-                <!-- 响应式网格布局：优化间距和视觉效果 -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-5 
-                           transition-all duration-500 ease-out">
-                    <th:block th:each="moment, momentStat : ${momentFinder.listAll()}"
-                        th:with="content=${moment.spec.content}, hasText=${not #strings.isEmpty(content.raw)}, hasMedia=${content.medium != null and not content.medium.isEmpty()}">
-                        <!-- 根据索引动态设置响应式显示类 -->
-                        <div th:if="${(hasText or hasMedia) and momentStat.index < 3}" th:class="${'moment-item rounded-xl p-3 md:p-4 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md hover-lift animate-smooth-fade-in tablet-optimized text-white h-24 md:h-28 flex-col justify-between' + 
-                                      (momentStat.index == 1 ? ' hidden md:flex stagger-2' : '') + 
-                                      (momentStat.index == 2 ? ' hidden lg:flex stagger-3' : ' flex stagger-1')}"
-                            th:classappend="${momentStat.index % 2 == 0 ? ' rotate-slight-left' : ' rotate-slight-right'}">
-                            <!-- 瞬间内容 -->
-                            <div class="flex-1 text-sm md:text-base overflow-hidden max-h-12 md:max-h-16 leading-snug *:m-0 *:p-0">
-                                <!-- 有文本内容时显示文本 -->
-                                <span th:if="${hasText}" th:utext="${content.raw}"></span>
-                                <!-- 只有媒体时显示媒体提示 -->
-                                <span th:unless="${hasText}" class="flex items-center gap-2 text-white/70">
-                                    <span class="icon-[material-symbols--image] w-5 h-5"></span>
-                                    <span th:text="${#lists.size(content.medium) + ' 张图片/视频'}"></span>
-                                </span>
-                            </div>
-
-                            <!-- 底部信息栏 -->
-                            <div class="flex items-center justify-between mt-2">
-                                <div class="flex items-center space-x-1.5 md:space-x-2">
-                                    <!-- 对齐优化：时间图标与文本使用紧凑行高与居中 -->
-                                    <span class="icon-[material-symbols--schedule] w-3 h-3 md:w-3.5 md:h-3.5 text-white/60
-                                                 transition-colors duration-200"></span>
-                                    <span class="text-xs leading-none text-white/60 transition-colors duration-200"
-                                        th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}"></span>
-                                </div>
-                                <div class="flex items-center space-x-1.5">
-                                    <!-- 链接按钮 -->
-                                    <a th:href="@{/moments/{name}(name=${moment.metadata.name})}"
-                                        class="p-1 md:p-1.5 rounded-full bg-white/5 border border-white/10 
-                                               hover:bg-white/10 hover:border-primary/30 hover:scale-110
-                                               transition-all duration-300 ease-out flex items-center group moment-link-btn"
-                                        title="查看详情">
-                                        <span
-                                            class="icon-[material-symbols--link] w-3 h-3 md:w-3.5 md:h-3.5 text-white/60 
-                                                   group-hover:text-primary transition-all duration-200"></span>
-                                    </a>
-                                </div>
-                            </div>
+        <!-- 已安装插件时显示完整功能 -->
+        <th:block th:if="${pluginFinder.available('PluginMoments')}">
+            <div class="moment-card shadow-xl rounded-2xl border border-primary/20 backdrop-blur-sm"
+                onmousemove="handleMomentCardGlow(event, this)" onmouseenter="showMomentCardGlow(this)"
+                onmouseleave="hideMomentCardGlow(this)">
+                <!-- 发光效果容器 -->
+                <div class="moment-glow-container">
+                    <div class="moment-glow"></div>
+                </div>
+                <div class="moment-card-content p-5">
+                    <!-- 标题栏 -->
+                    <div class="flex items-center justify-between mb-4 md:mb-6">
+                        <div class="flex items-center space-x-2 md:space-x-3">
+                            <!-- 对齐优化：标题图标与文字行高匹配，消除视觉偏差 -->
+                            <span class="icon-[material-symbols--chat-rounded] w-5 h-5 md:w-6 md:h-6 text-primary
+                                     transition-all duration-300"></span>
+                            <h3 class="moment-title text-base md:text-lg leading-5 md:leading-6 font-medium text-white transition-all duration-200"
+                                th:text="${theme.config.index.moment_settings.moment_title ?: '瞬间'}">瞬间</h3>
                         </div>
-                    </th:block>
+                        <!-- 查看全部/发布按钮 -->
+                        <a href="/moments" class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 
+                               rounded-full text-xs md:text-sm leading-4 text-white hover:text-primary-200 
+                               transition-all duration-300 ease-out hover:scale-105"
+                            th:title="${#authorization.expression('isAuthenticated()') ? '发布瞬间' : '查看全部瞬间'}">
+                            <span th:if="${#authorization.expression('isAuthenticated()')}"
+                                class="icon-[material-symbols--add] w-3.5 h-3.5 md:w-4 md:h-4 mr-1"></span>
+                            <span th:if="${#authorization.expression('isAuthenticated()')}">发布</span>
+                            <span th:unless="${#authorization.expression('isAuthenticated()')}"
+                                class="icon-[material-symbols--arrow-forward] w-4 h-4"></span>
+                        </a>
+                    </div>
+
+                    <!-- 响应式网格布局：优化间距和视觉效果 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-5 
+                           transition-all duration-500 ease-out">
+                        <th:block th:each="moment, momentStat : ${momentFinder.listAll()}"
+                            th:with="content=${moment.spec.content}, hasText=${not #strings.isEmpty(content.raw)}, hasMedia=${content.medium != null and not content.medium.isEmpty()}">
+                            <!-- 根据索引动态设置响应式显示类 -->
+                            <div th:if="${(hasText or hasMedia) and momentStat.index < 3}" th:class="${'moment-item rounded-xl p-3 md:p-4 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-105 hover:backdrop-blur-md hover-lift tablet-optimized text-white h-24 md:h-28 flex-col justify-between' + 
+                                      (momentStat.index == 1 ? ' hidden md:flex' : '') + 
+                                      (momentStat.index == 2 ? ' hidden lg:flex' : ' flex')}"
+                                th:classappend="${momentStat.index % 2 == 0 ? ' rotate-slight-left' : ' rotate-slight-right'}">
+                                <!-- 瞬间内容 -->
+                                <div
+                                    class="flex-1 text-sm md:text-base overflow-hidden max-h-12 md:max-h-16 leading-snug *:m-0 *:p-0">
+                                    <!-- 有文本内容时显示文本 -->
+                                    <span th:if="${hasText}" th:utext="${content.raw}"></span>
+                                    <!-- 只有媒体时显示媒体提示 -->
+                                    <span th:unless="${hasText}" class="flex items-center gap-2 text-white/70">
+                                        <span class="icon-[material-symbols--image] w-5 h-5"></span>
+                                        <span th:text="${#lists.size(content.medium) + ' 张图片/视频'}"></span>
+                                    </span>
+                                </div>
+
+                                <!-- 底部信息栏 -->
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="flex items-center space-x-1.5 md:space-x-2">
+                                        <!-- 对齐优化：时间图标与文本使用紧凑行高与居中 -->
+                                        <span class="icon-[material-symbols--schedule] w-3 h-3 md:w-3.5 md:h-3.5 text-white/60
+                                                 transition-colors duration-200"></span>
+                                        <span class="text-xs leading-none text-white/60 transition-colors duration-200"
+                                            th:text="${#temporals.format(moment.spec.releaseTime, 'MM-dd HH:mm')}"></span>
+                                    </div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <!-- 链接按钮 -->
+                                        <a th:href="@{/moments/{name}(name=${moment.metadata.name})}"
+                                            class="p-1 md:p-1.5 rounded-full bg-white/5 border border-white/10 
+                                               hover:bg-white/10 hover:border-primary/30 hover:scale-110
+                                               transition-all duration-300 ease-out flex items-center group moment-link-btn" title="查看详情">
+                                            <span class="icon-[material-symbols--link] w-3 h-3 md:w-3.5 md:h-3.5 text-white/60 
+                                                   group-hover:text-primary transition-all duration-200"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
             </div>
-        </div>
-    </th:block>
+        </th:block>
     </div>
 </div>

@@ -1,7 +1,6 @@
-
 <!-- 主要内容区域 -->
 <main class="relative" th:fragment="post-content"
-      th:with="cfg = ${theme.config.article.sidebar_settings},
+  th:with="cfg = ${theme.config.article.sidebar_settings},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -10,23 +9,22 @@
 
   <!-- 主体内容区域 -->
   <div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="flex gap-8" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
+    <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
       <!-- 左侧文章内容区 -->
-      <article class="flex-1 min-w-0 overflow-hidden" th:classappend="${cfg.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
+      <article class="flex-1 min-w-0 overflow-hidden"
+        th:classappend="${cfg.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
         <div class="prose prose-lg max-w-none font-sans" style="font-size: 16px; line-height: 1.8;">
           <!-- 文章正文内容 -->
-          <div id="article-content" 
-               th:utext="${post.content.content}" 
-               th:classappend="${'article-style-' + (theme.config.article.content_style.style_theme ?: 'default')}"
-               class="prose prose-lg max-w-none">
-          
+          <div id="article-content" th:utext="${post.content.content}"
+            th:classappend="${'article-style-' + (theme.config.article.content_style.style_theme ?: 'default')}"
+            class="prose prose-lg max-w-none">
+
           </div>
         </div>
       </article>
 
       <!-- 右侧功能区块 -->
-      <aside th:if="${cfg.show_sidebar != false}" 
-             class="right-sidebar w-80 space-y-6 hidden lg:block">
+      <aside th:if="${cfg.show_sidebar != false}" class="right-sidebar w-80 space-y-6 hidden lg:block">
         <!-- 文章目录（固定在最前面） -->
         <th:block th:replace="~{modules/post/toc :: widget}" />
         <!-- 动态小工具 -->
