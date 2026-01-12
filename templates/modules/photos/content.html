@@ -15,25 +15,26 @@
 
     <div class="w-full px-4 md:px-6 lg:px-8 py-8 md:py-12">
 
-      <!-- 页面标题区域 -->
-      <header class="text-center mb-12">
-        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-base-content mb-4" th:text="${pageTitle}">图库</h1>
-        <p class="text-base-content/60 text-lg max-w-2xl mx-auto" th:text="${pageDesc}">记录生活中的美好瞬间</p>
-        <p class="text-base-content/40 text-sm mt-2" th:if="${photos != null && photos.total > 0}">
-          共 <span th:text="${photos.total}">0</span> 张照片
+      <!-- 页面标题区域 - 居中简约 -->
+      <header class="text-center mb-10">
+        <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight" th:text="${pageTitle}">图库</h1>
+        <p class="text-base-content/50 mt-2" th:text="${pageDesc}">记录生活中的美好瞬间</p>
+        <p class="text-base-content/40 text-sm mt-1" th:if="${photos != null && photos.total > 0}">
+          共 <span class="font-medium" th:text="${photos.total}">0</span> 张照片
         </p>
       </header>
 
-      <!-- 分组切换 -->
-      <div th:if="${groups != null && #lists.size(groups) > 1}" class="mb-8">
-        <div class="flex flex-wrap justify-center gap-2">
-          <a th:href="@{/photos}" class="btn btn-sm"
-            th:classappend="${param.group == null || #lists.isEmpty(param.group)} ? 'btn-primary' : 'btn-ghost'">
+      <!-- 分组切换 - 居中简约 -->
+      <div th:if="${groups != null && #lists.size(groups) > 1}" class="mb-10 flex justify-center">
+        <div class="inline-flex flex-wrap justify-center gap-2">
+          <a th:href="@{/photos}" class="px-4 py-2 rounded-full text-sm font-medium transition-all"
+            th:classappend="${param.group == null || #lists.isEmpty(param.group)} ? 'bg-primary text-primary-content' : 'bg-base-200/70 text-base-content/60 hover:bg-base-200 hover:text-base-content'">
             全部
           </a>
           <th:block th:each="group : ${groups}">
-            <a th:href="@{/photos(group=${group.metadata.name})}" class="btn btn-sm"
-              th:classappend="${param.group != null && !#lists.isEmpty(param.group) && param.group[0] == group.metadata.name} ? 'btn-primary' : 'btn-ghost'"
+            <a th:href="@{/photos(group=${group.metadata.name})}"
+              class="px-4 py-2 rounded-full text-sm font-medium transition-all"
+              th:classappend="${param.group != null && !#lists.isEmpty(param.group) && param.group[0] == group.metadata.name} ? 'bg-primary text-primary-content' : 'bg-base-200/70 text-base-content/60 hover:bg-base-200 hover:text-base-content'"
               th:text="${group.spec.displayName}">
               分组
             </a>
@@ -41,19 +42,27 @@
         </div>
       </div>
 
-      <!-- 图片网格 (瀑布流全宽) -->
+      <!-- 图片网格 - 瀑布流 + 悬浮效果 -->
       <div th:if="${photos != null && photos.total > 0}" id="photo-grid"
-        class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-1.5">
+        class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-2">
         <th:block th:each="photo : ${photos.items}">
-          <div class="photo-item">
-            <figure class="photo-card">
-              <img th:src="${photo.spec.url}" th:alt="${photo.spec.displayName}" th:data-src="${photo.spec.url}"
-                th:data-sub-html="${photo.spec.displayName != null ? '<h4>' + photo.spec.displayName + '</h4>' + (photo.spec.description != null ? '<p>' + photo.spec.description + '</p>' : '') : ''}"
-                class="photo-img" loading="lazy" />
-              <figcaption th:if="${showPhotoInfo}" class="photo-info">
-                <h3 th:if="${photo.spec.displayName}" th:text="${photo.spec.displayName}">照片标题</h3>
-                <p th:if="${photo.spec.description}" th:text="${photo.spec.description}">照片描述</p>
-              </figcaption>
+          <!-- 图片卡片 -->
+          <div class="photo-item mb-2 break-inside-avoid">
+            <figure class="group relative overflow-hidden rounded-lg cursor-pointer" th:data-src="${photo.spec.url}"
+              th:data-sub-html="${photo.spec.displayName != null ? '<h4>' + photo.spec.displayName + '</h4>' + (photo.spec.description != null ? '<p>' + photo.spec.description + '</p>' : '') : ''}">
+              <!-- 图片 -->
+              <img th:src="${photo.spec.url}" th:alt="${photo.spec.displayName}"
+                class="w-full h-auto object-cover transition-all duration-300 group-hover:brightness-[0.85]"
+                loading="lazy" />
+              <!-- 悬浮遮罩 + 信息 -->
+              <div th:if="${showPhotoInfo && photo.spec.displayName != null}"
+                class="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="w-full p-3 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                  <h3 class="text-white text-sm font-medium line-clamp-1" th:text="${photo.spec.displayName}">照片标题</h3>
+                  <p th:if="${photo.spec.description}" class="text-white/70 text-xs mt-0.5 line-clamp-1"
+                    th:text="${photo.spec.description}">照片描述</p>
+                </div>
+              </div>
             </figure>
           </div>
         </th:block>
@@ -98,8 +107,8 @@
           <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
           评论留言
         </h2>
-        <div class="card bg-base-100/60 backdrop-blur-xl shadow-xl border border-base-content/5 rounded-[1.5rem]">
-          <div class="card-body p-6 sm:p-8">
+        <div class="glow-card bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] rounded-2xl">
+          <div class="p-6 sm:p-8">
             <halo:comment group="content.halo.run" kind="SinglePage"
               th:attr="name=${singlePage != null ? singlePage.metadata.name : 'photos'}" colorScheme="system">
             </halo:comment>
