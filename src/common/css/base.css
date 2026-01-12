@@ -355,6 +355,15 @@ html.theme-transitioning * {
     box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
 }
 
+/* 发光卡片效果 - 不影响布局的独立发光类 */
+[data-color-scheme="dark"] .glow-card {
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
+[data-color-scheme="dark"] .glow-card:hover {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-base-content) 20%, transparent);
+}
+
 /* 模态框阴影 */
 [data-color-scheme="dark"] .modal-box {
     box-shadow: 0 4px 16px color-mix(in srgb, var(--color-base-content) 20%, transparent);

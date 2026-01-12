@@ -50,7 +50,7 @@
               <!-- 链接卡片网格 - Apple Bento风格 -->
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <a th:each="link : ${group.links}" th:href="${link.spec.url}" target="_blank" rel="noopener noreferrer"
-                  class="group relative flex items-center gap-4 p-4 
+                  class="glow-card group relative flex items-center gap-4 p-4 
                          bg-base-100/80 backdrop-blur-xl rounded-2xl 
                          border border-base-content/[0.06] 
                          shadow-sm hover:shadow-lg hover:border-base-content/10 hover:scale-[1.02]
@@ -77,8 +77,8 @@
 
                   <!-- 外链图标 -->
                   <div class="shrink-0">
-                    <span class="icon-[heroicons--arrow-up-right] w-4 h-4 text-base-content/20 
-                                 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 
+                    <span class="icon-[heroicons--arrow-right] w-4 h-4 text-base-content/20 
+                                 group-hover:text-primary group-hover:translate-x-1 
                                  transition-all duration-300"></span>
                   </div>
                 </a>
@@ -100,7 +100,7 @@
 
         <!-- 申请友链提示 - 简洁风格 -->
         <div class="mt-12">
-          <div class="bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6">
+          <div class="glow-card bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6">
             <div class="flex flex-col sm:flex-row items-center gap-5">
               <div class="shrink-0">
                 <div
@@ -265,7 +265,7 @@
             </div>
             <h2 class="text-lg font-semibold text-base-content">评论留言</h2>
           </div>
-          <div class="bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6">
+          <div class="glow-card bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6">
             <halo:comment group="content.halo.run" kind="SinglePage"
               th:attr="name=${singlePage != null ? singlePage.metadata.name : 'links'}" colorScheme="system">
             </halo:comment>
