@@ -17,34 +17,33 @@
       <!-- 左侧：归档内容 -->
       <section class="flex-1" th:classappend="${cfg?.show_sidebar != true ? 'max-w-4xl mx-auto' : ''}">
 
-        <!-- 页面标题区 -->
-        <div class="mb-8">
-          <h1 class="text-3xl font-bold text-base-content mb-2">
-            <span class="icon-[heroicons--archive-box] w-8 h-8 mr-2 align-middle text-primary"></span>
-            文章归档
-          </h1>
-          <p class="text-base-content/60">
-            <span th:if="${archives != null and archives.items != null}">
-              共 <span class="font-semibold text-primary" th:text="${#lists.size(archives.items)}">0</span> 个年份的文章记录
-            </span>
-          </p>
-        </div>
+        <!-- 页面标题区 - Apple风格简洁 -->
+        <header class="mb-10">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold text-base-content tracking-tight">文章归档</h1>
+              <p class="text-base-content/50 mt-1" th:if="${archives != null and archives.items != null}">
+                共 <span class="font-medium text-base-content" th:text="${#lists.size(archives.items)}">0</span> 个年份的文章记录
+              </p>
+            </div>
+          </div>
+        </header>
 
-        <!-- 年份月份快速导航 -->
+        <!-- 年份月份快速导航 - 简约版 -->
         <div class="mb-8 space-y-3"
           th:if="${archives != null and archives.items != null and !#lists.isEmpty(archives.items)}">
           <div th:each="archive : ${archives.items}" class="flex flex-wrap items-center gap-2">
             <!-- 年份标签 -->
             <a th:href="|#year-${archive.year}|"
-              class="px-3 py-1.5 rounded-lg text-sm font-bold bg-primary text-primary-content hover:bg-primary/80 transition-all">
+              class="px-3 py-1.5 rounded-full text-sm font-semibold bg-base-200/80 text-base-content hover:bg-primary hover:text-primary-content transition-all">
               <span th:text="${archive.year}"></span>
             </a>
             <!-- 月份按钮 -->
             <th:block th:each="monthData : ${archive.months}">
               <a th:href="|#month-${archive.year}-${monthData.month}|"
-                class="px-3 py-1.5 rounded-full text-sm bg-base-200/80 text-base-content/70 hover:bg-primary hover:text-primary-content transition-all">
+                class="px-3 py-1.5 rounded-full text-sm bg-base-200/60 text-base-content/60 hover:bg-base-200 hover:text-base-content transition-all">
                 <span th:text="${monthData.month + '月'}"></span>
-                <span class="ml-1 opacity-60" th:text="'(' + ${#lists.size(monthData.posts)} + ')'"></span>
+                <span class="ml-0.5 opacity-50" th:text="${#lists.size(monthData.posts)}"></span>
               </a>
             </th:block>
           </div>
@@ -95,7 +94,7 @@
                         th:with="isPinned = ${post.spec.pinned == true},
                                         isPrivate = ${post.spec.visible != null and post.spec.visible.name() == 'PRIVATE' and currentUser != null and currentUser.metadata.name == post.spec.owner},
                                         isLocked = ${post.metadata.annotations != null and post.metadata.annotations['content.halo.run/content-restriction'] != null and post.metadata.annotations['content.halo.run/content-restriction'] != ''}"
-                        class="group relative flex items-start gap-4 p-4 rounded-xl bg-base-100 border border-base-200 hover:border-primary/30 hover:shadow-md transition-all duration-300 cursor-pointer">
+                        class="glow-card group relative flex items-start gap-4 p-4 rounded-xl bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] hover:border-base-content/10 hover:shadow-lg transition-all duration-300 cursor-pointer">
                         <!-- 整卡片可点击链接 -->
                         <a th:href="${post.status.permalink}" class="absolute inset-0 z-10" aria-label="阅读文章"></a>
 
@@ -186,7 +185,7 @@
             <span class="icon-[mdi--comment-text-outline] w-5 h-5 text-primary"></span>
             评论留言
           </h2>
-          <div class="card bg-base-100/60 backdrop-blur-xl shadow-xl border border-base-content/5 rounded-[1.5rem]">
+          <div class="glow-card bg-base-100/80 backdrop-blur-xl border border-base-content/[0.06] rounded-2xl">
             <div class="card-body p-6 sm:p-8">
               <halo:comment group="content.halo.run" kind="SinglePage"
                 th:attr="name=${singlePage != null ? singlePage.metadata.name : 'archives'}" colorScheme="system">
