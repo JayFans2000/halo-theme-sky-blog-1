@@ -4,8 +4,7 @@
 
 /* Dock 容器样式 */
 .floating-dock-wrapper {
-  /* z-index 通过 Alpine 动态控制 */
-  position: relative;
+  /* 不设置 position，让内部 fixed 正常工作 */
 }
 
 .dock-container {

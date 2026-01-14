@@ -5,12 +5,11 @@
 <!--           文章目录组件                      -->
 <!-- ========================================== -->
 
-<div th:fragment="widget" 
-     id="toc-card" 
-     class="card bg-base-100 shadow-sm rounded-lg p-4 sidebar-card sticky top-20 z-10">
-  <h3 class="font-semibold text-lg mb-4 flex items-center gap-2 text-base-content">
-    <span class="icon-[heroicons--list-bullet] w-5 h-5"></span>
-    <span>目录</span>
+<div th:fragment="widget" id="toc-card"
+  class="card bg-base-100/80 backdrop-blur-xl shadow-lg border border-base-content/5 rounded-[1.5rem] p-5 sidebar-card transition-all duration-300">
+  <h3 class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-4 flex items-center gap-2">
+    <span class="icon-[heroicons--list-bullet] w-4 h-4"></span>
+    <span>文章目录</span>
   </h3>
   <div class="toc-container overflow-y-auto pr-2 scrollbar-thin">
     <nav id="toc-nav" class="space-y-1" role="navigation" aria-label="文章目录">
@@ -20,4 +19,3 @@
 </div>
 
 </html>
-

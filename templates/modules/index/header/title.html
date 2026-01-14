@@ -5,6 +5,7 @@
         // 获取当前使用的字体设置
         const titleFont = /*[[${theme.config.index.title_settings.title_font}]]*/ 'font-default';
         const subtitleFont = /*[[${theme.config.index.subtitle_settings.subtitle_font}]]*/ 'font-default';
+        const fontCdn = /*[[${theme.config.general.font_settings.font_cdn}]]*/ 'https://cdn.5ee.net/fonts';
 
         // 已加载的字体跟踪
         const loadedFonts = {};
@@ -22,18 +23,18 @@
 
         // 根据主标题字体加载
         if (titleFont === 'font-lxgw-wenkai-bright') {
-            loadFont('霞鹜文楷亮', '/fonts/LXGWBright-SemiLight/result.css');
+            loadFont('霞鹜文楷亮', fontCdn + '/LXGWBright-SemiLight/result.css');
         }
         else if (titleFont === 'font-siyuan-songti') {
-            loadFont('思源屏显臻宋', '/fonts/思源屏显臻宋/result.css');
+            loadFont('思源屏显臻宋', fontCdn + '/思源屏显臻宋/result.css');
         }
 
         // 根据副标题字体加载
         if (subtitleFont === 'font-lxgw-wenkai-bright') {
-            loadFont('霞鹜文楷亮', '/fonts/LXGWBright-SemiLight/result.css');
+            loadFont('霞鹜文楷亮', fontCdn + '/LXGWBright-SemiLight/result.css');
         }
         else if (subtitleFont === 'font-siyuan-songti') {
-            loadFont('思源屏显臻宋', '/fonts/思源屏显臻宋/result.css');
+            loadFont('思源屏显臻宋', fontCdn + '/思源屏显臻宋/result.css');
         }
 
         // 英文字体和默认字体已在基础CSS中加载，无需动态处理

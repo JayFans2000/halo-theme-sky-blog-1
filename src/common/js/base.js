@@ -233,11 +233,20 @@ window.SkyEvents = {
           }
         });
       }, {
-        rootMargin: '50px 0px', // 提前 50px 触发
-        threshold: 0.05
+        rootMargin: '200px 0px', // 提前 200px 触发，确保长页面也能触发
+        threshold: 0 // 只要有一点进入就触发
       });
 
       animElements.forEach(el => animObserver.observe(el));
+      
+      // 备用方案：3秒后强制显示所有未触发的元素
+      setTimeout(() => {
+        animElements.forEach(el => {
+          if (!el.classList.contains('visible')) {
+            el.classList.add('visible');
+          }
+        });
+      }, 3000);
     } else {
       // 降级方案：不支持 Observer 直接显示
       animElements.forEach(el => el.classList.add('visible'));

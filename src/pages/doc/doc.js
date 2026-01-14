@@ -7,7 +7,7 @@ import './doc.css';
 
 // 图片懒加载与渐显
 function initLazyLoad() {
-  const images = document.querySelectorAll('#article-content img');
+  const images = document.querySelectorAll('#doc-content img');
   if (!images.length) return;
 
   images.forEach((img) => {
@@ -28,11 +28,94 @@ function initLazyLoad() {
   });
 }
 
+/**
+ * 构建动态目录树结构 - 基于相对层级
+ * @param {Array} headingElements - 过滤后的标题元素列表
+ * @param {number} minLevel - 最小层级（基准层级）
+ * @returns {Array} 目录树数据
+ */
+function buildDynamicTocTree(headingElements, minLevel) {
+  const tocTree = [];
+  const stack = [];
+
+  headingElements.forEach((headingElement, headingIndex) => {
+    // 为标题添加ID（如果没有的话）
+    if (!headingElement.id) {
+      headingElement.id = `heading-${headingIndex}`;
+    }
+
+    const absoluteLevel = parseInt(headingElement.tagName.charAt(1));
+    const relativeLevel = absoluteLevel - minLevel;
+
+    const tocItem = {
+      id: headingElement.id,
+      text: headingElement.textContent.trim(),
+      absoluteLevel: absoluteLevel,
+      relativeLevel: relativeLevel,
+      element: headingElement,
+      children: [],
+    };
+
+    // 清理栈，移除比当前级别高或相等的节点
+    while (stack.length > 0 && stack[stack.length - 1].relativeLevel >= relativeLevel) {
+      stack.pop();
+    }
+
+    // 添加到父节点或根节点
+    if (stack.length === 0) {
+      tocTree.push(tocItem);
+    } else {
+      stack[stack.length - 1].children.push(tocItem);
+    }
+
+    stack.push(tocItem);
+  });
+
+  return tocTree;
+}
+
+/**
+ * 递归创建动态目录HTML结构 - 树形嵌套
+ * @param {Array} tocTree - 树形结构数据
+ * @returns {HTMLElement} 生成的ol元素
+ */
+function createDynamicTocHTML(tocTree) {
+  const ol = document.createElement('ol');
+  ol.className = 'toc-list';
+
+  tocTree.forEach((item) => {
+    const li = document.createElement('li');
+    li.className = 'toc-item-wrapper';
+
+    // 创建目录链接
+    const linkElement = document.createElement('a');
+    linkElement.href = `#${item.id}`;
+    linkElement.textContent = item.text;
+    linkElement.className = 'toc-link';
+
+    // 设置相对层级属性（用于CSS样式）
+    linkElement.setAttribute('data-relative-level', item.relativeLevel.toString());
+    linkElement.setAttribute('data-heading-id', item.id);
+
+    li.appendChild(linkElement);
+
+    // 递归创建子节点
+    if (item.children.length > 0) {
+      const childrenOl = createDynamicTocHTML(item.children);
+      li.appendChild(childrenOl);
+    }
+
+    ol.appendChild(li);
+  });
+
+  return ol;
+}
+
 // 目录生成 (使用 Intersection Observer 优化)
 function initTOC() {
   const tocNav = document.getElementById('toc-nav');
   const tocCard = document.getElementById('toc-card');
-  const content = document.getElementById('article-content');
+  const content = document.getElementById('doc-content');
 
   if (!tocNav || !content) return;
 
@@ -53,30 +136,13 @@ function initTOC() {
     return;
   }
 
-  // 生成列表
-  const frag = document.createDocumentFragment();
-  const list = document.createElement('ol');
-  list.className = 'toc-list';
+  // 构建树形目录结构
+  const tocTree = buildDynamicTocTree(headings, minLevel);
+  const tocList = createDynamicTocHTML(tocTree);
 
-  headings.forEach((h, i) => {
-    if (!h.id) h.id = `heading-${i}`;
-
-    const li = document.createElement('li');
-    li.className = 'toc-item-wrapper';
-
-    const a = document.createElement('a');
-    a.href = `#${h.id}`;
-    a.className = 'toc-link';
-    a.textContent = h.textContent.trim();
-    a.dataset.relativeLevel = +h.tagName[1] - minLevel;
-
-    li.appendChild(a);
-    list.appendChild(li);
-  });
-
-  frag.appendChild(list);
+  // 清空现有内容并生成HTML结构
   tocNav.innerHTML = '';
-  tocNav.appendChild(frag);
+  tocNav.appendChild(tocList);
 
   // 平滑滚动（事件委托）
   tocNav.addEventListener('click', (e) => {
@@ -95,16 +161,18 @@ function initTOC() {
 
   // 滚动高亮 (Intersection Observer)
   const links = tocNav.querySelectorAll('.toc-link');
-  let currentActive = -1;
+  let currentActive = null;
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        const idx = headings.indexOf(entry.target);
-        if (entry.isIntersecting && idx !== -1) {
-          if (currentActive !== idx) {
-            links.forEach((l, i) => l.classList.toggle('active', i === idx));
-            currentActive = idx;
+        if (entry.isIntersecting) {
+          const headingId = entry.target.id;
+          const activeLink = tocNav.querySelector(`.toc-link[data-heading-id="${headingId}"]`);
+          if (activeLink && activeLink !== currentActive) {
+            links.forEach((l) => l.classList.remove('active'));
+            activeLink.classList.add('active');
+            currentActive = activeLink;
           }
         }
       });
@@ -198,12 +266,90 @@ function initSidebarFooterCollision() {
   window.addEventListener('resize', updateSidebarPositions);
 }
 
+// 初始化抽屉
+function initDrawers() {
+  // 目录抽屉
+  const tocOverlay = document.getElementById('doc-toc-overlay');
+  const tocDrawer = document.getElementById('doc-toc-drawer');
+  const tocDrawerNav = document.getElementById('doc-toc-drawer-nav');
+
+  if (tocOverlay && tocDrawer) {
+    window.openDocTocDrawer = () => {
+      tocOverlay.classList.add('open');
+      tocDrawer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      
+      // 初始化目录内容
+      if (tocDrawerNav && !tocDrawerNav.querySelector('.toc-list')) {
+        const tocNav = document.getElementById('toc-nav');
+        if (tocNav && tocNav.innerHTML.trim()) {
+          tocDrawerNav.innerHTML = tocNav.innerHTML;
+          bindTocDrawerEvents(tocDrawerNav);
+        }
+      }
+    };
+
+    window.closeDocTocDrawer = () => {
+      tocOverlay.classList.remove('open');
+      tocDrawer.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+  }
+
+  // 侧边栏抽屉
+  const sidebarOverlay = document.getElementById('doc-sidebar-overlay');
+  const sidebarDrawer = document.getElementById('doc-sidebar-drawer');
+
+  if (sidebarOverlay && sidebarDrawer) {
+    window.openDocSidebarDrawer = () => {
+      sidebarOverlay.classList.add('open');
+      sidebarDrawer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeDocSidebarDrawer = () => {
+      sidebarOverlay.classList.remove('open');
+      sidebarDrawer.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+  }
+
+  // ESC 键关闭
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (tocDrawer?.classList.contains('open')) window.closeDocTocDrawer();
+      if (sidebarDrawer?.classList.contains('open')) window.closeDocSidebarDrawer();
+    }
+  });
+}
+
+function bindTocDrawerEvents(container) {
+  const links = container.querySelectorAll('.toc-link');
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const headingId = link.getAttribute('data-heading-id') || link.getAttribute('href').slice(1);
+      const heading = document.getElementById(headingId);
+      if (heading) {
+        window.closeDocTocDrawer();
+        setTimeout(() => {
+          window.scrollTo({
+            top: heading.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
+    });
+  });
+}
+
 // 初始化
 function init() {
   initLazyLoad();
   initTOC();
   initDropdowns();
   initSidebarFooterCollision();
+  initDrawers();
 }
 
 if (document.readyState === 'loading') {

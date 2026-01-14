@@ -15,12 +15,12 @@ function createFloatingDock() {
     isCommentDrawerOpen: false,
     scrollTimeout: null,
     scrollPercent: 0,
-    
+
     init() {
       this.updateVisibility();
-      
+
       let ticking = false;
-      
+
       window.addEventListener('scroll', () => {
         if (!ticking) {
           requestAnimationFrame(() => {
@@ -31,23 +31,23 @@ function createFloatingDock() {
         }
       }, { passive: true });
     },
-    
+
     updateVisibility() {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      
+
       // 只在页面最顶部（< 50px）时隐藏
       this.isVisible = scrollTop >= 50;
       this.scrollPercent = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
     },
-    
+
     scrollToTop() {
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
     },
-    
+
     // 文章页专用方法
     openShareModal() {
       const checkbox = document.getElementById('share-drawer');
@@ -57,7 +57,7 @@ function createFloatingDock() {
         checkbox.dispatchEvent(new Event('change'));
       }
     },
-    
+
     toggleCommentDrawer() {
       this.isCommentDrawerOpen = !this.isCommentDrawerOpen;
       const checkbox = document.getElementById('comment-drawer');
@@ -73,255 +73,165 @@ function createFloatingDock() {
  * 模板使用：templates/modules/post/floating-dock.html
  * 参考 theme-earth 的优雅设计：预设平台 + ID 过滤模式
  */
+/**
+ * 通用分享弹窗组件
+ * 模板使用：templates/modules/share-modal.html
+ * 
+ * 支持的 data 属性：
+ * - data-share-url: 分享链接
+ * - data-share-title: 分享标题
+ * - data-share-item-ids: 启用的平台ID列表（逗号分隔）
+ * 
+ * 触发方式：$dispatch('open-share-modal')
+ */
 function createShareModal() {
   return {
     // 页面信息
     permalink: '',
     title: '',
-    
+
     // 状态
-    isShareOpen: false,
+    isOpen: false,
     copied: false,
-    
-    // 启用的平台 ID 列表（从配置读取）
+
+    // 启用的平台 ID 列表
     shareItemIds: [],
-    
-    // 预设的所有分享平台
+
+    // 预设的所有分享平台（含颜色）
     presetShareItems: [
-      {
-        id: "wechat",
-        name: "微信",
-        icon: "icon-[simple-icons--wechat]",
-        type: "qrcode",  // 特殊类型：打开二维码页面
-        url: "/themes/theme-sky-blog-1/assets/qrcode/qrcode-share.html?url={url}"
-      },
-      {
-        id: "x",
-        name: "X",
-        icon: "icon-[simple-icons--x]",
-        type: "url",
-        url: "https://twitter.com/intent/tweet?url={url}&text={title}"
-      },
-      {
-        id: "telegram",
-        name: "Telegram",
-        icon: "icon-[simple-icons--telegram]",
-        type: "url",
-        url: "https://telegram.me/share/url?url={url}&text={title}"
-      },
-      {
-        id: "facebook",
-        name: "Facebook",
-        icon: "icon-[simple-icons--facebook]",
-        type: "url",
-        url: "https://facebook.com/sharer/sharer.php?u={url}"
-      },
-      {
-        id: "qq",
-        name: "QQ",
-        icon: "icon-[simple-icons--tencentqq]",
-        type: "url",
-        url: "https://connect.qq.com/widget/shareqq/index.html?url={url}&title={title}"
-      },
-      {
-        id: "qzone",
-        name: "QQ空间",
-        icon: "icon-[simple-icons--qzone]",
-        type: "url",
-        url: "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={url}&title={title}"
-      },
-      {
-        id: "weibo",
-        name: "微博",
-        icon: "icon-[simple-icons--sinaweibo]",
-        type: "url",
-        url: "https://service.weibo.com/share/share.php?url={url}&title={title}"
-      },
-      {
-        id: "douban",
-        name: "豆瓣",
-        icon: "icon-[simple-icons--douban]",
-        type: "url",
-        url: "https://www.douban.com/share/service?href={url}&name={title}"
-      },
-      {
-        id: "native",
-        name: "系统分享",
-        icon: "icon-[tabler--device-desktop]",
-        type: "native"  // 原生浏览器分享
-      }
+      { id: "wechat", name: "微信", icon: "icon-[simple-icons--wechat]", color: "#07c160", type: "qrcode" },
+      { id: "x", name: "X", icon: "icon-[simple-icons--x]", color: "#000000", type: "url", url: "https://twitter.com/intent/tweet?url={url}&text={title}" },
+      { id: "telegram", name: "Telegram", icon: "icon-[simple-icons--telegram]", color: "#26a5e4", type: "url", url: "https://telegram.me/share/url?url={url}&text={title}" },
+      { id: "facebook", name: "Facebook", icon: "icon-[simple-icons--facebook]", color: "#1877f2", type: "url", url: "https://facebook.com/sharer/sharer.php?u={url}" },
+      { id: "qq", name: "QQ", icon: "icon-[simple-icons--tencentqq]", color: "#12b7f5", type: "url", url: "https://connect.qq.com/widget/shareqq/index.html?url={url}&title={title}" },
+      { id: "qzone", name: "QQ空间", icon: "icon-[simple-icons--qzone]", color: "#fece00", type: "url", url: "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={url}&title={title}" },
+      { id: "weibo", name: "微博", icon: "icon-[simple-icons--sinaweibo]", color: "#e6162d", type: "url", url: "https://service.weibo.com/share/share.php?url={url}&title={title}" },
+      { id: "douban", name: "豆瓣", icon: "icon-[simple-icons--douban]", color: "#007722", type: "url", url: "https://www.douban.com/share/service?href={url}&name={title}" },
+      { id: "native", name: "更多", icon: "icon-[heroicons--share]", color: "#6366f1", type: "native" }
     ],
-    
+
     // 初始化
     init() {
-      // 从模板的 data 属性读取文章信息
-      const postTitle = this.$el.dataset.postTitle || '';
-      const siteTitle = this.$el.dataset.siteTitle || '';
-      const postUrl = this.$el.dataset.postUrl || '';
-      const shareTitleTemplate = this.$el.dataset.shareTitleTemplate || '';
-      
-      // 读取启用的平台 ID 列表
+      // 从 data 属性读取配置
+      const shareUrl = this.$el.dataset.shareUrl || this.$el.dataset.postUrl || '';
+      const shareTitle = this.$el.dataset.shareTitle || this.$el.dataset.postTitle || '';
       const shareItemIdsStr = this.$el.dataset.shareItemIds || '';
-      this.shareItemIds = shareItemIdsStr ? shareItemIdsStr.split(',') : [];
       
+      this.shareItemIds = shareItemIdsStr ? shareItemIdsStr.split(',').map(s => s.trim()) : [];
+      this.title = shareTitle || document.title;
+
       // 设置分享链接（转换为绝对 URL）
-      if (postUrl) {
-        // 如果是相对路径，转换为绝对 URL
-        if (postUrl.startsWith('/')) {
-          const origin = window.location.origin;
-          this.permalink = origin + postUrl;
-        } else if (postUrl.startsWith('http://') || postUrl.startsWith('https://')) {
-          // 已经是绝对 URL
-          this.permalink = postUrl;
+      if (shareUrl) {
+        if (shareUrl.startsWith('/')) {
+          this.permalink = window.location.origin + shareUrl;
+        } else if (shareUrl.startsWith('http')) {
+          this.permalink = shareUrl;
         } else {
-          // 其他情况使用当前页面 URL
           this.permalink = window.location.href;
         }
       } else {
         this.permalink = window.location.href;
       }
       
-      // 设置分享标题
-      if (shareTitleTemplate && shareTitleTemplate.trim() !== '') {
-        // 自定义模板
-        this.title = shareTitleTemplate
-          .replace(/{title}/g, postTitle)
-          .replace(/{site}/g, siteTitle)
-          .replace(/{author}/g, document.querySelector('meta[name="author"]')?.content || '');
-      } else {
-        // 默认使用文章标题
-        this.title = postTitle || document.title;
-      }
-      
-      // console.log('🔗 分享功能初始化', {
-      //   标题: this.title,
-      //   原始链接: postUrl,
-      //   完整链接: this.permalink,
-      //   启用平台: this.shareItemIds,
-      //   可用平台数: this.activeShareItems.length
-      // });
+      // 暴露到全局，供原生 onclick 调用（解决 teleport 后的作用域问题）
+      window.__shareModal = this;
     },
-    
+
     // 计算属性：过滤出启用的分享平台
     get activeShareItems() {
       if (!this.shareItemIds || this.shareItemIds.length === 0) {
-        // 如果没有配置，返回所有平台
         return this.presetShareItems;
       }
-      
       return this.shareItemIds
         .map(id => this.presetShareItems.find(item => item.id === id))
-        .filter(Boolean)
-        .filter(item => {
-          // 如果是 native 类型，检查浏览器是否支持
-          if (item?.type === 'native') {
-            return navigator.canShare?.({
-              title: this.title,
-              url: this.permalink
-            });
-          }
-          return true;
-        });
+        .filter(Boolean);
+      // 注意：不再过滤 native 类型，让所有配置的平台都显示
+      // 点击时再判断浏览器是否支持
     },
-    
-    // 关闭抽屉
-    closeShareDrawer() {
-      this.isShareOpen = false;
+
+    // 打开弹窗
+    openModal() {
+      this.isOpen = true;
+      document.body.style.overflow = 'hidden';
     },
-    
+
+    // 关闭弹窗
+    closeModal() {
+      this.isOpen = false;
+      document.body.style.overflow = '';
+    },
+
     // 复制链接
     async copyUrl() {
       try {
         await navigator.clipboard.writeText(this.permalink);
         this.copied = true;
-        setTimeout(() => {
-          this.copied = false;
-        }, 2000);
+        setTimeout(() => { this.copied = false; }, 2000);
       } catch (err) {
-        // console.error('❌ 复制失败:', err);
+        // 复制失败静默处理
       }
     },
-    
-    // 处理分享
+
+    // 处理分享 - 直接在点击事件中处理，确保用户手势有效
     handleShare(platformId) {
       const platform = this.activeShareItems.find(item => item?.id === platformId);
       if (!platform) {
-        // console.error('❌ 未找到分享平台:', platformId);
+        console.log('未找到平台:', platformId);
         return;
       }
-      
-      // console.log('📤 分享到', platform.name);
-      
-      // 根据平台类型处理
+
+      console.log('处理分享:', platformId, platform.type);
+
       if (platform.type === 'native') {
-        // 原生分享
-        this.shareNative();
+        // 原生分享必须在用户手势中直接调用
+        if (navigator.share) {
+          console.log('调用 navigator.share:', { title: this.title, url: this.permalink });
+          const self = this;
+          navigator.share({ 
+            title: this.title, 
+            url: this.permalink 
+          }).then(() => {
+            console.log('分享成功');
+            self.closeModal();
+          }).catch((err) => {
+            console.log('分享错误:', err.name, err.message);
+            self.closeModal();
+          });
+        } else {
+          // 不支持原生分享（非 HTTPS 或浏览器不支持）
+          console.log('浏览器不支持 navigator.share，已复制链接');
+          this.copyUrl();
+          // 不关闭弹窗，让用户看到"已复制"提示
+        }
       } else if (platform.type === 'qrcode') {
-        // 微信二维码（打开独立窗口）
+        this.closeModal();
         this.shareToWeChat();
       } else {
-        // URL 分享（其他平台）
+        this.closeModal();
         this.shareToUrl(platform);
       }
     },
-    
-    // 原生分享
-    shareNative() {
-      if (navigator.share) {
-        navigator.share({
-          title: this.title,
-          url: this.permalink
-        }).catch(err => {
-          // console.error('❌ 原生分享失败:', err);
-        });
-      }
-    },
-    
+
     // URL 分享
     shareToUrl(platform) {
-      // 替换 URL 模板中的变量
       const shareUrl = platform.url
         .replace(/{url}/g, encodeURIComponent(this.permalink))
         .replace(/{title}/g, encodeURIComponent(this.title));
-      
-      // 计算居中位置
-      const width = 600;
-      const height = 500;
+      const width = 600, height = 500;
       const left = (window.innerWidth - width) / 2;
       const top = (window.innerHeight - height) / 2;
-      const features = `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,scrollbars=yes,resizable=yes`;
-      
-      // 打开分享窗口
-      window.open(
-        shareUrl,
-        `分享到${platform.name}`,
-        features
-      );
+      window.open(shareUrl, `分享到${platform.name}`, 
+        `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,scrollbars=yes,resizable=yes`);
     },
-    
-    // 微信二维码分享 - 打开独立二维码页面
+
+    // 微信二维码分享
     shareToWeChat() {
-      // 计算居中位置
-      const width = 400;
-      const height = 500;
+      const width = 400, height = 500;
       const left = (window.innerWidth - width) / 2;
       const top = (window.innerHeight - height) / 2;
-      const features = `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,scrollbars=no,resizable=no`;
-      
-      // 构建二维码页面 URL（使用 assets 路径）
       const qrcodePageUrl = `/themes/theme-sky-blog-1/assets/qrcode/qrcode-share.html?url=${encodeURIComponent(this.permalink)}`;
-      
-      // console.log('📱 打开微信二维码页面:', {
-      //   链接: this.permalink,
-      //   二维码页面: qrcodePageUrl
-      // });
-      
-      // 打开新窗口显示二维码
-      window.open(
-        qrcodePageUrl,
-        '微信扫码分享',
-        features
-      );
+      window.open(qrcodePageUrl, '微信扫码分享',
+        `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,scrollbars=no,resizable=no`);
     }
   };
 }
@@ -333,7 +243,7 @@ function createShareModal() {
 function createCommentDrawer() {
   return {
     isOpen: false,
-    
+
     init() {
       // 监听抽屉状态
       const checkbox = document.getElementById('comment-drawer');
@@ -342,13 +252,13 @@ function createCommentDrawer() {
           this.isOpen = e.target.checked;
         });
       }
-      
+
       // 监听关闭抽屉事件
       window.addEventListener('close-comment-drawer', () => {
         this.closeDrawer();
       });
     },
-    
+
     closeDrawer() {
       this.isOpen = false;
       const checkbox = document.getElementById('comment-drawer');
@@ -370,16 +280,16 @@ function createHeaderController() {
     showMoments: true,
     showPublishModal: false,
     isTablet: false,
-    
+
     init() {
       // 检测设备类型
       this.detectDevice();
-      
+
       // 监听窗口大小变化
       window.addEventListener('resize', () => {
         this.detectDevice();
       });
-      
+
       // 监听滚动事件，使用节流优化性能
       let ticking = false;
       window.addEventListener('scroll', () => {
@@ -392,17 +302,17 @@ function createHeaderController() {
         }
       });
     },
-    
+
     detectDevice() {
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
     },
-    
+
     updateScrollOffset() {
       this.scrollOffset = window.scrollY;
-      
+
       // 更新scrolled状态，用于背景蒙版透明度控制
       this.scrolled = this.scrollOffset > 50;
-      
+
       // 平板端优化：减少视差效果强度
       if (this.isTablet) {
         this.scrollOffset *= 0.7;
@@ -418,11 +328,11 @@ function createHeaderController() {
 function createNavbarController() {
   return {
     scrolled: false,
-    
+
     init() {
       // 使用 requestAnimationFrame 节流的滚动监听
       let ticking = false;
-      
+
       window.addEventListener('scroll', () => {
         if (!ticking) {
           requestAnimationFrame(() => {
@@ -455,31 +365,31 @@ function createThemeToggle() {
     isDark: false,
     lightTheme: '',
     darkTheme: '',
-    
+
     init() {
       // 在初始化时保存主题配置到组件实例
       this.lightTheme = this.$el.dataset.lightTheme || 'light';
       this.darkTheme = this.$el.dataset.darkTheme || 'dark';
       const defaultTheme = this.$el.dataset.defaultTheme || 'dark_theme';
-      
+
       // 从 localStorage 读取用户偏好
       const savedTheme = localStorage.getItem('theme-mode');
-      
+
       // 确定当前主题状态（同步到组件状态，不触发切换）
       this.isDark = savedTheme ? (savedTheme === 'dark_theme') : (defaultTheme === 'dark_theme');
-      
+
       // 注意：不调用 applyTheme()，因为主题已经在 <head> 内联脚本中设置好了
       // 这里只是同步状态到组件，避免闪烁
     },
-    
+
     toggleTheme() {
       this.isDark = !this.isDark;
       const themeMode = this.isDark ? 'dark_theme' : 'light_theme';
-      
+
       localStorage.setItem('theme-mode', themeMode);
       this.applyTheme();
     },
-    
+
     /**
      * 应用主题到 HTML 元素
      * 同时设置 data-theme（具体主题名）和 data-color-scheme（light/dark 标识）
@@ -489,14 +399,14 @@ function createThemeToggle() {
       const themeName = this.isDark ? this.darkTheme : this.lightTheme;
       const themeMode = this.isDark ? 'dark' : 'light';
       const html = document.documentElement;
-      
+
       // 临时禁用所有过渡
       html.classList.add('theme-transitioning');
-      
+
       // 应用新主题
       html.setAttribute('data-theme', themeName);
       html.setAttribute('data-color-scheme', themeMode);
-      
+
       // 下一帧恢复过渡
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -517,10 +427,10 @@ function createThemeToggle() {
 function createSimpleFloatingDock() {
   return {
     isVisible: false,
-    
+
     init() {
       this.updateVisibility();
-      
+
       let ticking = false;
       window.addEventListener('scroll', () => {
         if (!ticking) {
@@ -532,12 +442,12 @@ function createSimpleFloatingDock() {
         }
       }, { passive: true });
     },
-    
+
     updateVisibility() {
       // 滚动超过 50px 时显示
       this.isVisible = window.scrollY >= 50;
     },
-    
+
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -552,10 +462,10 @@ function createSimpleFloatingDock() {
 function createDocFloatingDock() {
   return {
     isVisible: false,
-    
+
     init() {
       this.updateVisibility();
-      
+
       let ticking = false;
       window.addEventListener('scroll', () => {
         if (!ticking) {
@@ -567,24 +477,24 @@ function createDocFloatingDock() {
         }
       }, { passive: true });
     },
-    
+
     updateVisibility() {
       // 滚动超过 50px 时显示
       this.isVisible = window.scrollY >= 50;
     },
-    
+
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    
+
     toggleCommentDrawer() {
       window.dispatchEvent(new CustomEvent('toggle-doc-comment-drawer'));
     },
-    
+
     toggleTocDrawer() {
       window.dispatchEvent(new CustomEvent('toggle-doc-toc-drawer'));
     },
-    
+
     toggleSidebarDrawer() {
       window.dispatchEvent(new CustomEvent('toggle-doc-sidebar-drawer'));
     }
@@ -598,85 +508,10 @@ function createDocFloatingDock() {
 function createDocCommentDrawer() {
   return {
     isOpen: false,
-    
+
     closeDrawer() {
       this.isOpen = false;
     }
-  };
-}
-
-/**
- * 文档目录抽屉控制器
- * 模板使用：templates/modules/doc/floating-dock.html
- */
-function createDocTocDrawer() {
-  return {
-    isOpen: false,
-    retryCount: 0,
-    maxRetries: 10,
-    
-    init() {
-      // 监听 isOpen 变化，在打开时初始化目录
-      this.$watch('isOpen', (value) => {
-        if (value) {
-          this.retryCount = 0;
-          this.$nextTick(() => this.initTocContent());
-        }
-      });
-    },
-    
-    initTocContent() {
-      const drawerNav = document.getElementById('doc-toc-drawer-nav');
-      const tocNav = document.getElementById('toc-nav');
-      
-      if (!drawerNav) return;
-      
-      // 如果抽屉已经有内容，不重复初始化
-      if (drawerNav.querySelector('.toc-list')) return;
-      
-      // 复制侧边栏目录内容
-      if (tocNav && tocNav.innerHTML.trim()) {
-        drawerNav.innerHTML = tocNav.innerHTML;
-        this.bindClickEvents(drawerNav);
-      } else if (this.retryCount < this.maxRetries) {
-        // 目录可能还没生成，延迟重试
-        this.retryCount++;
-        setTimeout(() => this.initTocContent(), 100);
-      }
-    },
-    
-    bindClickEvents(container) {
-      const links = container.querySelectorAll('.toc-link');
-      const self = this;
-      links.forEach(link => {
-        // 移除旧的事件监听器（克隆替换）
-        const newLink = link.cloneNode(true);
-        link.parentNode.replaceChild(newLink, link);
-        
-        newLink.addEventListener('click', function(e) {
-          e.preventDefault();
-          const headingId = this.getAttribute('data-heading-id') || this.getAttribute('href').slice(1);
-          const heading = document.getElementById(headingId);
-          if (heading) {
-            window.scrollTo({
-              top: heading.offsetTop - 80,
-              behavior: 'smooth'
-            });
-            self.isOpen = false;
-          }
-        });
-      });
-    }
-  };
-}
-
-/**
- * 文档菜单抽屉控制器
- * 模板使用：templates/modules/doc/floating-dock.html
- */
-function createDocSidebarDrawer() {
-  return {
-    isOpen: false
   };
 }
 
@@ -688,10 +523,10 @@ function createSideFloatingDock() {
   return {
     isVisible: false,
     isExpanded: false,
-    
+
     init() {
       this.updateVisibility();
-      
+
       let ticking = false;
       window.addEventListener('scroll', () => {
         if (!ticking) {
@@ -703,7 +538,7 @@ function createSideFloatingDock() {
         }
       }, { passive: true });
     },
-    
+
     updateVisibility() {
       const newVisible = window.scrollY >= 50;
       // 滚动时自动收起展开的菜单
@@ -712,7 +547,7 @@ function createSideFloatingDock() {
       }
       this.isVisible = newVisible;
     },
-    
+
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -732,13 +567,11 @@ function initializeAll() {
   Alpine.data('navbarController', createNavbarController);
   Alpine.data('createThemeToggle', createThemeToggle);
   Alpine.data('sideFloatingDock', createSideFloatingDock);
-  
+
   // 文档页组件
   Alpine.data('simpleFloatingDock', createSimpleFloatingDock);
   Alpine.data('docFloatingDock', createDocFloatingDock);
   Alpine.data('docCommentDrawer', createDocCommentDrawer);
-  Alpine.data('docTocDrawer', createDocTocDrawer);
-  Alpine.data('docSidebarDrawer', createDocSidebarDrawer);
 }
 
 
@@ -753,7 +586,5 @@ export {
   createSideFloatingDock,
   createSimpleFloatingDock,
   createDocFloatingDock,
-  createDocCommentDrawer,
-  createDocTocDrawer,
-  createDocSidebarDrawer
+  createDocCommentDrawer
 };

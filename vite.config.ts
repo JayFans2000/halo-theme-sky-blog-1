@@ -9,21 +9,21 @@ import { join, dirname } from "path";
 function copyStaticAssets() {
   const srcStaticDir = 'src/static';
   const destAssetsDir = 'templates/assets';
-  
+
   if (!existsSync(srcStaticDir)) {
     return;
   }
-  
+
   function copyRecursive(src: string, dest: string) {
     if (!existsSync(dest)) {
       mkdirSync(dest, { recursive: true });
     }
-    
+
     const items = readdirSync(src);
     items.forEach(item => {
       const srcPath = join(src, item);
       const destPath = join(dest, item);
-      
+
       if (statSync(srcPath).isDirectory()) {
         copyRecursive(srcPath, destPath);
       } else {
@@ -34,7 +34,7 @@ function copyStaticAssets() {
       }
     });
   }
-  
+
   copyRecursive(srcStaticDir, destAssetsDir);
 }
 
@@ -44,10 +44,10 @@ function copyStaticAssets() {
  */
 function generateEntries() {
   const entries: Record<string, string> = {};
-  
+
   // 公共资源入口
   entries['main'] = 'src/common/main.js';
-  
+
   // 扫描页面JS文件
   const jsFiles = glob.sync("src/pages/**/*.js");
   jsFiles.forEach((file) => {
@@ -58,7 +58,7 @@ function generateEntries() {
       console.log(`📄 ${pageName}: ${file}`);
     }
   });
-  
+
   console.log(`✅ 生成 ${Object.keys(entries).length} 个入口点`);
   return entries;
 }

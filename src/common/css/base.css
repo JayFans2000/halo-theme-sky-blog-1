@@ -104,6 +104,31 @@
     --shadow-bento-hover: 0 8px 32px -4px rgba(0, 0, 0, 0.12);
     --shadow-bento-elevated: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
 
+    /* ========================================== */
+    /* 自适应阴影系统 - 亮/暗主题自动切换          */
+    /* 亮色：柔和阴影 / 暗色：微光边缘             */
+    /* ========================================== */
+    
+    /* 阴影颜色变量 - 亮色模式默认值 */
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --shadow-color-md: rgba(0, 0, 0, 0.12);
+    --shadow-color-lg: rgba(0, 0, 0, 0.16);
+    
+    /* 组件阴影 - 小 (按钮、标签、小卡片) */
+    --art-shadow-sm: 0 1px 3px var(--shadow-color), 0 1px 2px -1px var(--shadow-color);
+    
+    /* 组件阴影 - 中 (卡片、面板) */
+    --art-shadow-md: 0 4px 6px -1px var(--shadow-color-md), 0 2px 4px -2px var(--shadow-color);
+    
+    /* 组件阴影 - 大 (模态框、弹出层) */
+    --art-shadow-lg: 0 10px 15px -3px var(--shadow-color-lg), 0 4px 6px -4px var(--shadow-color-md);
+    
+    /* 组件阴影 - 超大 (聚焦元素) */
+    --art-shadow-xl: 0 20px 25px -5px var(--shadow-color-lg), 0 8px 10px -6px var(--shadow-color-md);
+    
+    /* 内阴影 - 输入框、凹陷效果 */
+    --art-shadow-inner: inset 0 2px 4px var(--shadow-color);
+
     /* Apple Animation Timing */
     --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
     --ease-apple-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -150,6 +175,18 @@ html {
 html[data-color-scheme="dark"],
 .dark,
 .color-scheme-dark {
+    /* 暗色模式阴影 - 微光边缘效果 */
+    --shadow-color: rgba(255, 255, 255, 0.04);
+    --shadow-color-md: rgba(255, 255, 255, 0.06);
+    --shadow-color-lg: rgba(255, 255, 255, 0.08);
+    
+    /* 暗色模式组件阴影 - 带微光 */
+    --art-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--shadow-color);
+    --art-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--shadow-color-md);
+    --art-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--shadow-color-lg);
+    --art-shadow-xl: 0 20px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--shadow-color-lg);
+    --art-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+
     --halo-cw-primary-1-color: var(--color-primary) !important;
     --halo-cw-primary-2-color: color-mix(in oklch, var(--color-primary) 80%, transparent) !important;
     --halo-cw-primary-3-color: color-mix(in oklch, var(--color-primary) 60%, transparent) !important;
@@ -670,3 +707,23 @@ html.theme-transitioning * {
         animation: none;
     }
 }
+
+
+/* ===================================================
+ * 全局字体类 - 正文字体选择
+ * 通过主题设置控制，应用到 html 元素全局生效
+ * 字体文件通过 CDN 按需加载
+ * ==================================================*/
+
+/* 霞鹜文楷亮 - 推荐中文 */
+html.font-lxgw-wenkai-bright,
+html.font-lxgw-wenkai-bright body {
+    font-family: 'LXGW WenKai Screen', 'LXGW WenKai', system-ui, sans-serif;
+}
+
+/* 思源屏显臻宋 - 优雅阅读 */
+html.font-siyuan-songti,
+html.font-siyuan-songti body {
+    font-family: '思源屏显臻宋', 'Source Han Serif SC', 'Noto Serif CJK SC', serif;
+}
+

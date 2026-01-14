@@ -179,6 +179,31 @@ spec:
               value: 5
               min: 3
               max: 10
+        - $formkit: group
+          name: font_settings
+          label: 全局字体
+          value:
+            body_font: font-default
+            font_cdn: "https://cdn.5ee.net/fonts"
+          children:
+            - $formkit: radio
+              name: body_font
+              label: 正文字体
+              help: 选择全站正文的字体风格，影响文章、文档等内容区域
+              value: font-default
+              options:
+                - value: font-default
+                  label: 系统默认
+                - value: font-lxgw-wenkai-bright
+                  label: 霞鹜文楷亮（推荐中文）
+                - value: font-siyuan-songti
+                  label: 思源宋体（优雅阅读）
+            - $formkit: text
+              name: font_cdn
+              label: 字体 CDN 地址
+              help: 自定义字体文件的 CDN 根路径，末尾不要加斜杠
+              value: "https://cdn.5ee.net/fonts"
+              placeholder: "https://cdn.5ee.net/fonts"
     - group: nav
       label: 顶部
       formSchema:
@@ -1232,8 +1257,9 @@ spec:
           label: 文章头部背景设置
           value:
             background_type: cover
-            custom_image_url: "https://www.dmoe.cc/random.php"
-            upload_image: ""
+            enable_fallback: true
+            custom_image: ""
+            fallback_image: "https://www.dmoe.cc/random.php"
           children:
             - $formkit: radio
               id: background_type
@@ -1244,50 +1270,46 @@ spec:
               options:
                 - label: 使用文章封面图
                   value: cover
-                - label: 自定义图片地址
-                  value: custom_url
-                - label: 本地上传图片
-                  value: upload
-            - $formkit: text
-              name: custom_image_url
-              key: custom_image_url_field
-              if: $get(background_type).value === 'custom_url'
-              label: 自定义图片地址
-              help: 输入图片的完整 URL 地址，支持随机图片（https://www.dmoe.cc/random.php）
-              placeholder: "https://www.dmoe.cc/random.php"
+                - label: 自定义图片
+                  value: custom
             - $formkit: attachment
-              name: upload_image
-              key: upload_image_field
-              if: $get(background_type).value === 'upload'
-              label: 上传背景图片
-              help: 上传文章头部背景图片（固定图片，不随文章变动）
-              accepts:
-                - image/jpeg
-                - image/png
-                - image/webp
+              name: custom_image
+              key: custom_image_field
+              if: $get(background_type).value === 'custom'
+              label: 自定义背景图片
+              help: 上传图片或输入图片 URL 地址
+            - $formkit: switch
+              id: enable_fallback
+              name: enable_fallback
+              label: 启用回退图片
+              help: 当选择的图片来源为空时，自动使用回退图片
+              value: true
+            - $formkit: attachment
+              name: fallback_image
+              key: fallback_image_field
+              if: $get(enable_fallback).value
+              label: 回退图片
+              help: 当背景图片为空时显示的默认图片，支持随机图片 API
+              value: "https://www.dmoe.cc/random.php"
         - $formkit: group
           name: content_style
           label: 内容样式
-          value:
-            style_theme: default
-          children:
-            - $formkit: select
-              name: style_theme
-              label: 文章样式主题
-              value: default
-              help: 选择文章内容的显示风格
-              options:
-                - value: default
-                  label: 默认风格（推荐）
-                - value: github
-                  label: GitHub 风格（经典优雅）
+          value: {}
+          children: []
         - $formkit: group
           name: sidebar_settings
           label: 侧边栏设置
           value:
             show_sidebar: true
-            enable_custom_sidebar: false
+            enable_custom_sidebar: true
             sidebar_position: right
+            sidebar_widgets:
+              - widget: toc
+              - widget: author_card
+              - widget: blog_stats
+              - widget: categories
+              - widget: tags
+              - widget: popular_posts
           children:
             - $formkit: switch
               id: post_show_sidebar
@@ -1301,7 +1323,7 @@ spec:
               if: $get(post_show_sidebar).value
               label: 定制侧边栏
               help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
-              value: false
+              value: true
             - $formkit: radio
               name: sidebar_position
               if: $get(post_enable_custom_sidebar).value
@@ -1323,6 +1345,7 @@ spec:
                 - type: text
                   label: $value.widget
               value:
+                - widget: toc
                 - widget: author_card
                 - widget: blog_stats
                 - widget: categories
@@ -1333,6 +1356,8 @@ spec:
                   name: widget
                   label: 小工具类型
                   options:
+                    - label: 文章目录
+                      value: toc
                     - label: 作者卡片
                       value: author_card
                     - label: 博客统计
@@ -1346,73 +1371,35 @@ spec:
                     - label: 最新文章
                       value: recent_posts
         - $formkit: group
-          name: dock_settings
-          label: 悬浮控制栏
+          name: post_interaction
+          label: 文章底部交互
           value:
-            enable_dock: true
-            dock_style: global
             enable_like: true
-            post_dock_menu: primary
             enable_share: true
-            enable_comment_drawer: true
-            enable_toc_drawer: false
-            enable_back_to_top: true
+            enable_comment: true
           children:
             - $formkit: switch
-              id: fd_post_enable_dock
-              name: enable_dock
-              label: 启用文章页 Dock
-              help: 仅控制文章页是否显示底部悬浮控制栏
-              value: true
-            - $formkit: radio
-              name: dock_style
-              label: Dock 样式
-              help: 选择悬浮控制栏的展示样式
-              if: $get(fd_post_enable_dock).value
-              options:
-                - label: 跟随全局设置
-                  value: global
-                - label: 底部居中
-                  value: bottom
-                - label: 右侧可折叠
-                  value: side
-            - $formkit: menuRadio
-              name: post_dock_menu
-              label: 文章页 Dock 菜单
-              value: primary
-              if: $get(fd_post_enable_dock).value
-              help: 选择要在文章页 Dock 中显示的菜单（可以和通用 Dock 菜单一样，也可以选择不同的菜单）
-            - $formkit: switch
-              id: enable_like
               name: enable_like
-              label: 启用点赞功能
-              help: 文章页 Dock 中的点赞按钮
-              if: $get(fd_post_enable_dock).value
+              label: 启用点赞
+              help: 文章底部的点赞按钮
               value: true
             - $formkit: switch
-              id: enable_share
+              id: post_enable_share
               name: enable_share
-              label: 启用分享功能
-              help: 文章页 Dock 中的分享按钮
-              if: $get(fd_post_enable_dock).value
+              label: 启用分享
+              help: 文章底部的分享按钮（打开分享弹窗）
               value: true
             - $formkit: group
               name: share_settings
               label: 分享设置
-              if: $get(enable_share).value
+              if: $get(post_enable_share).value
               value:
-                share_title_template: ""
                 share_item_ids:
                   - wechat
                   - weibo
                   - x
                   - qq
               children:
-                - $formkit: text
-                  name: share_title_template
-                  label: 分享标题模板
-                  help: 留空使用文章标题，可使用变量 {title} {site} {author}
-                  placeholder: "推荐阅读：{title} - {site}"
                 - $formkit: select
                   name: share_item_ids
                   multiple: true
@@ -1444,23 +1431,54 @@ spec:
                     - label: 系统分享
                       value: native
             - $formkit: switch
-              name: enable_comment_drawer
-              label: 启用评论抽屉
-              help: 从右侧展开的评论面板
-              if: $get(fd_post_enable_dock).value
+              name: enable_comment
+              label: 启用评论
+              help: 文章底部的评论按钮（展开内联评论区）
               value: true
+        - $formkit: group
+          name: dock_settings
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_style: global
+            post_dock_menu: primary
+            enable_toc_drawer: true
+            enable_back_to_top: true
+          children:
+            - $formkit: switch
+              id: enable_custom_dock
+              name: enable_custom_dock
+              label: 启用定制 Dock
+              help: 启用后可自定义 Dock 样式和菜单，禁用则使用全局设置
+              value: false
+            - $formkit: radio
+              name: dock_style
+              label: Dock 样式
+              help: 选择悬浮控制栏的展示样式
+              if: $get(enable_custom_dock).value
+              options:
+                - label: 跟随全局设置
+                  value: global
+                - label: 底部居中
+                  value: bottom
+                - label: 右侧可折叠
+                  value: side
+            - $formkit: menuRadio
+              name: post_dock_menu
+              label: 文章页 Dock 菜单
+              value: primary
+              if: $get(enable_custom_dock).value
+              help: 选择要在文章页 Dock 中显示的菜单（可以和通用 Dock 菜单一样，也可以选择不同的菜单）
             - $formkit: switch
               id: enable_toc_drawer
               name: enable_toc_drawer
               label: 启用目录抽屉
-              help: 点击后从右侧展开文章目录（隐藏侧边栏时推荐启用）
-              if: $get(fd_post_enable_dock).value
-              value: false
+              help: 移动端或隐藏侧边栏时，从 Dock 打开文章目录（默认开启）
+              value: true
             - $formkit: switch
               name: enable_back_to_top
               label: 返回顶部按钮
               help: 控制文章页悬浮 Dock 中是否显示“返回顶部”按钮
-              if: $get(fd_post_enable_dock).value
               value: true
     - group: category_settings
       label: 分类
@@ -2072,13 +2090,13 @@ spec:
           value:
             - name: "GitHub"
               url: "https://github.com"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>'
             - name: "Twitter"
               url: "https://twitter.com"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18.205 2.25h3.308l-7.227 8.26l8.502 11.24H16.13l-5.214-6.817L4.95 21.75H1.64l7.73-8.835L1.215 2.25H8.04l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>'
             - name: "邮箱"
               url: "mailto:example@email.com"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z"/></svg>'
           children:
             - $formkit: text
               name: name
@@ -2107,17 +2125,17 @@ spec:
               label: $value.name
           value:
             - name: "Vue.js"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2 3h3.5L12 15l6.5-12H22L12 21zm4.5 0h3L12 7.58L14.5 3h3L12 13.08z"/></svg>'
             - name: "TypeScript"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 3h18v18H3zm10.71 14.86c.5.98 1.51 1.73 3.09 1.73c1.6 0 2.8-.83 2.8-2.36c0-1.41-.81-2.04-2.25-2.66l-.42-.18c-.73-.31-1.04-.52-1.04-1.02c0-.41.31-.73.81-.73c.48 0 .8.21 1.09.73l1.31-.87c-.55-.96-1.33-1.33-2.4-1.33c-1.51 0-2.48.96-2.48 2.23c0 1.38.81 2.03 2.03 2.55l.42.18c.78.34 1.24.55 1.24 1.13c0 .48-.45.83-1.15.83c-.83 0-1.31-.43-1.67-1.03zM13 11.25H8v1.5h1.5V20h1.75v-7.25H13z"/></svg>'
             - name: "Tailwind CSS"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6c-2.67 0-4.33 1.33-5 4c1-1.33 2.17-1.83 3.5-1.5c.76.19 1.31.74 1.91 1.35c.98 1 2.09 2.15 4.59 2.15c2.67 0 4.33-1.33 5-4c-1 1.33-2.17 1.83-3.5 1.5c-.76-.19-1.3-.74-1.91-1.35C15.61 7.15 14.5 6 12 6m-5 6c-2.67 0-4.33 1.33-5 4c1-1.33 2.17-1.83 3.5-1.5c.76.19 1.3.74 1.91 1.35C8.39 16.85 9.5 18 12 18c2.67 0 4.33-1.33 5-4c-1 1.33-2.17 1.83-3.5 1.5c-.76-.19-1.3-.74-1.91-1.35C10.61 13.15 9.5 12 7 12"/></svg>'
             - name: "Java"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211c0 0 .552.346 1.321.646c-4.699 2.013-10.633-.118-6.943-1.149m-.575-2.627s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308c0 0 .384.389.987.602c-5.679 1.661-12.007.13-7.942-1.218m4.84-4.458c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688c0-.001-8.216 2.051-4.292 6.573M19.116 19.679s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033c-.856-.373.75-.89 1.254-.998c.527-.114.828-.093.828-.093c-.953-.671-6.156 1.317-2.643 1.887c9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062c1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568c2.082-1.006 3.776-.892 3.776-.892m7.824 4.374c4.503-2.34 2.421-4.589.968-4.285c-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562c0-.001.07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.889 4.832 0 6.836c-2.274-2.053-3.943-3.858-2.824-5.539c1.644-2.469 6.197-3.665 5.189-7.627M9.734 23.924c4.322.277 10.959-.153 11.116-2.198c0 0-.302.775-3.572 1.391c-3.688.694-8.239.613-10.937.168c0-.001.553.457 3.393.639"/></svg>'
             - name: "Docker"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.983 11.078h2.119a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.119a.185.185 0 0 0-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 0 0 .186-.186V3.574a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 0 0 .186-.186V6.29a.186.186 0 0 0-.186-.185h-2.118a.185.185 0 0 0-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 0 0 .184-.186V6.29a.185.185 0 0 0-.185-.185H8.1a.185.185 0 0 0-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 0 0 .185-.186V6.29a.186.186 0 0 0-.185-.185H5.136a.186.186 0 0 0-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 0 0 .186-.185V9.006a.186.186 0 0 0-.186-.186h-2.118a.185.185 0 0 0-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 0 0 .185-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.186.186 0 0 0-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 0 0 .184-.185V9.006a.185.185 0 0 0-.184-.186h-2.12a.185.185 0 0 0-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51c-.338.001-.676.03-1.01.087c-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199l-.226.327c-.284.438-.49.922-.612 1.43c-.23.97-.09 1.882.403 2.661c-.595.332-1.55.413-1.744.42H.751a.751.751 0 0 0-.75.748a11.4 11.4 0 0 0 .692 4.062c.545 1.428 1.355 2.48 2.41 3.124c1.18.723 3.1 1.137 5.275 1.137a15.7 15.7 0 0 0 2.93-.266a12 12 0 0 0 3.823-1.389a10.5 10.5 0 0 0 2.61-2.136c1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009c.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>'
             - name: "MySQL"
-              icon: ''
+              icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5.462 5.11c-.102 0-.17.013-.238.026v.026h.013c.047.093.128.153.187.233l.133.28l.013-.013c.082-.058.12-.15.12-.297c-.034-.036-.04-.08-.068-.116c-.034-.047-.106-.073-.16-.14M23.6 17.428c-.627-.385-1.35-.606-2.016-.845c-.156-.056-.327-.086-.47-.17l-.086-.17c.053-.11.04-.28.086-.418c.166-.51.506-.96.838-1.356c.263-.313.537-.68.74-1.038c.108-.19.16-.38.263-.575l-.153-.085c-.2.127-.467.2-.65.345c-.273.218-.513.478-.753.73c-.24.25-.453.52-.706.73l-.39-.263c.12-.37.406-.65.56-1.01c.093-.22.136-.44.226-.66l-.17-.085c-.266.24-.47.56-.7.845c-.23.286-.46.56-.74.78l-.086-.043c-.046-.093-.02-.22-.043-.345c-.073-.37-.14-.75-.263-.093c-.093-.14-.36-.22-.56-.3c-.22-.086-.48-.12-.66-.213c-.086-.047-.2-.153-.263-.153l-.086.17c.1.1.12.253.213.345c.066.066.18.1.263.153c.18.12.38.2.56.3c.086.047.233.1.263.17c.06.14-.013.3-.043.433c-.1.3-.2.56-.3.86c-.1.28-.2.56-.346.8c-.073.12-.346.186-.52.26c-.2.086-.42.133-.62.213c-.1.04-.26.08-.3.17c.093.1.113.26.213.346c.16.14.34.26.52.39c.16.113.42.18.52.346c-.12.36-.14.76-.26 1.13c-.12.36-.34.72-.52 1.08l.17.17c.36-.24.66-.56.87-.95c.1-.186.14-.4.26-.56c.22.06.46.26.65.39c.28.186.54.39.82.56c.14.086.4.14.43.26c-.08.2-.12.42-.21.61c-.1.2-.26.38-.35.58l.13.17c.44-.2.8-.54 1.13-.91c.16-.18.3-.4.52-.52c.2.1.4.3.56.43c.3.24.58.52.91.73c.17.1.58.32.61.1c.02-.14-.15-.26-.26-.35c-.2-.16-.42-.3-.61-.48c-.2-.18-.38-.4-.56-.6l.26-.35c.2.1.34.3.52.43c.3.22.6.42.95.56c.18.07.5.2.61.04c.04-.06-.02-.14-.09-.17m-4.17-1.74c.04-.14.14-.24.22-.35c.14.1.32.16.43.3c.12.14.18.32.26.48l-.35.17c-.14-.14-.36-.26-.43-.43c-.04-.08 0-.12-.13-.17m-9.78 1.18c-.36-.12-.63-.36-.86-.65c-.24-.3-.42-.66-.56-1.04c-.3-.8-.42-1.74-.43-2.77c0-.54.04-.1.1-1.56c.04-.3.04-.6.13-.86l-.09-.09c-.16.1-.3.3-.43.48c-.2.28-.38.58-.52.91c-.28.66-.44 1.4-.52 2.25c-.04.42-.02.84 0 1.26c.02.4.08.8.17 1.17c.1.38.22.76.43 1.04c.1.14.3.36.52.3c.2-.04.3-.3.35-.52c.06-.3.02-.62.04-.95l.17-.04c.1.32.2.7.39.95c.2.28.48.5.78.6c.06.02.16.08.22.04c.06-.06 0-.14-.04-.17c-.1-.1-.24-.14-.35-.22m-3.6-1.3c-.1-.28-.16-.6-.22-.91c-.12-.66-.2-1.34-.22-2.08c0-.36 0-.72.04-1.08c.02-.36.08-.72.17-1.04c.04-.14.1-.28.13-.43c.02-.1.1-.3.04-.39c-.06-.1-.22-.1-.3-.13c-.2-.06-.42-.04-.61-.04c-.36 0-.76-.02-1.04.09l-.09.09c.06.14.2.2.3.3c.1.1.2.22.26.35c.1.2.14.42.17.65c.06.46.04.96.04 1.47c0 .5-.02 1-.04 1.47c-.02.36-.04.72-.09 1.04c-.02.18-.06.36-.09.52c-.02.1-.08.28 0 .35c.1.1.28.04.39.04h.78c.2 0 .44.04.56-.09c.06-.06.04-.14.04-.22c-.02-.3-.14-.58-.22-.86m-2.64.56c-.06-.02-.14 0-.2.04c-.12.1-.12.28-.12.44c0 .1.02.22.08.28c.06.06.16.06.24.04c.12-.04.2-.14.24-.26c.02-.06.04-.14.04-.2c0-.08 0-.18-.06-.24c-.04-.04-.14-.08-.22-.1m-.34-1.26c.16-.02.3-.06.3-.26c0-.22-.14-.3-.3-.34c-.1-.02-.2 0-.28.04c-.1.06-.16.16-.16.28c0 .1.04.2.14.26c.08.04.2.04.3.02m-1.2 1.04c-.08-.02-.2 0-.26.04c-.14.1-.14.28-.14.46c0 .1.02.22.1.28c.06.06.16.06.24.04c.12-.04.2-.16.24-.28c.02-.06.04-.14.04-.2c0-.08 0-.18-.06-.24c-.04-.04-.1-.08-.16-.1m-.26-1.22c.16-.02.32-.06.32-.26c0-.22-.16-.32-.32-.36c-.1-.02-.2 0-.28.04c-.1.06-.18.16-.18.3c0 .1.06.2.16.26c.08.04.2.04.3.02m-1.04.86c-.08-.02-.18 0-.24.04c-.14.1-.14.28-.14.46c0 .1.02.22.1.28c.06.06.16.06.24.04c.12-.04.2-.16.24-.28c.02-.06.04-.14.04-.2c0-.08 0-.18-.06-.24c-.04-.04-.1-.08-.18-.1m-.2-1.04c.16-.02.32-.06.32-.26c0-.22-.16-.32-.32-.36c-.1-.02-.2 0-.28.04c-.1.06-.18.16-.18.3c0 .1.06.2.16.26c.08.04.2.04.3.02"/></svg>'
           children:
             - $formkit: text
               name: name
@@ -2133,23 +2151,85 @@ spec:
           name: display
           label: 显示设置
           value:
+            show_hero: true
+            show_social: true
+            show_stats: true
+            show_tech: true
+            show_github_stats: true
+            show_github_langs: true
+            show_github_calendar: true
             show_page_content: false
-            show_site_stats: true
             enable_comment: true
           children:
+            - $formkit: switch
+              name: show_hero
+              label: 显示个人介绍卡片
+              help: 头像 + 姓名 + 角色 + 简介
+              value: true
+            - $formkit: switch
+              name: show_social
+              label: 显示社交链接卡片
+              value: true
+            - $formkit: switch
+              name: show_stats
+              label: 显示站点统计卡片
+              value: true
+            - $formkit: switch
+              name: show_tech
+              label: 显示技术栈卡片
+              value: true
+            - $formkit: switch
+              name: show_github_stats
+              label: 显示 GitHub 统计卡片
+              help: 需要配置 GitHub 用户名
+              value: true
+            - $formkit: switch
+              name: show_github_langs
+              label: 显示语言分布卡片
+              help: 需要配置 GitHub 用户名
+              value: true
+            - $formkit: switch
+              name: show_github_calendar
+              label: 显示贡献热力图
+              help: 需要配置 GitHub 用户名
+              value: true
             - $formkit: switch
               name: show_page_content
               label: 显示更多介绍
               help: 启用后显示单页面编辑器中的内容
               value: false
             - $formkit: switch
-              name: show_site_stats
-              label: 显示站点统计
-              value: true
-            - $formkit: switch
               name: enable_comment
               label: 启用评论
               value: true
+        # CTA 行动召唤设置
+        - $formkit: group
+          name: cta
+          label: 行动召唤 (CTA)
+          help: 配置页面底部的行动召唤卡片
+          value:
+            title: "Let's work"
+            highlight: "together"
+            description: "I am always ready to help you"
+            link_url: "/contact"
+          children:
+            - $formkit: text
+              name: title
+              label: 标题文字
+              placeholder: "Let's work"
+            - $formkit: text
+              name: highlight
+              label: 高亮文字
+              help: 使用主题色显示
+              placeholder: "together"
+            - $formkit: text
+              name: description
+              label: 描述文字
+              placeholder: "I am always ready to help you"
+            - $formkit: text
+              name: link_url
+              label: 链接地址
+              placeholder: "/contact"
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock
@@ -2329,18 +2409,12 @@ spec:
           label: 分享设置
           if: $get(moments_enable_share).value
           value:
-            share_title_template: ""
             share_item_ids:
               - wechat
               - weibo
               - x
               - qq
           children:
-            - $formkit: text
-              name: share_title_template
-              label: 分享标题模板
-              help: 留空使用默认标题，可使用变量 {author} {site} {date}
-              placeholder: "{author} 的瞬间 - {site}"
             - $formkit: select
               name: share_item_ids
               multiple: true
@@ -2519,6 +2593,13 @@ spec:
           name: doc_settings
           label: 文档内容页
           value:
+            enable_share: true
+            share_settings:
+              share_item_ids:
+                - wechat
+                - weibo
+                - x
+                - qq
             enable_custom_dock: false
             dock_style: bottom
             dock_menu: primary
@@ -2526,6 +2607,53 @@ spec:
             enable_sidebar_drawer: true
             enable_back_to_top: true
           children:
+            - $formkit: switch
+              id: docsme_doc_enable_share
+              name: enable_share
+              label: 启用分享
+              help: 文档页面的分享按钮（打开分享弹窗）
+              value: true
+            - $formkit: group
+              name: share_settings
+              label: 分享设置
+              if: $get(docsme_doc_enable_share).value
+              value:
+                share_item_ids:
+                  - wechat
+                  - weibo
+                  - x
+                  - qq
+              children:
+                - $formkit: select
+                  name: share_item_ids
+                  multiple: true
+                  sortable: true
+                  label: 启用的分享平台
+                  help: 选择要启用的分享平台，可拖拽调整顺序
+                  value:
+                    - wechat
+                    - weibo
+                    - x
+                    - qq
+                  options:
+                    - label: 微信
+                      value: wechat
+                    - label: X (Twitter)
+                      value: x
+                    - label: Telegram
+                      value: telegram
+                    - label: Facebook
+                      value: facebook
+                    - label: QQ
+                      value: qq
+                    - label: QQ 空间
+                      value: qzone
+                    - label: 微博
+                      value: weibo
+                    - label: 豆瓣
+                      value: douban
+                    - label: 系统分享
+                      value: native
             - $formkit: switch
               id: docsme_doc_custom_dock
               name: enable_custom_dock

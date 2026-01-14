@@ -13,7 +13,7 @@
   - 否则使用全局 sidebar_settings
 -->
 <th:block th:fragment="dynamic(pageCfg)"
-          th:with="globalCfg = ${theme.config.general.sidebar_settings},
+  th:with="globalCfg = ${theme.config.general.sidebar_settings},
                    useCustom = ${pageCfg?.enable_custom_sidebar == true},
                    configWidgets = ${useCustom ? pageCfg?.sidebar_widgets : globalCfg?.widgets},
                    defaultWidgets = ${ {
@@ -24,7 +24,7 @@
                      {widget: 'popular_posts'}
                    } },
                    widgets = ${configWidgets != null && !#lists.isEmpty(configWidgets) ? configWidgets : defaultWidgets}">
-  
+
   <!-- 遍历配置的小工具 -->
   <th:block th:each="item : ${widgets}">
     <th:block th:if="${item.widget eq 'author_card'}">
@@ -44,6 +44,9 @@
     </th:block>
     <th:block th:if="${item.widget eq 'recent_posts'}">
       <th:block th:replace="~{modules/widgets/recent-posts :: list}" />
+    </th:block>
+    <th:block th:if="${item.widget eq 'toc'}">
+      <th:block th:replace="~{modules/post/toc :: widget}" />
     </th:block>
   </th:block>
 
