@@ -78,6 +78,39 @@ spec:
               max: 3000
               step: 100
         - $formkit: group
+          name: global_background
+          label: 全局背景
+          value:
+            enable_custom: false
+            background_style: base-200
+          children:
+            - $formkit: switch
+              id: enable_custom_bg
+              name: enable_custom
+              label: 启用自定义背景
+              help: 开启后可以自定义全局页面背景样式
+              value: false
+            - $formkit: toggle
+              name: background_style
+              if: $get(enable_custom_bg).value
+              label: 背景样式
+              help: 选择全局页面的背景样式
+              render-type: text
+              value: base-200
+              options:
+                - label: Base 100 (最浅)
+                  value: base-100
+                  render: Base 100
+                - label: Base 200 (默认)
+                  value: base-200
+                  render: Base 200
+                - label: Base 300 (较深)
+                  value: base-300
+                  render: Base 300
+                - label: 网格背景
+                  value: grid
+                  render: Grid
+        - $formkit: group
           name: floating_dock
           label: 悬浮控制栏
           value:
