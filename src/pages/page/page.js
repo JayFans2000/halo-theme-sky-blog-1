@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * 初始化页面内容
  */
 function initPageContent() {
-  const content = document.getElementById('page-content');
+  const content = document.getElementById('article-content');
   if (!content) return;
 
   // 处理外部链接 - 添加 target="_blank"

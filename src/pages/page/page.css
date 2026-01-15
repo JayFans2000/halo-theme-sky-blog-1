@@ -63,72 +63,73 @@
 /* ========================================== */
 /*              页面内容                       */
 /* ========================================== */
+/* 注意：使用 #article-content ID 复用 post.css 的文章样式 */
 
-#page-content {
+#article-content {
   font-size: 1rem;
   line-height: 1.75;
 }
 
 @media (min-width: 768px) {
-  #page-content {
+  #article-content {
     font-size: 1.125rem;
   }
 }
 
 /* 标题样式 */
-#page-content h1,
-#page-content h2,
-#page-content h3,
-#page-content h4,
-#page-content h5,
-#page-content h6 {
+#article-content h1,
+#article-content h2,
+#article-content h3,
+#article-content h4,
+#article-content h5,
+#article-content h6 {
   color: var(--color-base-content);
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-#page-content h2 {
+#article-content h2 {
   font-size: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--color-base-300);
 }
 
 @media (min-width: 768px) {
-  #page-content h2 {
+  #article-content h2 {
     font-size: 1.875rem;
   }
 }
 
-#page-content h3 {
+#article-content h3 {
   font-size: 1.25rem;
 }
 
 @media (min-width: 768px) {
-  #page-content h3 {
+  #article-content h3 {
     font-size: 1.5rem;
   }
 }
 
-#page-content h4 {
+#article-content h4 {
   font-size: 1.125rem;
 }
 
 @media (min-width: 768px) {
-  #page-content h4 {
+  #article-content h4 {
     font-size: 1.25rem;
   }
 }
 
 /* 标题内的 strong 不加粗（避免重复） */
-#page-content h2 strong,
-#page-content h3 strong,
-#page-content h4 strong {
+#article-content h2 strong,
+#article-content h3 strong,
+#article-content h4 strong {
   font-weight: inherit;
 }
 
 /* 段落样式 */
-#page-content p {
+#article-content p {
   color: color-mix(in oklab, var(--color-base-content) 80%, transparent);
   line-height: 1.8;
   margin: 1rem 0;
@@ -136,41 +137,41 @@
 }
 
 /* 链接样式 */
-#page-content a {
+#article-content a {
   color: var(--color-primary);
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
-#page-content a:hover {
+#article-content a:hover {
   text-decoration: underline;
   color: color-mix(in oklab, var(--color-primary) 80%, var(--color-base-content));
 }
 
 /* 列表样式 */
-#page-content ul,
-#page-content ol {
+#article-content ul,
+#article-content ol {
   color: color-mix(in oklab, var(--color-base-content) 80%, transparent);
   margin: 1rem 0;
   padding-left: 1.5rem;
 }
 
-#page-content li {
+#article-content li {
   margin: 0.5rem 0;
 }
 
-#page-content li::marker {
+#article-content li::marker {
   color: var(--color-primary);
 }
 
 /* 强调文本 */
-#page-content strong {
+#article-content strong {
   color: var(--color-base-content);
   font-weight: 600;
 }
 
 /* 引用块样式 */
-#page-content blockquote {
+#article-content blockquote {
   padding: 0.75rem 1rem;
   margin: 1.5rem 0;
   border-left: 4px solid var(--color-primary);
@@ -178,12 +179,12 @@
   background: color-mix(in oklab, var(--color-base-200) 50%, transparent);
 }
 
-#page-content blockquote p {
+#article-content blockquote p {
   margin: 0;
 }
 
 /* 代码样式 */
-#page-content code {
+#article-content code {
   padding: 0.125rem 0.375rem;
   border-radius: 0.25rem;
   font-size: 0.875rem;
@@ -191,7 +192,7 @@
   background: var(--color-base-200);
 }
 
-#page-content pre {
+#article-content pre {
   margin: 1.5rem 0;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -201,13 +202,13 @@
   filter: none !important; /* 覆盖可能的 blur 效果 */
 }
 
-#page-content pre code {
+#article-content pre code {
   padding: 0;
   background: transparent;
 }
 
 /* 图片样式 */
-#page-content img {
+#article-content img {
   margin: 1.5rem 0;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
@@ -216,31 +217,31 @@
 }
 
 /* 分割线样式 */
-#page-content hr {
+#article-content hr {
   margin: 2rem 0;
   border-color: var(--color-base-300);
 }
 
 /* 表格样式 */
-#page-content table {
+#article-content table {
   width: 100%;
   margin: 1.5rem 0;
   border-collapse: collapse;
 }
 
-#page-content th,
-#page-content td {
+#article-content th,
+#article-content td {
   padding: 0.5rem 1rem;
   text-align: left;
   border: 1px solid var(--color-base-300);
 }
 
-#page-content th {
+#article-content th {
   background: var(--color-base-200);
   font-weight: 600;
 }
 
-#page-content tr:nth-child(even) {
+#article-content tr:nth-child(even) {
   background: color-mix(in oklab, var(--color-base-200) 30%, transparent);
 }
 

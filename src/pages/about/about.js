@@ -4,6 +4,7 @@
  */
 
 import './about.css';
+import '../post/post.css'; // 复用文章内容样式
 
 (function(window, document) {
   'use strict';

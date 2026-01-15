@@ -11,8 +11,8 @@
   <!-- 分割线 -->
   <div class="divider"></div>
 
-  <!-- 文章内容 -->
-  <div id="page-content" th:utext="${singlePage.content.content}">
+  <!-- 文章内容 - 使用 article-content ID 复用 post 样式 -->
+  <div id="article-content" th:utext="${singlePage.content.content}">
     <p>页面内容...</p>
   </div>
 
