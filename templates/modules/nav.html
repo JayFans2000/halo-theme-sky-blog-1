@@ -90,14 +90,14 @@
 
           <!-- 搜索功能 -->
           <div th:if="${theme.config.nav.right_settings.show_search and pluginFinder.available('PluginSearchWidget')}">
-            <button class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0" onclick="SearchWidget.open();">
+            <button class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform" onclick="SearchWidget.open();">
               <!-- 自定义搜索图标 -->
               <th:block th:if="${theme.config.nav.right_settings.search_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.search_icon)}">
-                <span th:utext="${theme.config.nav.right_settings.search_icon}" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full"></span>
+                <span th:utext="${theme.config.nav.right_settings.search_icon}" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors"></span>
               </th:block>
               <!-- 默认搜索图标 -->
               <th:block th:unless="${theme.config.nav.right_settings.search_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.search_icon)}">
-              <span class="icon-[heroicons--magnifying-glass] w-5 h-5"></span>
+              <span class="icon-[heroicons--magnifying-glass] w-5 h-5 text-base-content/60 hover:text-primary transition-colors"></span>
               </th:block>
             </button>
           </div>
@@ -108,10 +108,10 @@
                         data-dark-theme=${theme.config.nav.theme_settings.dark_theme},
                         data-default-theme=${theme.config.nav.theme_settings.default_theme}"
             x-init="$nextTick(() => init())">
-            <button @click="toggleTheme()" class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0"
+            <button @click="toggleTheme()" class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
               :title="isDark ? '切换到浅色模式' : '切换到深色模式'">
               <!-- 浅色模式图标（当前为浅色主题时显示，点击切换到深色） -->
-              <span x-cloak x-show="!isDark" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full">
+              <span x-cloak x-show="!isDark" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors">
                 <th:block th:if="${theme.config.nav.theme_settings.light_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.light_icon)}">
                   <span th:utext="${theme.config.nav.theme_settings.light_icon}" class="block w-full h-full [&>svg]:w-full [&>svg]:h-full"></span>
                 </th:block>
@@ -120,7 +120,7 @@
                 </th:block>
               </span>
               <!-- 深色模式图标（当前为深色主题时显示，点击切换到浅色） -->
-              <span x-cloak x-show="isDark" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full">
+              <span x-cloak x-show="isDark" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors">
                 <th:block th:if="${theme.config.nav.theme_settings.dark_icon != null and !#strings.isEmpty(theme.config.nav.theme_settings.dark_icon)}">
                   <span th:utext="${theme.config.nav.theme_settings.dark_icon}" class="block w-full h-full [&>svg]:w-full [&>svg]:h-full"></span>
                 </th:block>
@@ -140,7 +140,7 @@
               <div th:if="${!#strings.equals(currentUser.name, 'anonymousUser')}"
                 class="dropdown dropdown-end dropdown-hover group/user">
                 <!-- 用户头像按钮 -->
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle border-0">
+                <div tabindex="0" role="button" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
                   <div class="avatar avatar-online">
                     <div class="w-8 rounded-full bg-base-200 ring-2 ring-primary ring-offset-base-100 ring-offset-1">
                       <!-- 用户头像 -->
@@ -215,14 +215,14 @@
 
               <!-- 未登录用户：显示登录按钮 -->
               <a th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}" href="/login"
-                class="btn btn-ghost btn-circle hover:bg-base-200/50 border-0" title="登录">
+                class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform" title="登录">
                 <!-- 自定义登录图标 -->
                 <th:block th:if="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}">
-                  <span th:utext="${theme.config.nav.right_settings.login_icon}" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full"></span>
+                  <span th:utext="${theme.config.nav.right_settings.login_icon}" class="w-5 h-5 [&>svg]:w-full [&>svg]:h-full text-base-content/60 hover:text-primary transition-colors"></span>
                 </th:block>
                 <!-- 默认登录图标 -->
                 <th:block th:unless="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}">
-                <span class="icon-[heroicons--user] w-5 h-5"></span>
+                <span class="icon-[heroicons--user] w-5 h-5 text-base-content/60 hover:text-primary transition-colors"></span>
                 </th:block>
               </a>
 
@@ -231,8 +231,8 @@
 
           <!-- 移动端菜单按钮 -->
           <div class="lg:hidden">
-            <label for="mobile-menu-drawer" class="btn btn-ghost btn-circle drawer-button border-0">
-              <span class="icon-[heroicons--bars-3] w-6 h-6"></span>
+            <label for="mobile-menu-drawer" class="w-10 h-10 rounded-full flex items-center justify-center drawer-button cursor-pointer hover:scale-110 transition-transform">
+              <span class="icon-[heroicons--bars-3] w-6 h-6 text-base-content/60 hover:text-primary transition-colors"></span>
             </label>
           </div>
 
