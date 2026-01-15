@@ -4,8 +4,8 @@
  * 参考：https://squareform.abthemes.online/
  */
 
-/* 引入公共文章内容样式 */
-@import '../../common/css/article-content.css';
+/* 引入 post.css 样式用于自定义内容区域 */
+@import '../post/post.css';
 
 /* ============================= 基础 - 浅色主题 ============================= */
 .about-squareform {

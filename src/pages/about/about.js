@@ -5,9 +5,6 @@
 
 import './about.css';
 
-// 导入公共文章内容处理脚本
-import { initArticleContent } from '../../common/js/article-content.js';
-
 (function(window, document) {
   'use strict';
   
@@ -501,9 +498,6 @@ import { initArticleContent } from '../../common/js/article-content.js';
     SF.initToolkitProgress();
     SF.initSmoothScroll();
     setTimeout(SF.initLocation, 500);
-    
-    // 初始化文章内容处理（图片懒加载、外部链接等）
-    initArticleContent();
   });
 
 })(window, document);

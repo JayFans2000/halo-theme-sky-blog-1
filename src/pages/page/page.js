@@ -6,11 +6,38 @@
 // 导入页面样式
 import './page.css';
 
-// 导入公共文章内容处理脚本
-import { initArticleContent } from '../../common/js/article-content.js';
-
 // 页面初始化
 document.addEventListener('DOMContentLoaded', () => {
-  // 使用公共的文章内容初始化（包含图片懒加载、外部链接、blur移除等）
-  initArticleContent();
+  initPageContent();
 });
+
+/**
+ * 初始化页面内容
+ */
+function initPageContent() {
+  const content = document.getElementById('page-content');
+  if (!content) return;
+
+  // 处理外部链接 - 添加 target="_blank"
+  const links = content.querySelectorAll('a[href^="http"]');
+  links.forEach((link) => {
+    if (!link.hostname.includes(window.location.hostname)) {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+
+  // 处理图片 - 添加懒加载
+  const images = content.querySelectorAll('img:not([loading])');
+  images.forEach((img) => {
+    img.setAttribute('loading', 'lazy');
+  });
+
+  // 移除内容中可能存在的内联 style 标签（如 blur 效果）
+  const inlineStyles = content.querySelectorAll('style');
+  inlineStyles.forEach((style) => {
+    if (style.textContent.includes('blur')) {
+      style.remove();
+    }
+  });
+}

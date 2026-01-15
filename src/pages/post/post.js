@@ -8,9 +8,6 @@
 // 导入文章页面特定样式
 import './post.css';
 
-// 导入公共文章内容处理脚本
-import { setupContentLazyLoad, initAdmonitionGlow } from '../../common/js/article-content.js';
-
 /**
  * 文章页 Alpine.js 组件
  * 使用 alpine:init 事件动态注册，避免加载顺序问题
@@ -997,13 +994,56 @@ document.addEventListener('alpine:init', () => {
     };
 
     /**
+     * 文章内容图片懒加载
+     * 跳过首屏前 N 张图片，后续图片添加 loading="lazy"
+     */
+    function setupContentLazyLoad() {
+        const content = document.getElementById('article-content');
+        if (!content) return;
+
+        const images = content.querySelectorAll('img:not([loading])');
+        const skipCount = 2; // 跳过前2张（首屏可能可见）
+
+        images.forEach((img, index) => {
+            if (index >= skipCount) {
+                img.setAttribute('loading', 'lazy');
+            }
+        });
+    }
+
+    /**
      * 页面加载完成后初始化
-     * 注意：setupContentLazyLoad 和 initAdmonitionGlow 已从公共模块导入
      */
     document.addEventListener('DOMContentLoaded', () => {
         pageManager.init();
         setupContentLazyLoad();
         initAdmonitionGlow();
     });
+
+    /**
+     * Admonition 鼠标跟随发光效果
+     */
+    function initAdmonitionGlow() {
+        const admonitions = document.querySelectorAll('#article-content .admonition');
+
+        admonitions.forEach(admonition => {
+            admonition.addEventListener('mouseenter', () => {
+                admonition.style.setProperty('--glow-opacity', '1');
+            });
+
+            admonition.addEventListener('mouseleave', () => {
+                admonition.style.setProperty('--glow-opacity', '0');
+            });
+
+            admonition.addEventListener('mousemove', (e) => {
+                const rect = admonition.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                admonition.style.setProperty('--glow-x', `${x}px`);
+                admonition.style.setProperty('--glow-y', `${y}px`);
+            });
+        });
+    }
 
 })();

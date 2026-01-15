@@ -97,25 +97,19 @@
             <!-- 左侧：作者信息 + 分享 -->
             <div class="flex items-center gap-4">
               <!-- 作者头像+信息 -->
-              <div th:if="${docInfo.doc.spec.owner}" 
-                   th:with="contributor = ${contributorFinder.getContributor(docInfo.doc.spec.owner)}"
-                   class="flex items-center gap-3">
-                <!-- 头像 -->
+              <div th:if="${docInfo.doc.spec.owner}" class="flex items-center gap-3">
+                <!-- 头像 - 使用项目图标或默认头像 -->
                 <div class="avatar">
                   <div class="w-10 h-10 rounded-full ring ring-primary/20 ring-offset-base-100 ring-offset-1">
-                    <img th:if="${contributor?.avatar}" 
-                         th:src="${contributor.avatar}" 
-                         th:alt="${contributor.displayName}" />
-                    <div th:unless="${contributor?.avatar}" 
-                         class="bg-primary/10 w-full h-full flex items-center justify-center">
+                    <img th:if="${project?.spec?.icon}" th:src="${project.spec.icon}" alt="作者头像" />
+                    <div th:unless="${project?.spec?.icon}" class="bg-primary/10 w-full h-full flex items-center justify-center">
                       <span class="icon-[heroicons--user] w-5 h-5 text-primary"></span>
                     </div>
                   </div>
                 </div>
                 <!-- 作者名+时间 -->
                 <div class="flex flex-col">
-                  <span class="text-sm font-medium text-base-content" 
-                        th:text="${contributor?.displayName ?: docInfo.doc.spec.owner}">作者名</span>
+                  <span class="text-sm font-medium text-base-content" th:text="${docInfo.doc.spec.owner}">作者名</span>
                   <div class="flex items-center gap-2 text-xs text-base-content/50">
                     <span th:if="${docInfo.doc.spec.updatedAt}" 
                           th:text="${'更新于 ' + #strings.substring(docInfo.doc.spec.updatedAt.toString(), 0, 10)}">
