@@ -4,7 +4,7 @@
 
 [![Halo](https://img.shields.io/badge/Halo-2.22.9+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1.0-orange)](https://github.com/sky121666/halo-theme-sky-blog-1/releases)
+[![Version](https://img.shields.io/badge/Version-2.1.1-orange)](https://github.com/sky121666/halo-theme-sky-blog-1/releases)
 
 ## 🌐 预览
 
@@ -60,8 +60,6 @@
 
 ## ✨ 功能特性
 
-## ✨ 功能特性
-
 | 功能 | 说明 |
 |------|------|
 | 🎨 35+ 主题 | DaisyUI 预设主题，可视化预览选择 |
@@ -78,6 +76,7 @@
 | 🧊 玻璃拟态 | 全局磨砂质感设计 |
 | 🏷️ 丰富短代码 | 提示块/折叠/标签页/时间轴等 |
 | 🔍 全局搜索 | 支持文章/页面/瞬间/分类搜索 |
+| 🎭 Iconify 图标 | 菜单/分类/标签支持自定义图标选择器 |
 
 ---
 

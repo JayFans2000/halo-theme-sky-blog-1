@@ -37,7 +37,11 @@
             <!-- 分类 -->
             <th:block th:if="${post.categories != null and !#lists.isEmpty(post.categories)}">
               <a th:each="category : ${post.categories}" th:href="@{${category.status.permalink}}"
+                th:with="categoryIcon = ${category.metadata.annotations?.get('icon')}"
                 class="badge badge-primary badge-sm gap-1 hover:opacity-80 transition-opacity cursor-pointer">
+                <th:block th:if="${categoryIcon != null and !categoryIcon.isEmpty()}">
+                  <span th:utext="${categoryIcon}" class="w-3 h-3 [&>svg]:w-3 [&>svg]:h-3"></span>
+                </th:block>
                 <span th:text="${category.spec.displayName}"></span>
               </a>
             </th:block>
@@ -45,8 +49,15 @@
             <!-- 标签 -->
             <th:block th:if="${post.tags != null and !#lists.isEmpty(post.tags)}">
               <a th:each="tag : ${post.tags}" th:href="@{${tag.status.permalink}}"
-                class="badge badge-sm bg-base-content/10 hover:bg-base-content/20 border-0 transition-colors cursor-pointer">
-                <span th:text="|#${tag.spec.displayName}|"></span>
+                th:with="tagIcon = ${tag.metadata.annotations?.get('icon')}"
+                class="badge badge-sm bg-base-content/10 hover:bg-base-content/20 border-0 transition-colors cursor-pointer gap-1">
+                <th:block th:if="${tagIcon != null and !tagIcon.isEmpty()}">
+                  <span th:utext="${tagIcon}" class="w-3 h-3 [&>svg]:w-3 [&>svg]:h-3"></span>
+                </th:block>
+                <th:block th:if="${tagIcon == null or tagIcon.isEmpty()}">
+                  <span>#</span>
+                </th:block>
+                <span th:text="${tag.spec.displayName}"></span>
               </a>
             </th:block>
           </div>

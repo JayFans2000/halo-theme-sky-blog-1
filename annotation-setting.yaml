@@ -1,0 +1,53 @@
+
+
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: theme-sky-blog-menuitem-icon
+spec:
+  targetRef:
+    group: ""
+    kind: MenuItem
+  formSchema:
+    - $formkit: "iconify"
+      name: "icon"
+      label: "菜单图标"
+      help: "填入完整的 SVG 代码，将显示在导航菜单和悬浮控制栏中"
+      format: svg
+      value-only: true
+
+---
+
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: theme-sky-blog-category-icon
+spec:
+  targetRef:
+    group: content.halo.run
+    kind: Category
+  formSchema:
+    - $formkit: "iconify"
+      name: "icon"
+      label: "分类图标"
+      help: "选择一个图标代表此分类"
+      format: svg
+      value-only: true
+
+---
+
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: theme-sky-blog-tag-icon
+spec:
+  targetRef:
+    group: content.halo.run
+    kind: Tag
+  formSchema:
+    - $formkit: "iconify"
+      name: "icon"
+      label: "标签图标"
+      help: "选择一个图标代表此标签"
+      format: svg
+      value-only: true
