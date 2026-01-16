@@ -5,6 +5,9 @@
 
 import './about.css';
 
+// 导入公共文章内容脚本（CSS 已在 about.css 中导入）
+import '../../static/js/article-content.js';
+
 (function(window, document) {
   'use strict';
   

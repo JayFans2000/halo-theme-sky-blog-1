@@ -58,9 +58,9 @@
   <!-- 目录抽屉 -->
   <th:block th:replace="~{modules/post/floating-dock :: tocDrawer}" />
 
-  <!-- JavaScript 文件 -->
-  <script th:src="@{/assets/js/post.js?v={version}(version=${theme.spec.version})}"></script>
-  <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
+  <!-- JavaScript 文件 - 使用 ES Module -->
+  <script type="module" th:src="@{/assets/js/post.js?v={version}(version=${theme.spec.version})}"></script>
+  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
 </body>
 
 </html>

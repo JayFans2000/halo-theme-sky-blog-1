@@ -69,8 +69,8 @@
 
   <!-- JavaScript -->
   <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
-  <!-- 文档页专用脚本 -->
-  <script th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"></script>
+  <!-- 文档页专用脚本 - 使用 ES Module -->
+  <script type="module" th:src="@{/assets/js/doc.js?v={version}(version=${theme.spec.version})}"></script>
 
   <!-- 插件脚本（需要在 body 后加载） -->
   <th:block th:if="${scripts != null}">

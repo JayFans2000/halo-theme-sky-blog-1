@@ -5,28 +5,13 @@
 
 import './doc.css';
 
-// 图片懒加载与渐显
-function initLazyLoad() {
-  const images = document.querySelectorAll('#doc-content img');
-  if (!images.length) return;
+// 导入公共文章内容脚本
+import '../../static/js/article-content.js';
 
-  images.forEach((img) => {
-    // 设置原生懒加载
-    if (!img.loading) {
-      img.loading = 'lazy';
-      img.decoding = 'async';
-    }
-
-    // 加载完成渐显
-    if (img.complete) {
-      img.classList.add('loaded');
-    } else {
-      img.addEventListener('load', () => img.classList.add('loaded'), {
-        once: true,
-      });
-    }
-  });
-}
+/**
+ * 图片懒加载由 article-content.js 统一处理
+ * 这里不再重复实现
+ */
 
 /**
  * 构建动态目录树结构 - 基于相对层级
@@ -115,7 +100,7 @@ function createDynamicTocHTML(tocTree) {
 function initTOC() {
   const tocNav = document.getElementById('toc-nav');
   const tocCard = document.getElementById('toc-card');
-  const content = document.getElementById('doc-content');
+  const content = document.getElementById('article-content');
 
   if (!tocNav || !content) return;
 
@@ -345,7 +330,7 @@ function bindTocDrawerEvents(container) {
 
 // 初始化
 function init() {
-  initLazyLoad();
+  // initLazyLoad(); - 已由 article-content.js 统一处理
   initTOC();
   initDropdowns();
   initSidebarFooterCollision();

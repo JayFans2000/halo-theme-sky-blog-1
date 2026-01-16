@@ -2,10 +2,12 @@
  * 关于页面 - Squareform 风格（简化版）
  * 视觉还原但不依赖外部动画库
  * 参考：https://squareform.abthemes.online/
+ * 
+ * 注意：#article-content 样式已通过 @import 导入
  */
 
-/* 引入 post.css 样式用于自定义内容区域 */
-@import '../post/post.css';
+/* 导入公共文章内容样式 */
+@import '../../static/css/article-content.css';
 
 /* ============================= 基础 - 浅色主题 ============================= */
 .about-squareform {
@@ -1038,7 +1040,7 @@
 }
 
 /* ============================= 文章内容样式 ============================= */
-/* 注意：自定义内容区域使用 #article-content 继承 post.css 的荧光笔标题样式 */
+/* 注意：自定义内容区域使用 #article-content，样式从静态 article-content.css 条件加载 */
 /* .sf-prose 类仅用于额外的微调 */
 
 .sf-prose {
@@ -1049,7 +1051,7 @@
 
 /* 自定义内容区域的 #article-content 微调 */
 .sf-content-card #article-content {
-  /* 移除 post.css 中的负 margin */
+  /* 确保在 Squareform 风格下正确显示 */
   margin: 0;
   padding: 0;
 }

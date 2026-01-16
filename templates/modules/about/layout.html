@@ -54,9 +54,9 @@
   <!-- 悬浮 Dock 控制栏 -->
   <th:block th:replace="~{modules/floating-dock :: dockWithConfig(${theme.config.about_settings}, 'comment')}" />
 
-  <!-- JavaScript -->
-  <script th:src="@{/assets/js/about.js?v={version}(version=${theme.spec.version})}"></script>
-  <script th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}" defer></script>
+  <!-- JavaScript - 使用 ES Module -->
+  <script type="module" th:src="@{/assets/js/about.js?v={version}(version=${theme.spec.version})}"></script>
+  <script type="module" th:src="@{/assets/js/main.js?v={version}(version=${theme.spec.version})}"></script>
 </body>
 
 </html>

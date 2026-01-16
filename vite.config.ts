@@ -70,7 +70,9 @@ export default defineConfig({
     rollupOptions: {
       input: generateEntries(),
       output: {
+        format: 'es', // 使用 ES Module 格式，支持代码分割
         entryFileNames: 'js/[name].js',
+        chunkFileNames: 'js/chunks/[name]-[hash].js', // 共享 chunk 的命名
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith(".css")) {
             const name = assetInfo.name.replace('.css', '');
@@ -81,7 +83,6 @@ export default defineConfig({
           }
           return "assets/[name][extname]";
         },
-        manualChunks: undefined,
       },
     },
     assetsInlineLimit: 0,
