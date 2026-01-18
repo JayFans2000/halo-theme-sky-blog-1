@@ -40,8 +40,17 @@
                   <div class="dropdown dropdown-bottom dropdown-center dropdown-hover group/dropdown">
                     <!-- 父级菜单项 -->
                     <a tabindex="0" role="button"
-                      class="nav-menu-item flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-base-content/80 hover:text-base-content transition-colors duration-200"
-                      th:text="${menuItem.status.displayName}">
+                      class="nav-menu-item flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-base-content/80 hover:text-base-content transition-colors duration-200">
+                      <!-- 菜单图标（如果有） -->
+                      <span
+                        th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}"
+                        th:utext="${menuItem.metadata.annotations['icon']}" class="w-4 h-4 nav-icon-svg flex-shrink-0">
+                      </span>
+                      <!-- 菜单文字 -->
+                      <span th:text="${menuItem.status.displayName}"></span>
+                      <!-- 下拉箭头 -->
+                      <span
+                        class="icon-[heroicons--chevron-down] w-3 h-3 text-base-content/40 transition-transform group-hover/dropdown:rotate-180"></span>
                     </a>
                     <!-- 子菜单下拉列表 - before 伪元素创建桥接区域 -->
                     <ul tabindex="0"
@@ -232,7 +241,7 @@
               <!-- 未登录用户：显示登录按钮 -->
               <a th:unless="${!#strings.equals(currentUser.name, 'anonymousUser')}" href="/login"
                 class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-                title="登录">
+                title="登录" aria-label="登录">
                 <!-- 自定义登录图标 -->
                 <th:block
                   th:if="${theme.config.nav.right_settings.login_icon != null and !#strings.isEmpty(theme.config.nav.right_settings.login_icon)}">

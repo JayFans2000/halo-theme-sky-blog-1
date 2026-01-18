@@ -60,7 +60,7 @@
             <!-- 单图 -->
             <th:block th:if="${#lists.size(content.medium) == 1}">
               <th:block th:each="medium : ${content.medium}">
-                <img th:if="${medium.type.name == 'PHOTO'}" th:src="${medium.url}"
+                <img th:if="${medium.type.name == 'PHOTO'}" th:src="${medium.url}" alt="瞬间图片"
                   class="rounded-xl max-h-72 object-cover cursor-pointer" loading="lazy" />
                 <video th:if="${medium.type.name == 'VIDEO'}" th:src="${medium.url}" controls preload="metadata"
                   class="rounded-xl max-h-72 w-full">
@@ -77,7 +77,7 @@
               <th:block th:each="medium, stat : ${content.medium}">
                 <div th:if="${medium.type.name == 'PHOTO' && stat.index < 9}"
                   class="aspect-square relative bg-base-200 overflow-hidden cursor-pointer">
-                  <img th:src="${medium.url}"
+                  <img th:src="${medium.url}" alt="瞬间图片"
                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     loading="lazy" />
                   <div th:if="${stat.index == 8 && #lists.size(content.medium) > 9}"

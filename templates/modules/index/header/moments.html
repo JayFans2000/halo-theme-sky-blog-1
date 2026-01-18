@@ -68,7 +68,8 @@
                         <a href="/moments" class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 
                                rounded-full text-xs md:text-sm leading-4 text-white hover:text-primary-200 
                                transition-all duration-300 ease-out hover:scale-105"
-                            th:title="${#authorization.expression('isAuthenticated()') ? '发布瞬间' : '查看全部瞬间'}">
+                            th:title="${#authorization.expression('isAuthenticated()') ? '发布瞬间' : '查看全部瞬间'}"
+                            aria-label="查看全部瞬间">
                             <span th:if="${#authorization.expression('isAuthenticated()')}"
                                 class="icon-[material-symbols--add] w-3.5 h-3.5 md:w-4 md:h-4 mr-1"></span>
                             <span th:if="${#authorization.expression('isAuthenticated()')}">发布</span>
@@ -113,7 +114,7 @@
                                         <a th:href="@{/moments/{name}(name=${moment.metadata.name})}"
                                             class="p-1 md:p-1.5 rounded-full bg-white/5 border border-white/10 
                                                hover:bg-white/10 hover:border-primary/30 hover:scale-110
-                                               transition-all duration-300 ease-out flex items-center group moment-link-btn" title="查看详情">
+                                               transition-all duration-300 ease-out flex items-center group moment-link-btn" title="查看详情" aria-label="查看瞬间详情">
                                             <span class="icon-[material-symbols--link] w-3 h-3 md:w-3.5 md:h-3.5 text-white/60 
                                                    group-hover:text-primary transition-all duration-200"></span>
                                         </a>

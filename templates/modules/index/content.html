@@ -645,7 +645,7 @@
                     <!-- 顶部元信息 -->
                     <div class="flex items-center gap-3 mb-4">
                       <div class="relative">
-                        <img th:src="${spec.logo}" alt=""
+                        <img th:src="${spec.logo}" th:alt="${spec.author}"
                           class="w-10 h-10 rounded-xl object-cover ring-2 ring-base-content/10 group-hover:ring-primary/50 transition-all"
                           loading="lazy" />
                         <div
@@ -701,7 +701,7 @@
                     <div class="flex items-start gap-4">
                       <!-- 左侧头像 -->
                       <a th:href="${spec.authorUrl}" target="_blank" rel="noopener" class="shrink-0 relative top-1">
-                        <img th:src="${spec.logo}" alt="avatar"
+                        <img th:src="${spec.logo}" th:alt="|${spec.author} 头像|"
                           class="w-12 h-12 rounded-xl object-cover ring-2 ring-base-content/10 group-hover:ring-primary/50 transition-all"
                           loading="lazy" />
                       </a>
@@ -773,7 +773,8 @@
                         <div class="relative">
                           <a th:href="@{/authors/{name}(name=${moment.owner.name})}" class="block group/avatar"
                             th:if="${moment.owner != null}">
-                            <img th:if="${moment.owner.avatar != null}" th:src="${moment.owner.avatar}" alt=""
+                            <img th:if="${moment.owner.avatar != null}" th:src="${moment.owner.avatar}"
+                              th:alt="|${moment.owner.displayName} 头像|"
                               class="w-10 h-10 rounded-xl object-cover ring-2 ring-base-content/10 group-hover/avatar:ring-primary/50 transition-all"
                               loading="lazy" />
                             <div th:unless="${moment.owner.avatar != null}"
@@ -815,7 +816,7 @@
                         <th:block th:each="medium, mStat : ${content.medium}" th:if="${mStat.index < 4}">
                           <div th:if="${medium.type.name == 'PHOTO'}"
                             class="relative aspect-square bg-base-200 overflow-hidden">
-                            <img th:src="${medium.url}" class="w-full h-full object-cover" loading="lazy" />
+                            <img th:src="${medium.url}" alt="瞬间图片" class="w-full h-full object-cover" loading="lazy" />
                             <div th:if="${mStat.index == 3 and #lists.size(content.medium) > 4}"
                               class="absolute inset-0 bg-black/50 flex items-center justify-center">
                               <span class="text-white font-semibold"
@@ -863,7 +864,8 @@
                       <!-- 头部 -->
                       <div class="flex items-center gap-3 mb-4">
                         <div class="relative shrink-0">
-                          <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner.avatar}" alt=""
+                          <img th:if="${moment.owner?.avatar != null}" th:src="${moment.owner.avatar}"
+                            th:alt="|${moment.owner.displayName} 头像|"
                             class="w-12 h-12 rounded-xl object-cover ring-2 ring-base-content/10 group-hover:ring-primary/50 transition-all"
                             loading="lazy" />
                           <div th:unless="${moment.owner?.avatar != null}"

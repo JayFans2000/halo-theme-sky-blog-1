@@ -37,7 +37,7 @@
               class="absolute -inset-2 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 rounded-xl blur-lg opacity-0 group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500">
             </div>
 
-            <img th:src="${spec.logo}" alt="" class="relative w-12 h-12 rounded-xl object-cover ring-1 ring-base-content/10 
+            <img th:src="${spec.logo}" th:alt="|${spec.author} 头像|" class="relative w-12 h-12 rounded-xl object-cover ring-1 ring-base-content/10 
                         group-hover:ring-primary/30 motion-safe:transition-all motion-safe:duration-300"
               loading="lazy" />
           </div>
@@ -90,7 +90,7 @@
               <div
                 class="absolute -inset-1.5 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 rounded-xl blur-md opacity-0 group-hover:opacity-70 motion-safe:transition-opacity motion-safe:duration-500">
               </div>
-              <img th:src="${spec.logo}" alt="" class="relative w-10 h-10 rounded-xl object-cover ring-1 ring-base-content/10 
+              <img th:src="${spec.logo}" th:alt="|${spec.author} 头像|" class="relative w-10 h-10 rounded-xl object-cover ring-1 ring-base-content/10 
                           group-hover:ring-primary/30 motion-safe:transition-all" loading="lazy" />
             </div>
             <span class="text-sm font-bold text-base-content truncate" th:text="${spec.author}">作者</span>

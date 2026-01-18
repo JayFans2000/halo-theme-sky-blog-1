@@ -4,7 +4,6 @@
 
 [![Halo](https://img.shields.io/badge/Halo-2.22.9+-blue)](https://halo.run)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1.1-orange)](https://github.com/sky121666/halo-theme-sky-blog-1/releases)
 
 ## 🌐 预览
 
@@ -57,7 +56,6 @@
 </div>
 
 ---
-
 ## ✨ 功能特性
 
 | 功能 | 说明 |
