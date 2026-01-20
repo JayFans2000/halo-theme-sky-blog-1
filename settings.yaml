@@ -2289,9 +2289,6 @@ spec:
           label: 内容显示
           value:
             page_size: 10
-            show_moments: true
-            moments_count: 6
-            default_tab: posts
           children:
             - $formkit: number
               name: page_size
@@ -2301,33 +2298,6 @@ spec:
               min: 5
               max: 50
               step: 5
-            - $formkit: switch
-              id: author_show_moments
-              name: show_moments
-              label: 显示瞬间
-              help: 在作者页面显示该作者发布的瞬间
-              value: true
-            - $formkit: number
-              name: moments_count
-              if: $get(author_show_moments).value
-              label: 瞬间显示数量
-              help: 设置瞬间区块最多显示的条数
-              value: 6
-              min: 3
-              max: 20
-            - $formkit: toggle
-              name: default_tab
-              label: 默认显示
-              help: 选择作者页默认显示的内容标签
-              render-type: text
-              size: 80
-              gap: 10
-              value: posts
-              options:
-                - label: 文章
-                  value: posts
-                - label: 瞬间
-                  value: moments
         # 悬浮控制栏设置
         - $formkit: group
           name: floating_dock

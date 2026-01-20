@@ -176,30 +176,24 @@ function createShareModal() {
     handleShare(platformId) {
       const platform = this.activeShareItems.find(item => item?.id === platformId);
       if (!platform) {
-        console.log('未找到平台:', platformId);
         return;
       }
 
-      console.log('处理分享:', platformId, platform.type);
 
       if (platform.type === 'native') {
         // 原生分享必须在用户手势中直接调用
         if (navigator.share) {
-          console.log('调用 navigator.share:', { title: this.title, url: this.permalink });
           const self = this;
           navigator.share({
             title: this.title,
             url: this.permalink
           }).then(() => {
-            console.log('分享成功');
             self.closeModal();
           }).catch((err) => {
-            console.log('分享错误:', err.name, err.message);
             self.closeModal();
           });
         } else {
           // 不支持原生分享（非 HTTPS 或浏览器不支持）
-          console.log('浏览器不支持 navigator.share，已复制链接');
           this.copyUrl();
           // 不关闭弹窗，让用户看到"已复制"提示
         }
@@ -627,7 +621,6 @@ function welcomeWeatherCard() {
 
     // 从缓存加载或请求新数据
     async loadWeather() {
-      console.log('[天气卡片] 开始加载...');
 
       // 1. 优先使用缓存
       const cached = this.getCache();
@@ -651,7 +644,6 @@ function welcomeWeatherCard() {
 
     // 通过 IP 获取城市名，然后查询天气
     async fetchWeatherByIP() {
-      console.log('[天气卡片] 开始 IP 定位...');
 
       // Step 1: 获取城市名
       const locationData = await this.getLocationFromIP();
@@ -712,22 +704,18 @@ function welcomeWeatherCard() {
 
         const rawCity = data.city || data.addr || '';
         const city = rawCity.replace('市', '').trim() || '未知';
-        console.log('[天气卡片] Pconline 定位成功:', city);
 
         return { latitude: null, longitude: null, city };
       } catch (e) {
-        console.warn('[天气卡片] Pconline 失败, 降级到 ipapi.co:', e.message);
 
         // 2. 失败降级到 ipapi.co (国外/通用)
         try {
           const ipRes = await fetch('https://api.ipify.cn/?format=json');
           const ipData = await ipRes.json();
-          console.log('[天气卡片] 获取 IP:', ipData.ip);
 
           const locationRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
           const locationData = await locationRes.json();
           const city = this.translateCity(locationData.city || locationData.region || '未知');
-          console.log('[天气卡片] ipapi.co 定位成功:', city);
 
           return { latitude: locationData.latitude, longitude: locationData.longitude, city };
         } catch (e2) {
@@ -805,7 +793,6 @@ function welcomeWeatherCard() {
         if (!res.ok) throw new Error(`Seniverse API error: ${res.status}`);
 
         const data = await res.json();
-        console.log('[天气卡片] 心知天气响应:', data);
 
         const now = data.results?.[0]?.now;
         const location = data.results?.[0]?.location;
@@ -841,7 +828,6 @@ function welcomeWeatherCard() {
       // 2. 降级到 wttr.in
       try {
         const url = `https://wttr.in/${encodeURIComponent(cityName)}?format=j1&lang=zh`;
-        console.log('[天气卡片] 请求 wttr.in:', url);
 
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         if (!res.ok) throw new Error('wttr.in error');
@@ -891,7 +877,6 @@ function welcomeWeatherCard() {
         this.weather.wind = parseFloat(current.windspeedKmph || 0);
         this.weather.feels_like = parseFloat(current.FeelsLikeC || this.weather.temp);
 
-        console.log('[天气卡片] 额外数据获取成功: 湿度', this.weather.humidity + '%', '风速', this.weather.wind + 'km/h');
 
         // 更新缓存
         this.setCache({

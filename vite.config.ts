@@ -95,7 +95,7 @@ function generateEntries() {
 export default defineConfig({
   build: {
     outDir: "templates/assets",
-    minify: 'terser',
+    minify: 'esbuild',  // esbuild 压缩更快且不会产生变量名冲突
     rollupOptions: {
       input: generateEntries(),
       output: {

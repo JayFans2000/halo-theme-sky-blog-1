@@ -1,1 +1,1 @@
-import"./chunks/article-content-CHvYTPdu.js";document.addEventListener("DOMContentLoaded",()=>{console.log("Page content initialized")});
+import"./chunks/article-content-CjRqbsg3.js";document.addEventListener("DOMContentLoaded",()=>{n()});function n(){console.log("Page content initialized")}
