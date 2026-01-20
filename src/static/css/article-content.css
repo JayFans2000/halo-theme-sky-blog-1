@@ -1461,3 +1461,76 @@ halo-comment::part(comment-list),
     color: #999;
   }
 }
+
+/* ===================================================
+ * 29. 投票组件 CSS 变量适配
+ * 使用 daisyUI 语义化颜色，自动适配所有主题
+ * ==================================================*/
+
+
+:root {
+    /* ========== 文本颜色 - 参考目录层次 ========== */
+    /* 标题：完整 base-content */
+    --vote-text-title-color: var(--color-base-content);
+    /* 描述：60% 透明度，与目录默认文字一致 */
+    --vote-text-description-color: color-mix(in srgb, var(--color-base-content) 60%, transparent);
+    /* 选中状态：primary 色 */
+    --vote-text-selected-color: var(--color-primary);
+    /* 已投票：与选中状态一致 */
+    --vote-text-voted-color: var(--color-primary);
+    /* 错误：error 色 */
+    --vote-text-error-color: var(--color-error);
+    /* 按钮文字 */
+    --vote-text-button-color: var(--color-primary-content);
+    /* 图标：50% 透明度 */
+    --vote-icon-color: color-mix(in srgb, var(--color-base-content) 50%, transparent);
+
+    /* ========== 背景颜色 - 参考目录层次 ========== */
+    /* 主容器背景 - 使用 base-200 作为卡片底色 */
+    --vote-background-primary-color: var(--color-base-200);
+    /* 选项默认背景 - base-100，比容器浅，形成凸起效果 */
+    --vote-background-secondary-color: var(--color-base-100);
+    /* 选项悬停背景 - 10% primary */
+    --vote-background-tertiary-color: color-mix(in srgb, var(--color-primary) 10%, var(--color-base-100));
+    /* 已选择背景 - 18% primary，比悬停稍深 */
+    --vote-background-selected-color: color-mix(in srgb, var(--color-primary) 18%, var(--color-base-100));
+    /* 已投票背景 - 与选中状态一致 */
+    --vote-background-voted-color: color-mix(in srgb, var(--color-primary) 18%, var(--color-base-100));
+    /* 进度条默认背景 */
+    --vote-background-progress-color: var(--color-base-300);
+    /* 进度条已投票背景 - 与选中背景一致 */
+    --vote-background-progress-voted-color: color-mix(in srgb, var(--color-primary) 18%, var(--color-base-100));
+    /* 提交按钮背景 */
+    --vote-background-button-color: var(--color-primary);
+    /* 提交按钮悬停背景 */
+    --vote-background-button-hover-color: color-mix(in srgb, var(--color-primary) 85%, var(--color-base-content));
+    /* 信息标签背景 */
+    --vote-background-tag-color: color-mix(in srgb, var(--color-base-content) 10%, transparent);
+    /* 已投票标签背景 */
+    --vote-background-voted-tag-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
+
+    /* ========== 边框颜色 ========== */
+    /* 默认边框 - 15% base-content */
+    --vote-border-color: color-mix(in srgb, var(--color-base-content) 15%, transparent);
+    /* 选中边框 - primary */
+    --vote-border-selected-color: color-mix(in srgb, var(--color-primary) 18%, var(--color-base-100));
+    /* 已投票边框 - 与选中状态一致 */
+    --vote-border-voted-color: color-mix(in srgb, var(--color-primary) 18%, var(--color-base-100));
+    /* ========== 阴影 ========== */
+    --vote-shadow: 
+        0 2px 8px -2px color-mix(in srgb, var(--color-base-content) 12%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--color-base-content) 6%, transparent);
+
+    /* ========== PK 模式 ========== */
+    --vote-pk-option1-bg: var(--color-primary);
+    --vote-pk-option2-bg: var(--color-secondary);
+    --vote-pk-progress-text-color: var(--color-primary-content);
+}
+
+/* 深色模式微调 */
+[data-color-scheme="dark"] {
+    --vote-border-color: color-mix(in srgb, var(--color-base-content) 20%, transparent);
+    --vote-shadow: 
+        0 2px 12px -2px rgba(0, 0, 0, 0.4),
+        0 0 0 1px color-mix(in srgb, var(--color-base-content) 10%, transparent);
+}
