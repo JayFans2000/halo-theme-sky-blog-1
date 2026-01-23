@@ -308,9 +308,16 @@
                   <div
                     class="collapse-title min-h-0 flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-base-content/5 cursor-pointer"
                     @click="open = !open">
-                    <span class="icon-[heroicons--folder] w-5 h-5 text-base-content/70"></span>
+                    <!-- 菜单图标（如果有自定义图标） -->
+                    <th:block th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                      <span th:utext="${menuItem.metadata.annotations['icon']}" class="w-5 h-5 nav-icon-svg flex-shrink-0 text-base-content/70"></span>
+                    </th:block>
+                    <!-- 默认图标 -->
+                    <th:block th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                      <span class="icon-[heroicons--folder] w-5 h-5 text-base-content/70"></span>
+                    </th:block>
                     <span class="text-sm text-base-content" th:text="${menuItem.status.displayName}">菜单项</span>
-                    <i class="icon-[heroicons--chevron-down] w-4 h-4 text-base-content/40 transition-transform duration-200"
+                    <i class="icon-[heroicons--chevron-down] w-4 h-4 text-base-content/40 transition-transform duration-200 ml-auto"
                       :class="{ 'rotate-180': open }"></i>
                   </div>
                   <div class="collapse-content p-0">
@@ -331,7 +338,14 @@
                 <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}"
                   class="flex items-center gap-3 px-3 py-2.5 text-sm text-base-content rounded-md hover:bg-base-content/5 drawer-menu-item"
                   th:style="'--item-index: ' + ${iterStat.index + 1}">
-                  <span class="icon-[heroicons--home] w-5 h-5 text-base-content/70"></span>
+                  <!-- 菜单图标（如果有自定义图标） -->
+                  <th:block th:if="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                    <span th:utext="${menuItem.metadata.annotations['icon']}" class="w-5 h-5 nav-icon-svg flex-shrink-0 text-base-content/70"></span>
+                  </th:block>
+                  <!-- 默认图标 -->
+                  <th:block th:unless="${menuItem.metadata?.annotations != null &amp;&amp; menuItem.metadata.annotations['icon'] != null}">
+                    <span class="icon-[heroicons--link] w-5 h-5 text-base-content/70"></span>
+                  </th:block>
                   <span th:text="${menuItem.status.displayName}"></span>
                 </a>
               </th:block>
