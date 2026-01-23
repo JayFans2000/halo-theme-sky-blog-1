@@ -3423,3 +3423,22 @@ spec:
                   value: "随时随地访问您的创作"
 
 
+    - group: bangumi_settings
+      label: 追番页面
+      formSchema:
+        - $formkit: group
+          name: plugin_tips
+          label: 📦 插件配置提示
+          help: 需要安装「Bilibili 追番」插件并配置 B 站 UID
+          children: []
+        - $formkit: text
+          name: page_title
+          label: 页面标题
+          value: "追番列表"
+          placeholder: "追番页面的标题"
+        - $formkit: textarea
+          name: page_description
+          label: 页面描述
+          value: "记录我的二次元之旅"
+          rows: 2
+          placeholder: "追番页面的描述"
