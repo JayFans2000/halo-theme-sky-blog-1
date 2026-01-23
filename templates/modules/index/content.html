@@ -3,7 +3,6 @@
   th:with="githubUsername = ${theme.config.about_settings.github.username},
                    profile = ${theme.config.about_settings.profile},
                    indexCfg = ${theme.config.index},
-                   sidebarCfg = ${indexCfg.sidebar_settings},
                    contentSettings = ${indexCfg.content_settings},
                    postSettings = ${indexCfg.post_settings},
                    friendsSettings = ${indexCfg.friends_settings},
@@ -12,7 +11,7 @@
                    hasMomentsPlugin = ${pluginFinder.available('PluginMoments')},
                    showFriendsTab = ${hasFriendsPlugin and friendsSettings.show_friends_tab != false},
                    showMomentsTab = ${hasMomentsPlugin and momentsSettings.show_moments_tab != false},
-                   showSidebar = ${sidebarCfg.show_sidebar != false},
+                   showSidebar = ${indexCfg.show_sidebar != false},
                    showHeatmap = ${contentSettings.show_heatmap != false},
                    heatmapType = ${contentSettings.heatmap_type ?: 'github'},
                    tabStyle = ${contentSettings.tab_style ?: 'chips'},
@@ -23,8 +22,8 @@
                    momentsCount = ${momentsSettings.moments_count ?: 6},
                    momentsListStyle = ${momentsSettings.list_style ?: 'two_columns'},
                    globalSidebarCfg = ${theme.config.general.sidebar_settings},
-                   useCustomSidebar = ${sidebarCfg.enable_custom_sidebar == true},
-                   sidebarPosition = ${useCustomSidebar ? (sidebarCfg.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+                   useCustomSidebar = ${indexCfg.enable_custom_sidebar == true},
+                   sidebarPosition = ${useCustomSidebar ? (indexCfg.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
 
   <div
     th:class="${theme.config.index.header_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
@@ -955,7 +954,7 @@
       <!-- 右侧：侧边栏 -->
       <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block sticky top-20 self-start">
         <!-- 动态小工具 -->
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${indexCfg})}" />
       </aside>
     </div>
 

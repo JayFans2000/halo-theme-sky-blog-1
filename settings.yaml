@@ -1209,66 +1209,54 @@ spec:
               label: 瞬间标题
               help: 瞬间说说模块的标题文字
               value: "瞬间"
-        # 侧边栏设置
-        - $formkit: group
-          name: sidebar_settings
-          label: 侧边栏设置
-          value:
-            show_sidebar: true
-            enable_custom_sidebar: false
-            sidebar_position: right
-            enabled_widgets:
-              - welcome_card
-              - author_card
-              - blog_stats
-              - recent_posts
-          children:
-            - $formkit: switch
-              id: index_show_sidebar
-              name: show_sidebar
-              label: 显示侧边栏
-              help: 是否在首页显示侧边栏
-              value: true
-            - $formkit: switch
-              id: index_enable_custom_sidebar
-              name: enable_custom_sidebar
-              if: $get(index_show_sidebar).value
-              label: 定制侧边栏
-              help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
-              value: false
-            - $formkit: toggle
-              name: sidebar_position
-              if: $get(index_enable_custom_sidebar).value
-              label: 侧边栏位置
-              render-type: text
-              size: 80
-              gap: 10
+        # 侧边栏设置 - 扁平结构（和分类页面一致）
+        - $formkit: switch
+          id: index_show_sidebar
+          name: show_sidebar
+          label: 显示侧边栏
+          help: 是否在首页显示侧边栏
+          value: true
+        - $formkit: switch
+          id: index_enable_custom_sidebar
+          name: enable_custom_sidebar
+          if: $get(index_show_sidebar).value
+          label: 定制侧边栏
+          help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
+          value: false
+        - $formkit: toggle
+          name: sidebar_position
+          if: $get(index_enable_custom_sidebar).value
+          label: 侧边栏位置
+          render-type: text
+          size: 80
+          gap: 10
+          value: right
+          options:
+            - label: 左侧
+              value: left
+            - label: 右侧
               value: right
-              options:
-                - label: 左侧
-                  value: left
-                - label: 右侧
-                  value: right
-            - $formkit: array
-              name: sidebar_widgets
-              if: $get(index_enable_custom_sidebar).value
-              label: 小工具列表
-              addLabel: 添加小工具
-              min: 0
-              max: 10
-              itemLabels:
-                - type: text
-                  label: $value.widget
-              value:
-                - widget: welcome_card
-                - widget: author_card
-                - widget: blog_stats
-                - widget: recent_posts
-              children:
-                - $formkit: select
-                  name: widget
-                  label: 小工具类型
-                  options: *widget_options
+        - $formkit: array
+          name: sidebar_widgets
+          if: $get(index_enable_custom_sidebar).value
+          label: 小工具列表
+          addLabel: 添加小工具
+          min: 0
+          max: 10
+          itemLabels:
+            - type: text
+              label: $value.widget
+          value:
+            - widget: welcome_card
+            - widget: author_card
+            - widget: steam_card
+            - widget: blog_stats
+            - widget: recent_posts
+          children:
+            - $formkit: select
+              name: widget
+              label: 小工具类型
+              options: *widget_options
         # 内容设置
         - $formkit: group
           name: content_settings
