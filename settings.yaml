@@ -861,30 +861,30 @@ spec:
     - group: index
       label: 首页
       formSchema:
-        - $formkit: group
-          name: header_settings
-          label: 首页头部区域
-          value:
-            enable_header: true
-          children:
-            - $formkit: switch
-              id: enable_header
-              name: enable_header
-              label: 启用首页头部
-              help: 关闭后将隐藏整个首页头部区域（包含背景、标题、副标题、瞬间、过渡动画）
-              value: true
+        # 头部背景设置（包含总开关）
         - $formkit: group
           name: background_settings
           label: 头部背景设置
-          if: $get(enable_header).value
           value:
+            enable_header: true
             background_type: effect
             background_image: "https://www.dmoe.cc/random.php"
             effect_style: starry-sky
+            light_scheme: black
+            light_custom_color: "#000000"
+            dark_scheme: black
+            dark_custom_color: "#000000"
           children:
+            - $formkit: switch
+              id: index_enable_header
+              name: enable_header
+              label: 启用首页头部
+              help: 总开关，控制：头部背景、主标题、副标题、底部过渡、瞬间说说
+              value: true
             - $formkit: toggle
               id: background_type
               name: background_type
+              if: $get(index_enable_header).value
               label: 背景类型
               help: 选择首页头部背景的显示方式
               render-type: text
@@ -899,7 +899,7 @@ spec:
             - $formkit: attachment
               name: background_image
               key: background_image_field
-              if: $get(background_type).value === 'image'
+              if: $get(index_enable_header).value && $get(background_type).value === 'image'
               label: 背景媒体（上传或输入地址）
               help: 上传图片/视频或直接输入 URL；附件控件兼容外链路径 https://www.dmoe.cc/random.php
               accepts:
@@ -913,7 +913,7 @@ spec:
             - $formkit: toggle
               name: effect_style
               key: effect_style_field
-              if: $get(background_type).value === 'effect'
+              if: $get(index_enable_header).value && $get(background_type).value === 'effect'
               label: 特效样式
               help: 选择 CSS 特效的视觉风格，支持自动适配主题色
               render-type: text
@@ -929,19 +929,11 @@ spec:
                   value: meteor-shower
                 - label: 深邃星空
                   value: starry-sky
-        - $formkit: group
-          name: overlay_settings
-          label: 蒙版渐变设置
-          if: $get(enable_header).value && $get(background_type).value === 'image'
-          value:
-            light_scheme: black
-            light_custom_color: "#000000"
-            dark_scheme: black
-            dark_custom_color: "#000000"
-          children:
+            # 蒙版渐变设置 - 扁平化到 background_settings 中
             - $formkit: toggle
               id: light_scheme
               name: light_scheme
+              if: $get(index_enable_header).value && $get(background_type).value === 'image'
               label: 浅色主题蒙版
               help: 选择浅色主题下的蒙版颜色方案
               render-type: color
@@ -963,13 +955,14 @@ spec:
                   render: "#6366f1"
             - $formkit: color
               name: light_custom_color
-              if: $get(light_scheme).value === 'custom'
+              if: $get(index_enable_header).value && $get(background_type).value === 'image' && $get(light_scheme).value === 'custom'
               label: 自定义颜色（浅色主题）
               help: 选择浅色主题下蒙版的自定义颜色
               value: "#000000"
             - $formkit: toggle
               id: dark_scheme
               name: dark_scheme
+              if: $get(index_enable_header).value && $get(background_type).value === 'image'
               label: 深色主题蒙版
               help: 选择深色主题下的蒙版颜色方案
               render-type: color
@@ -991,14 +984,14 @@ spec:
                   render: "#6366f1"
             - $formkit: color
               name: dark_custom_color
-              if: $get(dark_scheme).value === 'custom'
+              if: $get(index_enable_header).value && $get(background_type).value === 'image' && $get(dark_scheme).value === 'custom'
               label: 自定义颜色（深色主题）
               help: 选择深色主题下蒙版的自定义颜色
               value: "#000000"
         - $formkit: group
           name: title_settings
           label: 主标题设置
-          if: $get(enable_header).value
+          if: $get(index_enable_header).value
           value:
             show_title: true
             custom_title: "sky blog"
@@ -1096,7 +1089,7 @@ spec:
         - $formkit: group
           name: subtitle_settings
           label: 副标题设置
-          if: $get(enable_header).value
+          if: $get(index_enable_header).value
           value:
             show_subtitle: true
             subtitle_text: "记录生活，分享思考，探索无限可能"
@@ -1173,7 +1166,7 @@ spec:
         - $formkit: group
           name: wave_transition_settings
           label: 底部过渡设置
-          if: $get(enable_header).value
+          if: $get(index_enable_header).value
           value:
             show_wave_transition: true
             wave_color: "var(--sky-container)"
@@ -1193,7 +1186,7 @@ spec:
         - $formkit: group
           name: moment_settings
           label: 瞬间说说设置
-          if: $get(enable_header).value
+          if: $get(index_enable_header).value
           value:
             show_moment: true
             moment_title: "瞬间"
@@ -1211,54 +1204,68 @@ spec:
               label: 瞬间标题
               help: 瞬间说说模块的标题文字
               value: "瞬间"
-        # 侧边栏设置 - 扁平结构（和分类页面一致）
-        - $formkit: switch
-          id: index_show_sidebar
-          name: show_sidebar
-          label: 显示侧边栏
-          help: 是否在首页显示侧边栏
-          value: true
-        - $formkit: switch
-          id: index_enable_custom_sidebar
-          name: enable_custom_sidebar
-          if: $get(index_show_sidebar).value
-          label: 定制侧边栏
-          help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
-          value: false
-        - $formkit: toggle
-          name: sidebar_position
-          if: $get(index_enable_custom_sidebar).value
-          label: 侧边栏位置
-          render-type: text
-          size: 80
-          gap: 10
-          value: right
-          options:
-            - label: 左侧
-              value: left
-            - label: 右侧
-              value: right
-        - $formkit: array
-          name: sidebar_widgets
-          if: $get(index_enable_custom_sidebar).value
-          label: 小工具列表
-          addLabel: 添加小工具
-          min: 0
-          max: 10
-          itemLabels:
-            - type: text
-              label: $value.widget
+        # 侧边栏设置
+        - $formkit: group
+          name: sidebar_settings
+          label: 侧边栏设置
           value:
-            - widget: welcome_card
-            - widget: author_card
-            - widget: steam_card
-            - widget: blog_stats
-            - widget: recent_posts
+            show_sidebar: true
+            enable_custom_sidebar: false
+            sidebar_position: right
+            sidebar_widgets:
+              - widget: welcome_card
+              - widget: author_card
+              - widget: steam_card
+              - widget: blog_stats
+              - widget: recent_posts
           children:
-            - $formkit: select
-              name: widget
-              label: 小工具类型
-              options: *widget_options
+            - $formkit: switch
+              id: index_show_sidebar
+              name: show_sidebar
+              label: 显示侧边栏
+              help: 是否在首页显示侧边栏
+              value: true
+            - $formkit: switch
+              id: index_enable_custom_sidebar
+              name: enable_custom_sidebar
+              if: $get(index_show_sidebar).value
+              label: 定制侧边栏
+              help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
+              value: false
+            - $formkit: toggle
+              name: sidebar_position
+              if: $get(index_show_sidebar).value && $get(index_enable_custom_sidebar).value
+              label: 侧边栏位置
+              render-type: text
+              size: 80
+              gap: 10
+              value: right
+              options:
+                - label: 左侧
+                  value: left
+                - label: 右侧
+                  value: right
+            - $formkit: array
+              name: sidebar_widgets
+              if: $get(index_show_sidebar).value && $get(index_enable_custom_sidebar).value
+              label: 小工具列表
+              addLabel: 添加小工具
+              min: 0
+              max: 10
+              itemLabels:
+                - type: text
+                  label: $value.widget
+              value:
+                - widget: welcome_card
+                - widget: author_card
+                - widget: steam_card
+                - widget: blog_stats
+                - widget: recent_posts
+              children:
+                - $formkit: select
+                  name: widget
+                  label: 小工具类型
+                  options: *widget_options
         # 内容设置
         - $formkit: group
           name: content_settings
@@ -1568,11 +1575,6 @@ spec:
               label: 回退图片
               help: 当背景图片为空时显示的默认图片，支持随机图片 API
               value: "https://www.dmoe.cc/random.php"
-        - $formkit: group
-          name: content_style
-          label: 内容样式
-          value: {}
-          children: []
         - $formkit: group
           name: sidebar_settings
           label: 侧边栏设置

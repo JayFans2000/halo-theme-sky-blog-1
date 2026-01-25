@@ -23,7 +23,7 @@
   <link rel="stylesheet" th:href="@{/assets/css/main.css?v={version}(version=${theme.spec.version})}" />
   <link rel="stylesheet" th:href="@{/assets/css/index.css?v={version}(version=${theme.spec.version})}" />
   <!-- 以下样式仅在启用首页头部时加载 -->
-  <th:block th:if="${theme.config.index.header_settings?.enable_header != false}">
+  <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
     <!-- 背景特效样式 - 只在选择 CSS 特效时加载 -->
     <link th:if="${theme.config.index.background_settings.background_type == 'effect'}" rel="stylesheet"
       th:href="@{/assets/css/index-effects.css?v={version}(version=${theme.spec.version})}" />
@@ -54,12 +54,12 @@
     <th:block th:replace="~{modules/nav :: navbar}" />
 
     <!-- 首页头部区域 - 根据开关决定是否显示 -->
-    <th:block th:if="${theme.config.index.header_settings?.enable_header != false}">
+    <th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
       <th:block th:replace="~{modules/index/header}" />
     </th:block>
 
     <!-- 主要内容区域 -->
-    <main th:class="${theme.config.index.header_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
+    <main th:class="${theme.config.index.background_settings?.enable_header != false} ? 'flex-1 -mt-16' : 'flex-1'">
       <th:block th:replace="${content}" />
     </main>
 

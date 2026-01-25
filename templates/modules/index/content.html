@@ -7,11 +7,12 @@
                    postSettings = ${indexCfg.post_settings},
                    friendsSettings = ${indexCfg.friends_settings},
                    momentsSettings = ${indexCfg.moments_settings},
+                   sidebarCfg = ${indexCfg.sidebar_settings},
                    hasFriendsPlugin = ${pluginFinder.available('plugin-friends')},
                    hasMomentsPlugin = ${pluginFinder.available('PluginMoments')},
                    showFriendsTab = ${hasFriendsPlugin and friendsSettings.show_friends_tab != false},
                    showMomentsTab = ${hasMomentsPlugin and momentsSettings.show_moments_tab != false},
-                   showSidebar = ${indexCfg.show_sidebar != false},
+                   showSidebar = ${sidebarCfg?.show_sidebar != false},
                    showHeatmap = ${contentSettings.show_heatmap != false},
                    heatmapType = ${contentSettings.heatmap_type ?: 'github'},
                    tabStyle = ${contentSettings.tab_style ?: 'chips'},
@@ -22,11 +23,11 @@
                    momentsCount = ${momentsSettings.moments_count ?: 6},
                    momentsListStyle = ${momentsSettings.list_style ?: 'two_columns'},
                    globalSidebarCfg = ${theme.config.general.sidebar_settings},
-                   useCustomSidebar = ${indexCfg.enable_custom_sidebar == true},
-                   sidebarPosition = ${useCustomSidebar ? (indexCfg.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
+                   useCustomSidebar = ${sidebarCfg?.enable_custom_sidebar == true},
+                   sidebarPosition = ${useCustomSidebar ? (sidebarCfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
 
   <div
-    th:class="${theme.config.index.header_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
+    th:class="${theme.config.index.background_settings?.enable_header != false} ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 lg:pt-24 lg:pb-12' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 lg:pt-8 lg:pb-12'">
 
     <!-- 主内容区：内容 + 侧边栏 -->
     <div class="flex gap-8 lazy-anim" th:classappend="${sidebarPosition == 'left'} ? 'flex-row-reverse' : ''">
@@ -954,7 +955,7 @@
       <!-- 右侧：侧边栏 -->
       <aside th:if="${showSidebar}" class="w-80 shrink-0 space-y-6 hidden lg:block sticky top-20 self-start">
         <!-- 动态小工具 -->
-        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${indexCfg})}" />
+        <th:block th:replace="~{modules/widgets/sidebar :: dynamic(${sidebarCfg})}" />
       </aside>
     </div>
 

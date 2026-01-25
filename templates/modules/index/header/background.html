@@ -2,6 +2,9 @@
 <!--           首页背景层模块                    -->
 <!-- ========================================== -->
 
+<!-- 仅在 show_background 为 true 时显示背景 -->
+<th:block th:if="${theme.config.index.background_settings?.enable_header != false}">
+
 <!-- 背景层：图片/视频背景 -->
 <div class="absolute inset-0 z-0" th:if="${theme.config.index.background_settings.background_type == 'image'}"
     th:with="bgSrc=${theme.config.index.background_settings.background_image},
@@ -145,3 +148,5 @@
     </div>
 
 </div>
+
+</th:block>
