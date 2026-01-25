@@ -50,6 +50,10 @@
           <th:block th:replace="~{modules/widgets/steam-card :: card}" />
         </th:block>
 
+        <th:block th:if="${widgetType eq 'bangumi_card'}">
+          <th:block th:replace="~{modules/widgets/bangumi-card :: card}" />
+        </th:block>
+
         <th:block th:if="${widgetType eq 'blog_stats'}">
           <th:block th:replace="~{modules/widgets/blog-stats :: stats}" />
         </th:block>

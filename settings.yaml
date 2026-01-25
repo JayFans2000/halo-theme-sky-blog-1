@@ -217,6 +217,8 @@ spec:
                       value: recent_posts
                     - label: Steam 卡片
                       value: steam_card
+                    - label: 追番卡片
+                      value: bangumi_card
             - $formkit: number
               name: popular_posts_count
               label: 热门文章数量
@@ -1652,6 +1654,8 @@ spec:
                       value: recent_posts
                     - label: Steam 卡片
                       value: steam_card
+                    - label: 追番卡片
+                      value: bangumi_card
         - $formkit: group
           name: post_interaction
           label: 文章底部交互
@@ -3430,3 +3434,43 @@ spec:
           value: "记录我的二次元之旅"
           rows: 2
           placeholder: "追番页面的描述"
+        - $formkit: group
+          name: card_settings
+          label: 追番卡片设置
+          help: 侧边栏追番卡片的显示配置
+          value:
+            type_num: 1
+            status: 2
+            size: 6
+          children:
+            - $formkit: select
+              name: type_num
+              label: 番剧类型
+              help: 选择要展示的番剧类型
+              value: 1
+              options:
+                - label: 追番
+                  value: 1
+                - label: 追剧
+                  value: 2
+            - $formkit: select
+              name: status
+              label: 番剧状态
+              help: 选择要展示的番剧状态
+              value: 2
+              options:
+                - label: 全部
+                  value: 0
+                - label: 想看
+                  value: 1
+                - label: 在看
+                  value: 2
+                - label: 已看
+                  value: 3
+            - $formkit: number
+              name: size
+              label: 展示数量
+              help: 轮播卡片展示的番剧数量
+              value: 6
+              min: 1
+              max: 12
