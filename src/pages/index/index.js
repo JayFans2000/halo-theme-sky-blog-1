@@ -83,28 +83,50 @@ import './index.css';
     effectLayer = container.querySelector('.weather-effect-layer');
     if (!effectLayer) return;
 
+    // 第一阶段：立即渲染（使用缓存或默认晴天）
     loadWeatherData();
     renderEffect();
     setupScrollListener();
+
+    // 第二阶段：监听天气数据更新事件（来自天气卡片的真实数据）
+    window.addEventListener('sky-weather-updated', (event) => {
+      const newBg = event.detail?.weatherBg;
+
+      if (newBg && newBg !== currentState.type) {
+        // 标准化天气类型
+        let normalizedBg = newBg;
+        if (newBg === 'rain') normalizedBg = 'rainy';
+        if (newBg === 'snow') normalizedBg = 'snowy';
+        if (newBg === 'fog') normalizedBg = 'foggy';
+
+        currentState.type = normalizedBg;
+        renderEffect();
+      }
+    });
   }
 
   function loadWeatherData() {
     try {
       const cached = localStorage.getItem(CACHE_KEY);
+
       if (cached) {
         const data = JSON.parse(cached);
-        if (bg) {
-          if (bg === 'rain') bg = 'rainy';
-          if (bg === 'snow') bg = 'snowy';
-          if (bg === 'fog') bg = 'foggy';
+        const bg = data.weatherBg;
 
-          currentState.type = bg;
+        if (bg) {
+          // 标准化天气类型
+          let normalizedBg = bg;
+          if (bg === 'rain') normalizedBg = 'rainy';
+          if (bg === 'snow') normalizedBg = 'snowy';
+          if (bg === 'fog') normalizedBg = 'foggy';
+
+          currentState.type = normalizedBg;
           currentState.temp = parseFloat(data.weather?.temp || 20);
           return;
         }
       }
     } catch (e) {
-      // ignore errors
+      // ignore
     }
 
     const hour = new Date().getHours();

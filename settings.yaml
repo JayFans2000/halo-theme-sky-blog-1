@@ -886,7 +886,7 @@ spec:
               name: background_type
               if: $get(index_enable_header).value
               label: 背景类型
-              help: 选择首页头部背景的显示方式
+              help: 选择首页头部背景的显示方式。注：天气联动需在侧边栏启用「天气小组件」
               render-type: text
               size: 80
               gap: 10

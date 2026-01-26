@@ -954,10 +954,21 @@ function welcomeWeatherCard() {
     },
 
     // 保存缓存
+    // 用于追踪上次触发的天气类型，避免重复事件
+    _lastDispatchedBg: null,
+
     setCache(data) {
       try {
         const cacheData = { ...data, timestamp: Date.now() };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+
+        // 只在 weatherBg 真正变化时触发事件，避免重复
+        if (data.weatherBg && data.weatherBg !== this._lastDispatchedBg) {
+          this._lastDispatchedBg = data.weatherBg;
+          window.dispatchEvent(new CustomEvent('sky-weather-updated', {
+            detail: { weatherBg: data.weatherBg, location: data.location }
+          }));
+        }
       } catch (e) { /* ignore */ }
     },
 
