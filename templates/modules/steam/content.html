@@ -5,8 +5,7 @@
 <!--        Steam 游戏库主体内容 (异步加载)      -->
 <!-- ========================================== -->
 
-<main class="steam-page relative" th:fragment="steam-content"
-  x-data="steamPage()" x-init="init()">
+<main class="steam-page relative" th:fragment="steam-content" x-data="steamPage()" x-init="init()">
 
   <div class="max-w-6xl mx-auto px-4 py-8">
 
@@ -40,8 +39,8 @@
         <!-- Profile Header - 实际内容 -->
         <div x-show="!loading.profile && profile" x-cloak class="steam-profile-header">
           <div class="steam-profile-avatar" :class="profile?.playing ? 'playing' : ''">
-            <img :src="profile?.summary?.avatarfull" :alt="profile?.summary?.personaname"
-                 loading="eager" decoding="async" class="steam-avatar-img" />
+            <img :src="profile?.summary?.avatarfull" :alt="profile?.summary?.personaname" loading="eager"
+              decoding="async" class="steam-avatar-img" />
           </div>
           <div class="steam-profile-info">
             <div class="flex items-center gap-2">
@@ -69,7 +68,7 @@
           <div class="steam-heatmap-inline relative">
             <div class="heatmap-container relative min-h-[120px]">
               <div id="steam-heatmap-grid" class="steam-heatmap-grid" th:data-days="${heatmapDays}"
-                th:data-api-url="@{/apis/api.steam.halo.run/v1alpha1/heatmap/records}"></div>
+                th:data-api-url="@{/apis/api.steam.timxs.com/v1alpha1/heatmap/records}"></div>
 
               <div id="steam-heatmap-tooltip" class="steam-heatmap-tooltip"></div>
               <div id="steam-heatmap-loading" class="steam-heatmap-status">
@@ -118,8 +117,8 @@
           <div class="steam-badges-grid">
             <template x-for="(badge, index) in (badges?.badges || []).slice(0, 8)" :key="index">
               <div class="steam-badge-item" :title="(badge.badgeName || badge.displayName) + ' Lv.' + badge.level">
-                <img x-show="badge.imageUrl" :src="badge.imageUrl" :alt="badge.displayName"
-                     loading="lazy" decoding="async" class="steam-badge-img" />
+                <img x-show="badge.imageUrl" :src="badge.imageUrl" :alt="badge.displayName" loading="lazy"
+                  decoding="async" class="steam-badge-img" />
               </div>
             </template>
           </div>
@@ -153,7 +152,8 @@
           </div>
           <div class="steam-stat-item">
             <span class="steam-stat-label">最近2周</span>
-            <span class="steam-stat-value text-primary" x-text="((stats?.recentPlaytimeMinutes || 0) / 60).toFixed(1) + 'h'">0h</span>
+            <span class="steam-stat-value text-primary"
+              x-text="((stats?.recentPlaytimeMinutes || 0) / 60).toFixed(1) + 'h'">0h</span>
           </div>
         </div>
       </div>
@@ -202,7 +202,8 @@
               <div class="steam-game-card-achievement-row" x-show="game.achievementProgressText">
                 <span class="steam-game-card-achievement" x-text="game.achievementProgressText"></span>
                 <div class="steam-achievement-bar" :data-progress="game.achievementProgressText">
-                  <div class="steam-achievement-fill" :style="'width:' + getAchievementPercent(game.achievementProgressText) + '%'"></div>
+                  <div class="steam-achievement-fill"
+                    :style="'width:' + getAchievementPercent(game.achievementProgressText) + '%'"></div>
                 </div>
               </div>
             </div>
@@ -245,8 +246,10 @@
 
       <!-- 实际内容 -->
       <div x-show="!loading.games && games.items.length > 0" x-cloak class="steam-library-grid">
-        <template x-for="(game, idx) in games.items.filter(g => (g.appid || g.appId) && g.headerImageUrl)" :key="(game.appid || game.appId) + '-games-' + idx">
-          <a th:if="${enableGameLink}" :href="'https://store.steampowered.com/app/' + (game.appid || game.appId)" target="_blank" class="steam-game-card">
+        <template x-for="(game, idx) in games.items.filter(g => (g.appid || g.appId) && g.headerImageUrl)"
+          :key="(game.appid || game.appId) + '-games-' + idx">
+          <a th:if="${enableGameLink}" :href="'https://store.steampowered.com/app/' + (game.appid || game.appId)"
+            target="_blank" class="steam-game-card">
             <div class="steam-game-card-image">
               <img :src="game.headerImageUrl" :alt="game.name" loading="lazy" decoding="async" class="steam-game-img" />
             </div>
@@ -254,7 +257,8 @@
               <div class="steam-game-card-name" x-text="game.name">Game</div>
               <div class="steam-game-card-meta">
                 <span class="steam-game-card-playtime" x-text="game.playtimeFormatted">0h</span>
-                <span x-show="game.lastPlayedFormatted" class="steam-game-card-lastplayed" x-text="game.lastPlayedFormatted"></span>
+                <span x-show="game.lastPlayedFormatted" class="steam-game-card-lastplayed"
+                  x-text="game.lastPlayedFormatted"></span>
               </div>
             </div>
           </a>
@@ -271,15 +275,16 @@
       <!-- 分页 -->
       <div x-show="games?.totalPages > 1" x-cloak class="steam-pagination">
         <div class="steam-pagination-inner">
-          <button @click="loadGames(games.page - 1)" :disabled="games?.page <= 1"
-            class="steam-pagination-btn" :class="games?.page <= 1 ? 'opacity-30 cursor-not-allowed' : ''">
+          <button @click="loadGames(games.page - 1)" :disabled="games?.page <= 1" class="steam-pagination-btn"
+            :class="games?.page <= 1 ? 'opacity-30 cursor-not-allowed' : ''">
             <span class="icon-[heroicons--chevron-left] w-5 h-5"></span>
           </button>
           <span class="steam-pagination-info">
             <span x-text="games?.page || 1">1</span> / <span x-text="games?.totalPages || 1">1</span>
           </span>
           <button @click="loadGames(games.page + 1)" :disabled="games?.page >= games?.totalPages"
-            class="steam-pagination-btn" :class="games?.page >= games?.totalPages ? 'opacity-30 cursor-not-allowed' : ''">
+            class="steam-pagination-btn"
+            :class="games?.page >= games?.totalPages ? 'opacity-30 cursor-not-allowed' : ''">
             <span class="icon-[heroicons--chevron-right] w-5 h-5"></span>
           </button>
         </div>

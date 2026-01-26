@@ -50,16 +50,16 @@ const cache = {
  */
 async function fetchAPI(endpoint, useCache = true) {
   const cacheKey = endpoint.replace(/[^a-z0-9]/gi, '_');
-  
+
   if (useCache) {
     const cached = cache.get(cacheKey);
     if (cached) return cached;
   }
-  
-  const response = await fetch(`/apis/api.steam.halo.run/v1alpha1${endpoint}`);
-  
+
+  const response = await fetch(`/apis/api.steam.timxs.com/v1alpha1${endpoint}`);
+
   if (!response.ok) throw new Error(`API error: ${response.status}`);
-  
+
   const data = await response.json();
   if (useCache) cache.set(cacheKey, data);
   return data;
@@ -82,7 +82,7 @@ document.addEventListener('alpine:init', () => {
     games: { items: [], page: 1, totalPages: 1 },
     error: null,
     _initialized: false,
-    
+
     // 加载状态
     loading: {
       profile: true,
@@ -91,15 +91,15 @@ document.addEventListener('alpine:init', () => {
       recent: true,
       games: true
     },
-    
+
     // 配置
     config: window.steamPageConfig || {},
-    
+
     async init() {
       // 防止重复初始化
       if (this._initialized) return;
       this._initialized = true;
-      
+
       // 并行加载所有数据
       await Promise.all([
         this.loadProfile(),
@@ -108,13 +108,13 @@ document.addEventListener('alpine:init', () => {
         this.loadRecent(),
         this.loadGames(1)
       ]);
-      
+
       // 初始化热力图
       this.$nextTick(() => {
         initHeatmap();
       });
     },
-    
+
     async loadProfile() {
       try {
         this.profile = await fetchAPI('/profile');
@@ -125,7 +125,7 @@ document.addEventListener('alpine:init', () => {
         this.loading.profile = false;
       }
     },
-    
+
     async loadStats() {
       try {
         this.stats = await fetchAPI('/stats');
@@ -135,7 +135,7 @@ document.addEventListener('alpine:init', () => {
         this.loading.stats = false;
       }
     },
-    
+
     async loadBadges() {
       try {
         this.badges = await fetchAPI('/badges');
@@ -145,7 +145,7 @@ document.addEventListener('alpine:init', () => {
         this.loading.badges = false;
       }
     },
-    
+
     async loadRecent() {
       try {
         const limit = this.config.recentGamesLimit || 10;
@@ -158,7 +158,7 @@ document.addEventListener('alpine:init', () => {
         this.loading.recent = false;
       }
     },
-    
+
     async loadGames(page = 1) {
       this.loading.games = true;
       try {
@@ -172,7 +172,7 @@ document.addEventListener('alpine:init', () => {
         this.loading.games = false;
       }
     },
-    
+
     // 计算成就百分比
     getAchievementPercent(text) {
       if (!text) return 0;
@@ -208,7 +208,7 @@ function observeImageLoad() {
       });
     });
   });
-  
+
   observer.observe(document.body, { childList: true, subtree: true });
   document.querySelectorAll('.steam-game-img, .steam-badge-img, .steam-avatar-img').forEach(setupImageHandlers);
 }
@@ -216,14 +216,14 @@ function observeImageLoad() {
 function setupImageHandlers(img) {
   if (img.dataset.handled) return;
   img.dataset.handled = 'true';
-  
+
   if (img.complete && img.naturalHeight !== 0) {
     img.classList.add('loaded');
   } else {
-    img.addEventListener('load', function() {
+    img.addEventListener('load', function () {
       this.classList.add('loaded');
     });
-    img.addEventListener('error', function() {
+    img.addEventListener('error', function () {
       if (!this.src || this.src === window.location.href || this.src.endsWith('/steam')) {
         return;
       }

@@ -190,15 +190,15 @@
                 // 否则请求 API
                 const [profileRes, statsRes, badgesRes] = await Promise.all([
                   cachedProfile ? Promise.resolve(cachedProfile) :
-                    fetch('/apis/api.steam.halo.run/v1alpha1/profile')
+                    fetch('/apis/api.steam.timxs.com/v1alpha1/profile')
                       .then(r => r.ok ? r.json() : null)
                       .catch(() => null),
                   cachedStats ? Promise.resolve(cachedStats) :
-                    fetch('/apis/api.steam.halo.run/v1alpha1/stats')
+                    fetch('/apis/api.steam.timxs.com/v1alpha1/stats')
                       .then(r => r.ok ? r.json() : null)
                       .catch(() => null),
                   cachedBadges ? Promise.resolve(cachedBadges) :
-                    fetch('/apis/api.steam.halo.run/v1alpha1/badges')
+                    fetch('/apis/api.steam.timxs.com/v1alpha1/badges')
                       .then(r => r.ok ? r.json() : null)
                       .catch(() => null)
                 ]);
