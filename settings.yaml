@@ -1578,6 +1578,17 @@ spec:
               help: 当背景图片为空时显示的默认图片，支持随机图片 API
               value: "https://www.dmoe.cc/random.php"
         - $formkit: group
+          name: content_settings
+          label: 内容显示设置
+          value:
+            show_excerpt: true
+          children:
+            - $formkit: switch
+              name: show_excerpt
+              label: 显示文章摘要
+              help: 在文章内容前显示摘要（打字机效果）。如果安装了 AI 摘要插件，建议关闭避免重复
+              value: true
+        - $formkit: group
           name: sidebar_settings
           label: 侧边栏设置
           value:

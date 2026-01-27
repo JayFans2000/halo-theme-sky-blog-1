@@ -1,6 +1,8 @@
 <!-- 主要内容区域 -->
 <main class="relative" th:fragment="post-content"
   th:with="cfg = ${theme.config.article.sidebar_settings},
+               contentCfg = ${theme.config.article.content_settings},
+               showExcerpt = ${contentCfg?.show_excerpt != false},
                globalSidebarCfg = ${theme.config.general.sidebar_settings},
                useCustomSidebar = ${cfg?.enable_custom_sidebar == true},
                sidebarPosition = ${useCustomSidebar ? (cfg?.sidebar_position ?: 'right') : (globalSidebarCfg?.position ?: 'right')}">
@@ -15,7 +17,7 @@
         th:classappend="${cfg.show_sidebar == false ? 'max-w-4xl mx-auto' : 'lg:w-3/4'}">
         <div class="prose prose-lg max-w-none">
           <!-- 文章摘要 - 打字机效果 -->
-          <th:block th:with="excerptText = ${post.status.excerpt ?: ''}">
+          <th:block th:if="${showExcerpt}" th:with="excerptText = ${post.status.excerpt ?: ''}">
             <div th:if="${!#strings.isEmpty(excerptText)}" 
                  class="article-excerpt" 
                  x-data="articleExcerpt"
