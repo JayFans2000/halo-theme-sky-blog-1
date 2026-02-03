@@ -1,0 +1,1106 @@
+/* 装备页面 - 3D 装备收藏卡 - 战术终端版 */
+
+:root {
+    --card-w: 340px;
+    --card-h: 520px;
+}
+
+/* --- 风格定义 --- */
+.card-wrap {
+    /* 交互变量 - 由JS动态设置 */
+    --ptr-x: 50%;
+    --ptr-y: 50%;
+    --opacity: 0;
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+
+    /* 默认配置 - 不透明背景 */
+    --bg-main: var(--color-base-200);
+    --bg-pattern: color-mix(in oklch, var(--color-base-content) 3%, transparent);
+    --border-out: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+    --border-in: color-mix(in oklch, var(--color-base-100) 65%, transparent);
+    --text-main: var(--color-base-content);
+    --text-sub: color-mix(in oklch, var(--color-base-content) 65%, transparent);
+    --foil-blend: overlay;
+    --shadow-env: color-mix(in oklch, var(--color-base-content) 30%, transparent);
+
+    /* 边框光效开关 */
+    --border-glow-opacity: 0;
+    --foil-opacity: 0;
+    --foil-bg: none;
+
+    /* 默认强调色 */
+    --accent: var(--color-base-content);
+    --accent-glow: color-mix(in oklch, var(--color-base-content) 20%, transparent);
+}
+
+/* 亮色主题适配 */
+[data-color-scheme="light"] .card-wrap {
+    --foil-blend: soft-light;
+}
+
+/* 🥈 白银 (Silver) */
+[data-style="silver"] {
+    --accent: #9ca3af;
+    --accent-glow: rgba(156, 163, 175, 0.3);
+}
+
+/* 🥇 黄金 (Gold) */
+[data-style="gold"] {
+    --accent: #fbbf24;
+    --accent-glow: rgba(251, 191, 36, 0.3);
+}
+
+/* 🌈 炫彩 (Rainbow/Optic) */
+[data-style="rainbow"] {
+    --accent: var(--color-base-content);
+    --accent-glow: color-mix(in oklch, var(--color-base-content) 20%, transparent);
+    --foil-opacity: 0.8;
+    --border-glow-opacity: 1;
+    --foil-bg: linear-gradient(115deg, transparent 25%, rgba(0, 255, 255, 0.3) 45%, rgba(255, 0, 255, 0.3) 50%, rgba(255, 255, 0, 0.3) 55%, transparent 75%);
+}
+
+[data-color-scheme="light"] [data-style="rainbow"] {
+    --foil-bg: linear-gradient(115deg, transparent 25%, rgba(0, 200, 255, 0.15) 45%, rgba(255, 0, 200, 0.15) 50%, rgba(255, 200, 0, 0.15) 55%, transparent 75%);
+}
+
+/* 🎨 自定义颜色 */
+[data-style="custom"] {
+    --accent: var(--custom-color, #8b5cf6);
+    --accent-glow: color-mix(in oklch, var(--custom-color, #8b5cf6) 30%, transparent);
+}
+
+/* 🎯 跟随主题色 */
+[data-style="theme"] {
+    --accent: var(--color-primary);
+    --accent-glow: color-mix(in oklch, var(--color-primary) 30%, transparent);
+}
+
+/* --- 3D 容器 --- */
+.card-scene {
+    perspective: 1200px;
+    width: 100%;
+    height: 100%;
+}
+
+.card-wrap {
+    width: 100%;
+    height: 100%;
+    min-height: 520px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+    transition: transform 0.1s cubic-bezier(0.1, 0.5, 0.3, 1);
+    will-change: transform;
+    /* 裁剪溢出的光效，确保炫彩不超出卡片边界 */
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+/* --- 物理层 (The Chassis) --- */
+.card-chassis {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background-color: var(--bg-main);
+    background-image:
+        radial-gradient(var(--bg-pattern) 1px, transparent 1px),
+        linear-gradient(to right, var(--bg-pattern) 1px, transparent 1px);
+    background-size: 10px 10px, 40px 40px;
+
+
+
+    overflow: hidden;
+    transition: background 0.3s;
+    z-index: 1;
+}
+
+/* --- 全息边框 --- */
+.card-border-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    z-index: 20;
+    pointer-events: none;
+    border: 1px solid var(--border-out);
+}
+
+/* 边框上的流动光效 */
+.card-border-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 16px;
+    padding: 1.5px;
+
+    background: var(--foil-bg);
+    background-size: 200% 200%;
+    background-position: calc(100% - var(--ptr-x)) calc(100% - var(--ptr-y));
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    opacity: var(--border-glow-opacity);
+    mix-blend-mode: color-dodge;
+    filter: brightness(1.5);
+}
+
+/* 顶部和底部的装饰板 */
+.deco-plate {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--bg-pattern), transparent);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.plate-top {
+    top: 0;
+    border-bottom: 1px solid var(--border-out);
+}
+
+.plate-bottom {
+    bottom: 0;
+    height: 40px;
+    border-top: 1px solid var(--border-out);
+    background: linear-gradient(to top, var(--bg-pattern), transparent);
+}
+
+/* --- 光学层 --- */
+.card-sheen {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
+    background-size: 200% 200%;
+    background-position: var(--ptr-x) var(--ptr-y);
+    mix-blend-mode: overlay;
+    opacity: var(--opacity);
+    pointer-events: none;
+    z-index: 50;
+}
+
+.card-foil {
+    position: absolute;
+    /* 扩大尺寸，确保偏移后仍能覆盖整个卡片 */
+    inset: -15%;
+    border-radius: 16px;
+    background: var(--foil-bg);
+    background-size: 150% 150%;
+    transform: translate(calc(var(--ptr-x) * -0.1), calc(var(--ptr-y) * -0.1));
+    mix-blend-mode: var(--foil-blend);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 40;
+    transition: opacity 0.3s;
+}
+
+/* 炫彩样式：悬停时才显示全息光效，与其他配色保持一致 */
+[data-style="rainbow"]:hover .card-foil {
+    opacity: var(--foil-opacity);
+}
+
+/* --- 装饰性 UI --- */
+.corner-marker {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--accent);
+    opacity: 0.8;
+    z-index: 25;
+    /* 保持在3D空间中与卡片表面同一平面 */
+    transform: translateZ(1px);
+}
+
+.cm-tl {
+    top: 12px;
+    left: 12px;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.cm-tr {
+    top: 12px;
+    right: 12px;
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.cm-bl {
+    bottom: 12px;
+    left: 12px;
+    border-right: 0;
+    border-top: 0;
+}
+
+.cm-br {
+    bottom: 12px;
+    right: 12px;
+    border-left: 0;
+    border-top: 0;
+}
+
+.side-track {
+    position: absolute;
+    top: 80px;
+    bottom: 80px;
+    width: 2px;
+    background: var(--border-out);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 15;
+}
+
+.st-left {
+    left: 10px;
+}
+
+.st-right {
+    right: 10px;
+}
+
+.track-bit {
+    width: 4px;
+    height: 1px;
+    background: var(--text-sub);
+    opacity: 0.3;
+}
+
+/* --- 内容排版 --- */
+.content-layer {
+    position: absolute;
+    inset: 0;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 30;
+    color: var(--text-main);
+}
+
+.img-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+    margin: 16px 0;
+    border: 1px solid var(--border-out);
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.img-viewport::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(transparent 0, transparent 2px, rgba(0, 0, 0, 0.1) 3px);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+.img-viewport img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-viewport-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-sub);
+    opacity: 0.3;
+}
+
+.img-corner {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: var(--accent);
+    opacity: 0.5;
+    z-index: 20;
+}
+
+.img-corner-tl {
+    top: 8px;
+    left: 8px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+}
+
+.img-corner-br {
+    bottom: 8px;
+    right: 8px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid var(--border-out);
+    padding-left: 8px;
+}
+
+.data-label {
+    opacity: 0.5;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+    color: var(--text-sub);
+}
+
+.data-value {
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+}
+
+
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-left: 8px;
+}
+
+.card-badge {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    color: var(--text-sub);
+}
+
+.card-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-top: 4px;
+    color: var(--text-main);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.card-accent-bar {
+    width: 32px;
+    height: 4px;
+    background: var(--accent);
+    margin-bottom: 4px;
+    box-shadow: 0 0 5px var(--accent-glow);
+}
+
+.card-address {
+    font-size: 9px;
+    opacity: 0.5;
+    color: var(--text-sub);
+}
+
+.card-desc {
+    font-size: 11px;
+    line-height: 1.5;
+    opacity: 0.8;
+    text-align: justify;
+    border-left: 2px solid var(--accent);
+    padding-left: 8px;
+    margin-bottom: 16px;
+    color: var(--text-sub);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-footer {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    opacity: 0.4;
+}
+
+.card-footer-bar {
+    height: 4px;
+    width: 64px;
+}
+
+.card-footer-id {
+    font-size: 11px;
+    color: var(--text-sub);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    :root {
+        --card-w: 300px;
+        --card-h: 460px;
+    }
+
+    .card-name {
+        font-size: 1.25rem;
+    }
+
+    .content-layer {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --card-w: 280px;
+        --card-h: 440px;
+    }
+
+    .card-name {
+        font-size: 1.125rem;
+    }
+}
+
+/* 分组图标 */
+.group-icon {
+    width: 1rem;
+    height: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.group-icon svg {
+    width: 100%;
+    height: 100%;
+    color: var(--color-primary);
+}
+
+/* ========================================= */
+/*   Equipment Showcase - 展示区容器          */
+/*   毛玻璃容器 + 微暗渐变，衬托3D卡片        */
+/* ========================================= */
+
+.equipment-showcase {
+    position: relative;
+    margin-top: 1.5rem;
+    padding: 2rem;
+
+    /* 毛玻璃效果 - 降低不透明度 */
+    background: color-mix(in oklch, var(--color-base-100) 60%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    /* 圆角边框 - 增强对比度 */
+    border-radius: 1.5rem;
+    border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
+
+    /* 柔和阴影 - 增强深度 */
+    box-shadow:
+        0 8px 32px -8px color-mix(in oklch, var(--color-base-content) 12%, transparent),
+        inset 0 1px 0 color-mix(in oklch, var(--color-base-100) 80%, transparent);
+}
+
+/* 内部微暗渐变 (增强对比度) */
+.equipment-showcase::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+            transparent 0%,
+            color-mix(in oklch, var(--color-base-content) 2%, transparent) 50%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+/* 深色主题增强 */
+[data-color-scheme="dark"] .equipment-showcase {
+    background: color-mix(in oklch, var(--color-base-200) 90%, transparent);
+    border-color: color-mix(in oklch, var(--color-base-content) 15%, transparent);
+}
+
+/* 亮色主题增强 - 更明显的容器边界 */
+[data-color-scheme="light"] .equipment-showcase {
+    background: color-mix(in oklch, var(--color-base-100) 85%, transparent);
+    border-color: color-mix(in oklch, var(--color-base-content) 8%, transparent);
+    box-shadow:
+        0 8px 32px -8px color-mix(in oklch, var(--color-base-content) 8%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 展示区内的内容层 */
+.equipment-showcase>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* 卡片网格布局 (替代 Flexbox) */
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+    /* 移除 justify-items: center 以允许卡片拉伸填满单元格 */
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .equipment-showcase {
+        padding: 1.5rem 1rem;
+        border-radius: 1.25rem;
+    }
+
+    .equipment-grid {
+        gap: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .equipment-showcase {
+        padding: 2.5rem;
+        border-radius: 2rem;
+    }
+
+    .equipment-grid {
+        gap: 2.5rem;
+    }
+}
+
+/* ========================================= */
+/*   Tech Tabs - 主题友好胶囊按钮             */
+/* ========================================= */
+
+.tech-tabs-wrapper {
+    display: inline-flex;
+    padding: 0.375rem;
+    background: color-mix(in oklch, var(--color-base-content) 5%, transparent);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklch, var(--color-base-content) 8%, transparent);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tech-tab-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-base-content);
+    opacity: 0.6;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tech-tab-pill:hover {
+    opacity: 0.9;
+    background: color-mix(in oklch, var(--color-base-content) 5%, transparent);
+}
+
+.tech-tab-pill.active {
+    opacity: 1;
+    background: var(--color-base-100);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tech-tab-count {
+    font-size: 0.75rem;
+    opacity: 0.5;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+
+/* ========================================= */
+/*   ELEGANT GLOW CARD (以太光环版)           */
+/*   Namespace: .ec-*                        */
+/*   Strict 1:1 Adaptation from Reference   */
+/* ========================================= */
+
+.font-tech {
+    font-family: 'Space Grotesk', monospace;
+}
+
+/* --- 核心容器 --- */
+.ec-card {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+
+    background-color: color-mix(in srgb, var(--color-base-100), transparent 40%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 20px 40px -10px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    --glow-color: var(--color-primary);
+    --glow-bg: linear-gradient(135deg, transparent, var(--glow-color), transparent);
+    /* Default glow for theme style */
+    --text-main: var(--color-base-content);
+    --text-sub: color-mix(in srgb, var(--color-base-content), transparent 40%);
+}
+
+.ec-card:hover {
+    transform: translateY(-6px);
+}
+
+/* --- 动态光晕层 --- */
+.ec-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 2px;
+    background: var(--glow-bg);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    opacity: 0.5;
+    filter: blur(2px);
+    transition: opacity 0.3s, filter 0.3s;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.ec-card:hover::before {
+    opacity: 1;
+    filter: blur(4px);
+}
+
+/* --- 风格定义 (data-style on .ec-card) --- */
+.ec-card[data-style="silver"] {
+    --glow-color: #38bdf8;
+    --glow-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1), #38bdf8, rgba(255, 255, 255, 0.1));
+}
+
+.ec-card[data-style="gold"] {
+    --glow-color: #fbbf24;
+    --glow-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1), #fbbf24, rgba(255, 255, 255, 0.1));
+}
+
+.ec-card[data-style="rainbow"] {
+    /* 炫彩配色变量 - 低调奢华版 */
+    --rainbow-1: #a78bfa;
+    /* 紫罗兰 */
+    --rainbow-2: #93c5fd;
+    /* 天空蓝 */
+    --rainbow-3: #c4b5fd;
+    /* 薰衣草 */
+    --rainbow-4: #fcd34d;
+    /* 柔金 */
+    --glow-color: var(--rainbow-1);
+}
+
+.ec-card[data-style="rainbow"]::before {
+    /* 使用变量的渐变 */
+    background: linear-gradient(135deg,
+            var(--rainbow-1),
+            var(--rainbow-2),
+            var(--rainbow-3),
+            var(--rainbow-4),
+            var(--rainbow-1));
+    background-size: 300% 300%;
+    padding: 2px;
+    animation: ec-shimmer 6s ease-in-out infinite;
+    filter: blur(6px);
+    opacity: 0.8;
+}
+
+.ec-card[data-style="rainbow"]:hover::before {
+    filter: blur(4px);
+    opacity: 0.85;
+}
+
+@keyframes ec-shimmer {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.ec-card[data-style="custom"],
+.ec-card[data-style="theme"] {
+    --glow-bg: linear-gradient(135deg, transparent, var(--glow-color), transparent);
+}
+
+/* --- 内部布局 --- */
+.ec-card-inner {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 4px;
+}
+
+.ec-img-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.ec-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.ec-card:hover .ec-img-container img {
+    transform: scale(1.05);
+}
+
+.ec-status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ec-info-container {
+    padding: 20px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ec-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 4px;
+    text-shadow: 0 0 20px var(--glow-color);
+}
+
+.ec-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    line-height: 1.5;
+}
+
+/* --- 规格参数 (回归工业蓝图风格) --- */
+.ec-specs-tech {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    font-family: 'Space Grotesk', monospace;
+}
+
+.ec-spec-unit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    /* 虚线分割 */
+    border-bottom: 1px dashed color-mix(in srgb, var(--text-sub), transparent 70%);
+    padding-bottom: 6px;
+}
+
+.ec-spec-label {
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.ec-spec-val-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ec-spec-val {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* 刻度化进度条 (Segmented Bar) */
+.ec-data-bar {
+    width: 50px;
+    height: 6px;
+    background: color-mix(in srgb, var(--text-sub), transparent 85%);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 遮罩层制造刻度间隙 */
+.ec-data-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg,
+            transparent 0,
+            transparent 2px,
+            rgba(0, 0, 0, 0.5) 2px,
+            rgba(0, 0, 0, 0.5) 3px);
+    z-index: 2;
+    opacity: 0.3;
+}
+
+.ec-data-fill {
+    height: 100%;
+    background: var(--glow-color);
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 8px var(--glow-color);
+}
+
+/* 悬停触发动画 */
+.ec-card:hover .ec-data-fill {
+    width: var(--w);
+}
+
+/* --- 进度条风格适配 --- */
+/* Rainbow: 使用颜色变量渐变填充 */
+.ec-card[data-style="rainbow"] .ec-data-fill {
+    background: linear-gradient(90deg, var(--rainbow-1), var(--rainbow-2), var(--rainbow-4));
+    box-shadow: 0 0 8px var(--rainbow-1);
+}
+
+/* Silver: 天蓝色 */
+.ec-card[data-style="silver"] .ec-data-fill {
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8;
+}
+
+/* Gold: 金色 */
+.ec-card[data-style="gold"] .ec-data-fill {
+    background: #fbbf24;
+    box-shadow: 0 0 8px #fbbf24;
+}
+
+/* Theme/Custom: 使用 --glow-color */
+.ec-card[data-style="theme"] .ec-data-fill,
+.ec-card[data-style="custom"] .ec-data-fill {
+    background: var(--glow-color);
+    box-shadow: 0 0 8px var(--glow-color);
+}
+
+/* 浅色主题适配 */
+[data-color-scheme="light"] .ec-card {
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow:
+        0 20px 40px -10px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+[data-color-scheme="light"] .ec-card-title {
+    text-shadow: none;
+}
+
+/* 浅色模式下刻度线调整 */
+[data-color-scheme="light"] .ec-data-bar::after {
+    background: repeating-linear-gradient(90deg,
+            transparent 0,
+            transparent 2px,
+            rgba(255, 255, 255, 0.8) 2px,
+            rgba(255, 255, 255, 0.8) 3px);
+}
+
+/* ========================================= */
+/*   Equipment Hero Section                  */
+/*   优雅卡片模式顶部大图区域                  */
+/* ========================================= */
+
+.eq-hero {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: var(--hero-bg) center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+}
+
+.eq-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 60%);
+    z-index: 1;
+}
+
+.eq-hero-content {
+    position: relative;
+    z-index: 10;
+    color: #fff;
+}
+
+.eq-hero-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.eq-hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.eq-hero-desc {
+    font-size: 0.9375rem;
+    opacity: 0.85;
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+/* Author 区域放在 content 内部，不使用绝对定位 */
+.eq-hero-author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.eq-hero-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.eq-hero-author-desc {
+    opacity: 0.7;
+    margin-left: 0.25rem;
+}
+
+/* ========================================= */
+/*   Equipment Group                         */
+/*   分组区域样式                             */
+/* ========================================= */
+
+.eq-group-header {
+    margin-bottom: 1.5rem;
+}
+
+.eq-group-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-base-content);
+    margin-bottom: 0.5rem;
+}
+
+.eq-group-desc {
+    font-size: 0.9375rem;
+    color: var(--color-base-content);
+    opacity: 0.5;
+}
+
+/* ========================================= */
+/*   Equipment Grid - 4 Columns              */
+/*   4列响应式网格布局                        */
+/* ========================================= */
+
+.eq-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 1280px) {
+    .eq-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .eq-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .eq-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .eq-hero {
+        height: 240px;
+        padding: 1.5rem;
+    }
+
+    .eq-hero-title {
+        font-size: 1.75rem;
+    }
+}

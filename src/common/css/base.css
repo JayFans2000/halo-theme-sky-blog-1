@@ -41,7 +41,7 @@
 /* 全局网格背景效果                           */
 /* ========================================== */
 .bg-grid-pattern {
-    background-image: 
+    background-image:
         linear-gradient(to right, color-mix(in oklch, var(--color-base-content) 3%, transparent) 1px, transparent 1px),
         linear-gradient(to bottom, color-mix(in oklch, var(--color-base-content) 3%, transparent) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -57,6 +57,11 @@
     /* 颜色变量 - 使用正确的 DaisyUI 5 变量格式 */
     --halo-search-widget-base-bg-color: var(--color-base-100);
     /* base-100 */
+
+    /* 修复字体加载问题 (来自 PR #15) */
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
     --halo-search-widget-primary-color: var(--color-primary);
     /* primary */
     --halo-search-widget-muted-color: color-mix(in oklch, var(--color-base-content) 80%, transparent);
@@ -118,24 +123,24 @@
     /* 自适应阴影系统 - 亮/暗主题自动切换          */
     /* 亮色：柔和阴影 / 暗色：微光边缘             */
     /* ========================================== */
-    
+
     /* 阴影颜色变量 - 亮色模式默认值 */
     --shadow-color: rgba(0, 0, 0, 0.08);
     --shadow-color-md: rgba(0, 0, 0, 0.12);
     --shadow-color-lg: rgba(0, 0, 0, 0.16);
-    
+
     /* 组件阴影 - 小 (按钮、标签、小卡片) */
     --art-shadow-sm: 0 1px 3px var(--shadow-color), 0 1px 2px -1px var(--shadow-color);
-    
+
     /* 组件阴影 - 中 (卡片、面板) */
     --art-shadow-md: 0 4px 6px -1px var(--shadow-color-md), 0 2px 4px -2px var(--shadow-color);
-    
+
     /* 组件阴影 - 大 (模态框、弹出层) */
     --art-shadow-lg: 0 10px 15px -3px var(--shadow-color-lg), 0 4px 6px -4px var(--shadow-color-md);
-    
+
     /* 组件阴影 - 超大 (聚焦元素) */
     --art-shadow-xl: 0 20px 25px -5px var(--shadow-color-lg), 0 8px 10px -6px var(--shadow-color-md);
-    
+
     /* 内阴影 - 输入框、凹陷效果 */
     --art-shadow-inner: inset 0 2px 4px var(--shadow-color);
 
@@ -189,7 +194,7 @@ html[data-color-scheme="dark"],
     --shadow-color: rgba(255, 255, 255, 0.04);
     --shadow-color-md: rgba(255, 255, 255, 0.06);
     --shadow-color-lg: rgba(255, 255, 255, 0.08);
-    
+
     /* 暗色模式组件阴影 - 带微光 */
     --art-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--shadow-color);
     --art-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--shadow-color-md);
@@ -713,10 +718,13 @@ html.theme-transitioning * {
 
 /* 慢速脉冲动画 - 用于装饰元素 */
 @keyframes pulse-slow {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
         transform: scale(1);
     }
+
     50% {
         opacity: 0.8;
         transform: scale(1.05);
@@ -763,19 +771,22 @@ html.font-siyuan-songti body {
 .img-lazy-container {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(
-        90deg,
-        color-mix(in oklch, var(--color-base-content) 5%, transparent) 25%,
-        color-mix(in oklch, var(--color-base-content) 10%, transparent) 50%,
-        color-mix(in oklch, var(--color-base-content) 5%, transparent) 75%
-    );
+    background: linear-gradient(90deg,
+            color-mix(in oklch, var(--color-base-content) 5%, transparent) 25%,
+            color-mix(in oklch, var(--color-base-content) 10%, transparent) 50%,
+            color-mix(in oklch, var(--color-base-content) 5%, transparent) 75%);
     background-size: 200% 100%;
     animation: img-skeleton-shimmer 1.5s ease-in-out infinite;
 }
 
 @keyframes img-skeleton-shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* 图片加载中状态 */
@@ -798,4 +809,11 @@ article img[loading="lazy"] {
 /* 头像图片 - 圆形骨架 */
 .avatar img[loading="lazy"]:not(.loaded) {
     background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+}
+
+/* 修复移动端底部布局问题 */
+@media (max-width: 767px) {
+    body {
+        padding-bottom: 0 !important;
+    }
 }

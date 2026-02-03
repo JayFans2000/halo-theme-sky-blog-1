@@ -372,8 +372,9 @@
             <h2 class="text-lg font-semibold text-base-content">评论留言</h2>
           </div>
           <div class="glow-card bg-base-100/80 backdrop-blur-xl rounded-2xl border border-base-content/[0.06] p-6">
-            <halo:comment group="plugin.halo.run" kind="Plugin"
-              th:name="${pluginName}" colorScheme="system">
+            <halo:comment group="plugin.halo.run" kind="Plugin" th:name="${pluginName != null ? pluginName : 'links'}"
+              th:attr="displayName=${theme.config.links_settings?.page_title ?: '友情链接'}, subject-title=${theme.config.links_settings?.page_title ?: '友情链接'}"
+              colorScheme="system">
             </halo:comment>
           </div>
         </section>

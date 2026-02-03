@@ -3084,7 +3084,7 @@ spec:
       formSchema:
         - $formkit: group
           name: plugin_tips
-          label: 📦 插件配置提示
+          label: 插件配置提示
           help: 每页显示数量等参数请在「后台 → 插件 → 朋友圈 → 基本设置」中配置
           children: []
         - $formkit: text
@@ -3391,7 +3391,7 @@ spec:
     # 认证页面设置
     # ========================================
     - group: auth
-      label: 认证页面
+      label: 认证
       formSchema:
         - $formkit: group
           name: auth_settings
@@ -3537,7 +3537,7 @@ spec:
 
 
     - group: bangumi_settings
-      label: 追番页面
+      label: 追番
       formSchema:
         - $formkit: group
           name: plugin_tips
@@ -3597,55 +3597,186 @@ spec:
               max: 12
 
     - group: equipment_settings
-      label: 装备页面
+      label: 装备
       formSchema:
         - $formkit: group
           name: plugin_tips
-          label: 📦 插件配置提示
+          label: 插件配置提示
           help: 需要安装「Equipment 装备管理」插件
           children: []
-        - $formkit: text
-          name: page_title
-          label: 页面标题
-          value: "装备列表"
-          placeholder: "装备页面的标题"
-        - $formkit: text
-          name: page_subtitle
-          label: 副标题
-          value: 好物
-        - $formkit: textarea
-          name: page_description
-          label: 页面描述
-          value: "跟我一起享受科技带来的乐趣"
-          rows: 2
-        - $formkit: attachment
-          name: cover_url
-          label: 背景媒体（上传或输入地址）
-          help: 上传图片/视频或直接输入 URL；附件控件兼容外链路径 https://www.dmoe.cc/random.php
-          value: https://www.dmoe.cc/random.php
-          accepts:
-                - image/jpeg
-                - image/png
-                - image/avif
-                - image/webp
-                - image/gif
-                - video/mp4
-                - video/webm
-                - video/ogg
-        - $formkit: toggle
-          name: mode
-          label: 装备页风格
-          render-type: text
-          size: 60
-          gap: 10
-          value: tech
-          options:
-            - label: 科技风
+        
+        # ===== 基础信息 =====
+        - $formkit: group
+          name: basic_info
+          label: 基础信息
+          value:
+            page_title: "我的装备"
+            page_subtitle: "好物分享"
+            page_description: "分享我日常使用的硬件与软件"
+          children:
+            - $formkit: text
+              name: page_title
+              label: 页面标题
+              value: "我的装备"
+              placeholder: "装备页面的标题"
+            - $formkit: text
+              name: page_subtitle
+              label: 副标题
+              value: "好物分享"
+              placeholder: "页面副标题"
+            - $formkit: textarea
+              name: page_description
+              label: 页面描述
+              value: "分享我日常使用的硬件与软件"
+              placeholder: "页面描述信息"
+              rows: 2
+        
+        # ===== 风格设置 =====
+        - $formkit: group
+          name: style_settings
+          label: 风格设置
+          value:
+            mode: "tech"
+            cover_url: "https://www.dmoe.cc/random.php"
+          children:
+            - $formkit: toggle
+              id: equipment_mode
+              name: mode
+              label: 装备页风格
+              help: 选择装备页面的展示风格
+              render-type: text
+              size: 80
+              gap: 10
               value: tech
-            - label: 简约风
-              value: simple
-        - $formkit: switch
-          name: enable_comment
-          label: 启用评论
-          help: 装备底部的评论按钮（展开内联评论区）
-          value: true
+              options:
+                - label: 3D卡片
+                  value: tech
+                - label: 优雅卡片
+                  value: simple
+            - $formkit: select
+              name: tab_style
+              label: Tab 切换样式
+              help: 选择分组切换按钮的展示样式
+              if: $get(equipment_mode).value === 'tech'
+              value: pills
+              options:
+                - label: 药丸胶囊
+                  value: pills
+                - label: 芯片边框
+                  value: chips
+                - label: 极简下划线
+                  value: underline
+                - label: 玻璃拟态
+                  value: glass
+            - $formkit: attachment
+              name: hero_background
+              label: Hero 背景图
+              help: 优雅卡片模式下的顶部大图（建议 16:9 比例）
+              if: $get(equipment_mode).value === 'simple'
+              value: "https://www.dmoe.cc/random.php"
+              accepts:
+                - "image/*"
+
+        
+        # ===== 功能设置 =====
+        - $formkit: group
+          name: feature_settings
+          label: 功能设置
+          value:
+            enable_comment: true
+          children:
+            - $formkit: switch
+              name: enable_comment
+              label: 启用评论
+              help: 在装备页面底部显示评论区
+              value: true
+        
+        # ===== 侧边栏设置 =====
+        - $formkit: group
+          name: sidebar_settings
+          label: 侧边栏
+          value:
+            show_sidebar: false
+            enable_custom_sidebar: false
+            sidebar_position: right
+            sidebar_widgets:
+              - widget: author_card
+              - widget: blog_stats
+              - widget: categories
+              - widget: tags
+              - widget: popular_posts
+          children:
+            - $formkit: switch
+              id: equipment_show_sidebar
+              name: show_sidebar
+              label: 显示侧边栏
+              help: 启用后显示侧边栏，页面变为左右布局
+              value: false
+            - $formkit: switch
+              id: equipment_enable_custom_sidebar
+              name: enable_custom_sidebar
+              if: $get(equipment_show_sidebar).value
+              label: 定制侧边栏
+              help: 启用后可单独配置此页面的侧边栏，禁用则使用全局配置
+              value: false
+            - $formkit: toggle
+              name: sidebar_position
+              if: $get(equipment_enable_custom_sidebar).value
+              label: 侧边栏位置
+              render-type: text
+              size: 80
+              gap: 10
+              value: right
+              options:
+                - label: 左侧
+                  value: left
+                - label: 右侧
+                  value: right
+            - $formkit: array
+              name: sidebar_widgets
+              if: $get(equipment_enable_custom_sidebar).value
+              label: 小工具列表
+              addLabel: 添加小工具
+              min: 0
+              max: 10
+              itemLabels:
+                - type: text
+                  label: $value.widget
+              value:
+                - widget: author_card
+                - widget: blog_stats
+                - widget: categories
+                - widget: tags
+                - widget: popular_posts
+              children:
+                - $formkit: select
+                  name: widget
+                  label: 小工具类型
+                  options: *widget_options
+        
+        # ===== 悬浮控制栏设置 =====
+        - $formkit: group
+          name: floating_dock
+          label: 悬浮控制栏
+          value:
+            enable_custom_dock: false
+            dock_menu: primary
+            enable_back_to_top: true
+          children:
+            - $formkit: switch
+              id: equipment_enable_custom_dock
+              name: enable_custom_dock
+              label: 定制悬浮控制栏
+              help: 启用后可单独配置此页面的悬浮控制栏，禁用则使用全局配置
+              value: false
+            - $formkit: menuRadio
+              name: dock_menu
+              label: Dock 菜单
+              value: primary
+              if: $get(equipment_enable_custom_dock).value
+              help: 选择要在悬浮控制栏中显示的菜单
+            - $formkit: switch
+              name: enable_back_to_top
+              label: 返回顶部按钮
+              if: $get(equipment_enable_custom_dock).value
+              value: true
