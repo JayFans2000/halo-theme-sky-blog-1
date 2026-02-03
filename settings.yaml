@@ -1314,19 +1314,51 @@ spec:
                   value: underline
                 - label: 玻璃拟态
                   value: glass
-        # 文章内容设置
+            - $formkit: array
+              name: tabs_order
+              label: Tab 显示顺序
+              help: 使用上下箭头调整首页 Tab 的显示顺序（从左到右）
+              value:
+                - tab: posts
+                - tab: friends
+                - tab: moments
+              upControl: true
+              downControl: true
+              insertControl: false
+              removeControl: false
+              addButton: false
+              children: 
+                - $formkit: select
+                  name: tab
+                  label: ""
+                  options:
+                    - label: 全部文章
+                      value: posts
+                    - label: 朋友动态
+                      value: friends
+                    - label: 瞬间说说
+                      value: moments
+        # 文章列表设置
         - $formkit: group
           name: post_settings
-          label: 文章内容设置
+          label: 文章列表设置
           value:
+            show_posts: true
             list_style: magazine
             post_count: 8
             cover_fallback_enable: true
             cover_fallback_mode: missing_only
             cover_fallback_url: "https://www.dmoe.cc/random.php"
           children:
+            - $formkit: switch
+              id: show_posts_tab
+              name: show_posts
+              label: 显示文章列表
+              help: 是否显示"全部文章"Tab
+              value: true
             - $formkit: toggle
               name: list_style
+              if: $get(show_posts_tab).value
               label: 文章列表风格
               help: 选择首页文章列表的展示风格
               render-type: text
@@ -1344,6 +1376,7 @@ spec:
                   value: minimal
             - $formkit: number
               name: post_count
+              if: $get(show_posts_tab).value
               label: 文章数量
               help: 首页显示的文章数量（3-12）
               value: 8
@@ -1352,12 +1385,13 @@ spec:
             - $formkit: switch
               id: index_cover_fallback_enable
               name: cover_fallback_enable
+              if: $get(show_posts_tab).value
               label: 启用封面替代
               help: 启用后无封面的文章将使用指定图片替代
               value: true
             - $formkit: toggle
               name: cover_fallback_mode
-              if: $get(index_cover_fallback_enable).value
+              if: $get(show_posts_tab).value && $get(index_cover_fallback_enable).value
               label: 替代模式
               help: 选择替代策略
               render-type: text
@@ -1371,7 +1405,7 @@ spec:
                   value: always
             - $formkit: text
               name: cover_fallback_url
-              if: $get(index_cover_fallback_enable).value
+              if: $get(show_posts_tab).value && $get(index_cover_fallback_enable).value
               label: 替代图片地址
               help: 默认封面图片的 URL 地址
               value: "https://www.dmoe.cc/random.php"
